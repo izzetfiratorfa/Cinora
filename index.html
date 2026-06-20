@@ -256,6 +256,9 @@
   .review .r-who{display:block;font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
   .review.nur .r-who{color:#e07ac8}
   .review.firat .r-who{color:#63a0e0}
+  .ext-link{font-size:13px;font-weight:600;color:var(--accent);padding:5px 11px;border:1px solid var(--line-hi);
+    border-radius:8px;transition:.15s;text-decoration:none}
+  .ext-link:hover{border-color:var(--accent);background:var(--accent-soft)}
   /* istatistik panosu */
   .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px}
   .stat-card{background:var(--raised);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
@@ -1074,6 +1077,14 @@ function openDetail(id){
     +((it.genres&&it.genres.length)?'<div class="pm-row"><span class="pm-lbl">Alt tür</span>'+it.genres.map(function(g){return '<span class="gtag">'+esc(g)+'</span>';}).join("")+'</div>':'')
     +((it.people&&it.people.length)?'<div class="pm-row"><span class="pm-lbl">Kişiler</span>'+it.people.map(function(p){return '<span class="gtag">'+esc(p)+'</span>';}).join("")+'</div>':'')
     +((rec.length)?'<div class="pm-row">'+rec.map(function(p){return '<span class="rec">'+HEART+esc(p)+' önerdi</span>';}).join("")+'</div>':'')
+    +(function(){
+        var links=[];
+        var imdbHref=it.imdbUrl||(it.imdbId?("https://www.imdb.com/title/"+it.imdbId+"/"):"");
+        if(imdbHref) links.push('<a class="ext-link" href="'+esc(imdbHref)+'" target="_blank" rel="noopener">IMDb ↗</a>');
+        if(it.lbUrl) links.push('<a class="ext-link" href="'+esc(it.lbUrl)+'" target="_blank" rel="noopener">Letterboxd ↗</a>');
+        if(it.tmdbId) links.push('<a class="ext-link" href="https://www.themoviedb.org/'+(it._type||"movie")+'/'+esc(it.tmdbId)+'" target="_blank" rel="noopener">TMDB ↗</a>');
+        return links.length?'<div class="pm-row"><span class="pm-lbl">Bağlantılar</span>'+links.join("")+'</div>':'';
+      })()
     +'<div class="pm-row" style="margin-top:18px">'
       +'<button class="quick-watch '+(it.watched?"on":"")+'" id="detWatch">'+EYE+(it.watched?"İzlendi":"İzledim olarak işaretle")+'</button>'
       +'<button class="quick-watch" id="detShare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v14"/></svg>Bağlantıyı kopyala</button>'
@@ -1230,6 +1241,9 @@ function renderForm(editId){
       +'<div class="imdb-row"><input type="text" id="f_imdb" value="'+esc(it&&it.imdbUrl?it.imdbUrl:(it&&it.imdbId?"https://www.imdb.com/title/"+it.imdbId+"/":""))+'" placeholder="örn. letterboxd.com/film/parasite/  ·  tt6751668  ·  Yüzüğün Efendisi">'
       +'<button class="btn btn-ghost" id="fetchImdb" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Bilgileri çek</button></div></div>'
     +'<div id="imdbNote"></div>'
+    +'<div class="field"><label>Letterboxd linki <span class="hint">— filme kaydedilir; bu linkten de çekebilirsin</span></label>'
+      +'<div class="imdb-row"><input type="text" id="f_lb" value="'+esc(it&&it.lbUrl?it.lbUrl:"")+'" placeholder="https://letterboxd.com/film/parasite/">'
+      +'<button class="btn btn-ghost" id="fetchLb" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Bu linkten çek</button></div></div>'
     +'<div class="row2">'
       +'<div class="field"><label>Yıl</label><input type="number" id="f_year" value="'+esc(it&&it.year?it.year:"")+'" placeholder="Örn. 1994" min="1880" max="2100"></div>'
       +'<div class="field"><label>Süre <span class="hint">(dk)</span></label><input type="number" id="f_runtime" value="'+esc(it&&it.runtime?it.runtime:"")+'" placeholder="142" min="1" max="999"></div>'
@@ -1323,12 +1337,11 @@ function renderForm(editId){
   paintSub();
 
   /* --- bilgileri çek: IMDb / Letterboxd / TMDB linki ya da film adı --- */
-  var fetchBtn=document.getElementById("fetchImdb"), imdbNote=document.getElementById("imdbNote");
-  fetchBtn.onclick=function(){
-    var url=document.getElementById("f_imdb").value.trim();
-    if(!url){ imdbNote.innerHTML='<div class="preview-note warn">Önce bir bağlantı ya da film adı gir.</div>'; return; }
-    imdbNote.innerHTML='<div class="preview-note warn">Çekiliyor…</div>'; fetchBtn.disabled=true;
-    fetchMeta(url).then(function(d){
+  var fetchBtn=document.getElementById("fetchImdb"), fetchLbBtn=document.getElementById("fetchLb"), imdbNote=document.getElementById("imdbNote");
+  function doFetch(input, srcBtn){
+    if(!input){ imdbNote.innerHTML='<div class="preview-note warn">Önce bir bağlantı ya da film adı gir.</div>'; return; }
+    imdbNote.innerHTML='<div class="preview-note warn">Çekiliyor…</div>'; fetchBtn.disabled=true; fetchLbBtn.disabled=true;
+    fetchMeta(input).then(function(d){
       if(d.titleTr||d.title) document.getElementById("f_title").value=d.titleTr||d.title;
       if(d.titleOriginal) document.getElementById("f_title_orig").value=d.titleOriginal;
       if(d.titleEn) document.getElementById("f_title_en").value=d.titleEn;
@@ -1353,8 +1366,10 @@ function renderForm(editId){
         +'</div>';
     }).catch(function(err){
       imdbNote.innerHTML='<div class="preview-note bad">'+esc(err.message||"Çekilemedi.")+'</div>';
-    }).then(function(){ fetchBtn.disabled=false; });
-  };
+    }).then(function(){ fetchBtn.disabled=false; fetchLbBtn.disabled=false; });
+  }
+  fetchBtn.onclick=function(){ doFetch(document.getElementById("f_imdb").value.trim()); };
+  fetchLbBtn.onclick=function(){ doFetch(document.getElementById("f_lb").value.trim()); };
 
   document.getElementById("chkWatch").onclick=function(){ var c=this; watched=!watched; c.classList.toggle("on",watched);
     c.querySelector("span:last-child").textContent=watched?"İzledim":"İzlemedim"; };
@@ -1414,7 +1429,7 @@ function renderForm(editId){
       reviewFirat:document.getElementById("f_revFirat").value.trim(),
       overview:document.getElementById("f_overview").value.trim(),
       ratings:fetchedRatings||{},
-      imdbId:fetchedImdbId||extractImdbId(imdbUrlVal), imdbUrl:imdbUrlVal, tmdbId:fetchedTmdbId||null,
+      imdbId:fetchedImdbId||extractImdbId(imdbUrlVal), imdbUrl:imdbUrlVal, lbUrl:document.getElementById("f_lb").value.trim(), tmdbId:fetchedTmdbId||null,
       watched:watched, watchedDate:wdate||"",
       recommendedBy:rec.slice(),
       date:document.getElementById("f_date").value,
