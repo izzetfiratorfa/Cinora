@@ -446,13 +446,28 @@ function latinName(s){
 
 var TMDB_BASE="https://api.themoviedb.org/3";
 
+/* 5xx ve ağ hatalarında kısa beklemelerle otomatik yeniden dener (502/503/504 çoğu zaman geçicidir) */
+function tfetch(url, tries){
+  tries = tries || 3;
+  return fetch(url, {cache:"no-store"}).then(function(r){
+    if(r.status>=500 && tries>1){
+      return new Promise(function(res){ setTimeout(res, 500*(4-tries)); }).then(function(){ return tfetch(url, tries-1); });
+    }
+    return r;
+  }).catch(function(e){
+    if(tries>1){ return new Promise(function(res){ setTimeout(res, 500*(4-tries)); }).then(function(){ return tfetch(url, tries-1); }); }
+    throw e;
+  });
+}
+function tmdbErr(r){ return new Error(r.status>=500 ? ("TMDB şu an yanıt vermiyor ("+r.status+"). Birkaç saniye sonra tekrar dene.") : ("TMDB hatası ("+r.status+")")); }
+
 /* Girdiyi TMDB {type,id}'ye çöz: IMDb linki, Letterboxd linki, TMDB linki ya da düz film adı */
 function resolveTmdb(input, keys){
   var s=(input||"").trim();
   var tt=extractImdbId(s);
   if(tt){
-    return fetch(TMDB_BASE+"/find/"+tt+"?api_key="+keys.tmdb+"&external_source=imdb_id&language=tr-TR")
-      .then(function(r){ if(!r.ok) throw new Error("TMDB find hatası ("+r.status+")"); return r.json(); })
+    return tfetch(TMDB_BASE+"/find/"+tt+"?api_key="+keys.tmdb+"&external_source=imdb_id&language=tr-TR")
+      .then(function(r){ if(!r.ok) throw tmdbErr(r); return r.json(); })
       .then(function(d){ var m=(d.movie_results&&d.movie_results[0]), tv=(d.tv_results&&d.tv_results[0]), hit=m||tv;
         if(!hit) throw new Error("TMDB'de bu IMDb numarası eşlenmemiş. Letterboxd linki ya da film adı dene.");
         return { type:m?"movie":"tv", id:hit.id }; });
@@ -468,8 +483,8 @@ function resolveTmdb(input, keys){
   } else if(/^https?:\/\//i.test(s)){
     return Promise.reject(new Error("Bağlantı tanınmadı. IMDb / Letterboxd / TMDB linki ya da film adı gir."));
   }
-  return fetch(TMDB_BASE+"/search/multi?api_key="+keys.tmdb+"&language=tr-TR&include_adult=true&query="+encodeURIComponent(query))
-    .then(function(r){ if(!r.ok) throw new Error("TMDB arama hatası ("+r.status+")"); return r.json(); })
+  return tfetch(TMDB_BASE+"/search/multi?api_key="+keys.tmdb+"&language=tr-TR&include_adult=true&query="+encodeURIComponent(query))
+    .then(function(r){ if(!r.ok) throw tmdbErr(r); return r.json(); })
     .then(function(d){
       var res=(d.results||[]).filter(function(x){return x.media_type==="movie"||x.media_type==="tv";});
       if(!res.length) throw new Error("TMDB'de eşleşme bulunamadı: "+query);
@@ -481,8 +496,8 @@ function resolveTmdb(input, keys){
 function loadDetails(type, id, keys){
   var out={ ratings:{} };
   return Promise.all([
-    fetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=tr-TR&append_to_response=credits,external_ids").then(function(r){ if(!r.ok) throw new Error("TMDB detay hatası ("+r.status+")"); return r.json(); }),
-    fetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=en-US").then(function(r){ return r.ok?r.json():null; })
+    tfetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=tr-TR&append_to_response=credits,external_ids").then(function(r){ if(!r.ok) throw tmdbErr(r); return r.json(); }),
+    tfetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=en-US").then(function(r){ return r.ok?r.json():null; })
   ]).then(function(res){
     var d=res[0], en=res[1]||{};
     out.tmdbId=id; out._type=type;
@@ -510,7 +525,7 @@ function loadDetails(type, id, keys){
 
 function omdbEnrich(out, keys){
   if(!keys.omdb || !out.imdbId) return Promise.resolve(out);
-  return fetch("https://www.omdbapi.com/?i="+out.imdbId+"&apikey="+keys.omdb)
+  return tfetch("https://www.omdbapi.com/?i="+out.imdbId+"&apikey="+keys.omdb)
     .then(function(r){ return r.ok?r.json():null; })
     .then(function(o){
       if(o && o.Response!=="False"){
