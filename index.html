@@ -508,21 +508,31 @@ function fetchFromImdb(imdbUrl){
 function hashStr(s){ var h=0,i; for(i=0;i<s.length;i++){ h=(h<<5)-h+s.charCodeAt(i); h|=0; } return h.toString(36); }
 function readLocal(){ try{ var raw=localStorage.getItem(STORE_KEY); return raw?(JSON.parse(raw)||[]):null; }catch(e){ return null; } }
 
-/* Yayınlanan catalog.json değiştiyse herkes onu alır; aksi halde yerel düzenlemeler korunur. */
+/* Yayın (catalog.json) yalnızca GERÇEKTEN değiştiğinde ve DOLU olduğunda herkese yayılır.
+   Yereldeki kayıtlar asla boş/eski yayınla ezilmez. */
 function load(){
   return fetch("./catalog.json",{cache:"no-store"})
     .then(function(r){ return r.ok?r.text():null; })
     .then(function(txt){
-      var localItems=readLocal();
-      if(txt){
-        var h=hashStr(txt), pub=localStorage.getItem(PUB_HASH_KEY);
-        if(!localItems || h!==pub){
-          try{ state.items=JSON.parse(txt)||[]; }catch(e){ state.items=localItems||[]; }
-          save(); localStorage.setItem(PUB_HASH_KEY,h);
-          return;
-        }
+      var localItems=readLocal();                 // yoksa null
+      if(txt==null){ state.items=localItems||[]; return; }   // catalog.json yok / file://
+      var h=hashStr(txt), pub=localStorage.getItem(PUB_HASH_KEY);
+      var pubItems=null; try{ pubItems=JSON.parse(txt); }catch(e){ pubItems=null; }
+      var pubHasData=Array.isArray(pubItems)&&pubItems.length>0;
+
+      if(!localItems){                            // hiç yerel veri yok → yayını al (boş olsa da)
+        state.items=Array.isArray(pubItems)?pubItems:[];
+        save(); localStorage.setItem(PUB_HASH_KEY,h); return;
       }
-      state.items=localItems||[];
+      if(pub==null){                              // ilk açılış: yereli KORU, imzayı taban al
+        localStorage.setItem(PUB_HASH_KEY,h);
+        state.items=localItems; return;
+      }
+      if(h!==pub && pubHasData){                  // yayın gerçekten değişti ve dolu → yeni listeyi al
+        state.items=pubItems;
+        save(); localStorage.setItem(PUB_HASH_KEY,h); return;
+      }
+      state.items=localItems;                     // değişmemiş ya da yayın boş → yereli koru
     })
     .catch(function(){ state.items=readLocal()||[]; });
 }
