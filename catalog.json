@@ -1,27 +1,38 @@
 [
   {
     "id": "mqmchu4o8odki",
-    "title": "Naked Lunch",
-    "titleTr": "Naked Lunch",
-    "titleOriginal": "",
+    "title": "Müthiş Yemek",
+    "titleTr": "Müthiş Yemek",
+    "titleOriginal": "Naked Lunch",
     "titleEn": "Naked Lunch",
-    "year": null,
-    "runtime": null,
-    "director": "",
-    "cast": [],
-    "country": "",
-    "language": "",
-    "categories": [],
+    "year": 1991,
+    "runtime": 115,
+    "director": "David Cronenberg",
+    "cast": [
+      "Peter Weller",
+      "Judy Davis",
+      "Ian Holm",
+      "Julian Sands",
+      "Roy Scheider"
+    ],
+    "country": "Canada, United Kingdom",
+    "language": "Arabic, English",
+    "categories": [
+      "Suç",
+      "Dram"
+    ],
     "genres": [],
     "collections": [
       "NoraKült"
     ],
     "scoreNur": null,
     "scoreFirat": 10,
-    "ratings": {},
+    "ratings": {
+      "tmdb": 7
+    },
     "imdbId": "tt0102511",
     "imdbUrl": "https://www.imdb.com/title/tt0102511/?ref_=fn_t_1",
-    "tmdbId": null,
+    "tmdbId": 2742,
     "watched": false,
     "recommendedBy": [
       "Fırat"
@@ -29,7 +40,7 @@
     "date": "",
     "people": [],
     "description": "",
-    "thumb": "https://www.imdb.com/title/tt0102511/mediaviewer/rm3414044928/?ref_=tt_ov_i",
+    "thumb": "https://image.tmdb.org/t/p/w500/u01kh5jKUWjhom76mguRqUgdvja.jpg",
     "embed": "https://ok.ru/videoembed/14716242954830",
     "platform": "ok",
     "_rawSrc": "https://ok.ru/video/14716242954830"
@@ -72,37 +83,45 @@
     "people": [],
     "description": "",
     "thumb": "https://image.tmdb.org/t/p/w500/xMYP4uaNeyPmX4FQ2xxWk2eIN6K.jpg",
-    "embed": "https://ok.ru/videoembed/14715752876622",
+    "embed": "https://ok.ru/videoembed/4548813851217",
     "platform": "ok",
-    "_rawSrc": "https://ok.ru/video/14715752876622"
+    "_rawSrc": "https://ok.ru/video/4548813851217"
   },
   {
     "id": "mqmb00dqbreo3",
     "title": "Autoerótica",
     "titleTr": "Autoerótica",
     "titleOriginal": "Autoerótica",
-    "titleEn": "Autoerótica",
-    "year": null,
-    "runtime": null,
-    "director": "",
-    "cast": [],
-    "country": "",
-    "language": "",
+    "titleEn": "Autoerotic",
+    "year": 2021,
+    "runtime": 92,
+    "director": "Andrea Hoyos",
+    "cast": [
+      "Rafaella Mey",
+      "Wendy Vásquez",
+      "Micaela Céspedes",
+      "Beto Benitez",
+      "Renato Rueda"
+    ],
+    "country": "Peru",
+    "language": "Spanish",
     "categories": [],
     "genres": [],
     "collections": [],
     "scoreNur": null,
     "scoreFirat": null,
-    "ratings": {},
+    "ratings": {
+      "tmdb": 2.9
+    },
     "imdbId": "tt15338066",
     "imdbUrl": "www.imdb.com/title/tt15338066",
-    "tmdbId": null,
+    "tmdbId": 862627,
     "watched": false,
     "recommendedBy": [],
     "date": "",
     "people": [],
     "description": "",
-    "thumb": "https://www.imdb.com/title/tt15338066/mediaviewer/rm3958502145/?ref_=tt_ov_i",
+    "thumb": "https://image.tmdb.org/t/p/w500/bRFlkfnuzsNlQE8mix47B7eLJFr.jpg",
     "embed": "https://ok.ru/videoembed/14702292503118",
     "platform": "ok",
     "_rawSrc": "https://ok.ru/video/14702292503118"
