@@ -444,65 +444,99 @@ function latinName(s){
   return out;
 }
 
-/* IMDb linki → TMDB (tr+en ad, orijinal ad, ülke, dil, poster) + opsiyonel OMDb (puanlar) */
-function fetchFromImdb(imdbUrl){
-  var id=extractImdbId(imdbUrl);
-  if(!id) return Promise.reject(new Error("Bağlantıda tt… numarası bulunamadı."));
+var TMDB_BASE="https://api.themoviedb.org/3";
+
+/* Girdiyi TMDB {type,id}'ye çöz: IMDb linki, Letterboxd linki, TMDB linki ya da düz film adı */
+function resolveTmdb(input, keys){
+  var s=(input||"").trim();
+  var tt=extractImdbId(s);
+  if(tt){
+    return fetch(TMDB_BASE+"/find/"+tt+"?api_key="+keys.tmdb+"&external_source=imdb_id&language=tr-TR")
+      .then(function(r){ if(!r.ok) throw new Error("TMDB find hatası ("+r.status+")"); return r.json(); })
+      .then(function(d){ var m=(d.movie_results&&d.movie_results[0]), tv=(d.tv_results&&d.tv_results[0]), hit=m||tv;
+        if(!hit) throw new Error("TMDB'de bu IMDb numarası eşlenmemiş. Letterboxd linki ya da film adı dene.");
+        return { type:m?"movie":"tv", id:hit.id }; });
+  }
+  var tm=s.match(/themoviedb\.org\/(movie|tv)\/(\d+)/i);
+  if(tm) return Promise.resolve({ type:tm[1].toLowerCase(), id:tm[2] });
+  var query=s, yearHint=null;
+  var lb=s.match(/letterboxd\.com\/(?:[^\/]+\/)?film\/([^\/?#]+)/i);
+  if(lb){
+    var slug=decodeURIComponent(lb[1]);
+    var ym=slug.match(/-(\d{4})$/); if(ym){ yearHint=ym[1]; slug=slug.replace(/-(\d{4})$/,""); }
+    query=slug.replace(/-/g," ").trim();
+  } else if(/^https?:\/\//i.test(s)){
+    return Promise.reject(new Error("Bağlantı tanınmadı. IMDb / Letterboxd / TMDB linki ya da film adı gir."));
+  }
+  return fetch(TMDB_BASE+"/search/multi?api_key="+keys.tmdb+"&language=tr-TR&include_adult=true&query="+encodeURIComponent(query))
+    .then(function(r){ if(!r.ok) throw new Error("TMDB arama hatası ("+r.status+")"); return r.json(); })
+    .then(function(d){
+      var res=(d.results||[]).filter(function(x){return x.media_type==="movie"||x.media_type==="tv";});
+      if(!res.length) throw new Error("TMDB'de eşleşme bulunamadı: "+query);
+      if(yearHint){ var by=res.filter(function(x){var dt=x.release_date||x.first_air_date||"";return dt.slice(0,4)===yearHint;}); if(by.length) res=by; }
+      return { type:res[0].media_type, id:res[0].id };
+    });
+}
+
+function loadDetails(type, id, keys){
+  var out={ ratings:{} };
+  return Promise.all([
+    fetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=tr-TR&append_to_response=credits,external_ids").then(function(r){ if(!r.ok) throw new Error("TMDB detay hatası ("+r.status+")"); return r.json(); }),
+    fetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=en-US").then(function(r){ return r.ok?r.json():null; })
+  ]).then(function(res){
+    var d=res[0], en=res[1]||{};
+    out.tmdbId=id; out._type=type;
+    out.imdbId=(d.external_ids&&d.external_ids.imdb_id)||null;
+    out.titleTr=d.title||d.name||"";
+    out.titleOriginal=d.original_title||d.original_name||"";
+    out.titleEn=en.title||en.name||"";
+    out.title=out.titleTr||out.titleOriginal||out.titleEn;
+    var date=d.release_date||d.first_air_date||""; out.year=date?parseInt(date.slice(0,4),10):null;
+    out.runtime=d.runtime||(d.episode_run_time&&d.episode_run_time[0])||null;
+    out.genres=(d.genres||[]).map(function(g){return g.name;});
+    var crew=(d.credits&&d.credits.crew)||[];
+    var dir=crew.find(function(c){return c.job==="Director";});
+    if(!dir && d.created_by && d.created_by[0]) dir={name:d.created_by[0].name};
+    out.director=dir?latinName(dir.name):"";
+    out.cast=((d.credits&&d.credits.cast)||[]).slice(0,7).map(function(c){return latinName(c.name);}).filter(Boolean).slice(0,5);
+    if(d.poster_path) out.poster="https://image.tmdb.org/t/p/w500"+d.poster_path;
+    if(typeof d.vote_average==="number" && d.vote_average>0) out.ratings.tmdb=Math.round(d.vote_average*10)/10;
+    out.country=(d.production_countries||[]).map(function(c){return c.name;}).join(", ");
+    var langs=(d.spoken_languages||[]).map(function(l){return l.english_name||l.name;}).filter(Boolean);
+    out.language=langs.join(", ")||(d.original_language?d.original_language.toUpperCase():"");
+    return out;
+  });
+}
+
+function omdbEnrich(out, keys){
+  if(!keys.omdb || !out.imdbId) return Promise.resolve(out);
+  return fetch("https://www.omdbapi.com/?i="+out.imdbId+"&apikey="+keys.omdb)
+    .then(function(r){ return r.ok?r.json():null; })
+    .then(function(o){
+      if(o && o.Response!=="False"){
+        if(o.imdbRating && o.imdbRating!=="N/A") out.ratings.imdb=o.imdbRating;
+        (o.Ratings||[]).forEach(function(r){
+          if(r.Source==="Rotten Tomatoes") out.ratings.rt=r.Value;
+          if(r.Source==="Metacritic") out.ratings.metacritic=r.Value;
+        });
+        if(!out.director && o.Director && o.Director!=="N/A") out.director=latinName(o.Director);
+        if((!out.cast||!out.cast.length) && o.Actors && o.Actors!=="N/A") out.cast=o.Actors.split(",").map(function(s){return latinName(s.trim());}).filter(Boolean);
+        if(!out.runtime && o.Runtime && /\d+/.test(o.Runtime)) out.runtime=parseInt(o.Runtime,10);
+        if(!out.country && o.Country && o.Country!=="N/A") out.country=o.Country;
+        if(!out.language && o.Language && o.Language!=="N/A") out.language=o.Language;
+      }
+      return out;
+    }).catch(function(){ return out; });
+}
+
+/* IMDb / Letterboxd / TMDB linki ya da film adı → bilgileri çek */
+function fetchMeta(input){
   var keys=getKeys();
   if(!keys.tmdb) return Promise.reject(new Error("Önce Ayarlar'dan TMDB API anahtarını gir."));
-  var base="https://api.themoviedb.org/3", out={ imdbId:id, ratings:{} }, type, tmdbId;
-  return fetch(base+"/find/"+id+"?api_key="+keys.tmdb+"&external_source=imdb_id&language=tr-TR")
-    .then(function(r){ if(!r.ok) throw new Error("TMDB find hatası ("+r.status+")"); return r.json(); })
-    .then(function(d){
-      var movie=(d.movie_results&&d.movie_results[0]), tv=(d.tv_results&&d.tv_results[0]), hit=movie||tv;
-      if(!hit) throw new Error("TMDB'de bu IMDb kimliği bulunamadı.");
-      tmdbId=hit.id; type=movie?"movie":"tv"; out.tmdbId=tmdbId; out._type=type;
-      return Promise.all([
-        fetch(base+"/"+type+"/"+tmdbId+"?api_key="+keys.tmdb+"&language=tr-TR&append_to_response=credits").then(function(r){ if(!r.ok) throw new Error("TMDB detay hatası ("+r.status+")"); return r.json(); }),
-        fetch(base+"/"+type+"/"+tmdbId+"?api_key="+keys.tmdb+"&language=en-US").then(function(r){ return r.ok?r.json():null; })
-      ]);
-    })
-    .then(function(res){
-      var d=res[0], en=res[1]||{};
-      out.titleTr=d.title||d.name||"";
-      out.titleOriginal=d.original_title||d.original_name||"";
-      out.titleEn=en.title||en.name||"";
-      out.title=out.titleTr||out.titleOriginal||out.titleEn;
-      var date=d.release_date||d.first_air_date||""; out.year=date?parseInt(date.slice(0,4),10):null;
-      out.runtime=d.runtime||(d.episode_run_time&&d.episode_run_time[0])||null;
-      out.genres=(d.genres||[]).map(function(g){return g.name;});
-      var crew=(d.credits&&d.credits.crew)||[];
-      var dir=crew.find(function(c){return c.job==="Director";});
-      if(!dir && d.created_by && d.created_by[0]) dir={name:d.created_by[0].name};
-      out.director=dir?latinName(dir.name):"";
-      out.cast=((d.credits&&d.credits.cast)||[]).slice(0,7).map(function(c){return latinName(c.name);}).filter(Boolean).slice(0,5);
-      if(d.poster_path) out.poster="https://image.tmdb.org/t/p/w500"+d.poster_path;
-      if(typeof d.vote_average==="number" && d.vote_average>0) out.ratings.tmdb=Math.round(d.vote_average*10)/10;
-      out.country=(d.production_countries||[]).map(function(c){return c.name;}).join(", ");
-      var langs=(d.spoken_languages||[]).map(function(l){return l.english_name||l.name;}).filter(Boolean);
-      out.language=langs.join(", ")||(d.original_language?d.original_language.toUpperCase():"");
-      return out;
-    })
-    .then(function(out){
-      if(!keys.omdb) return out;
-      return fetch("https://www.omdbapi.com/?i="+out.imdbId+"&apikey="+keys.omdb)
-        .then(function(r){ return r.ok?r.json():null; })
-        .then(function(o){
-          if(o && o.Response!=="False"){
-            if(o.imdbRating && o.imdbRating!=="N/A") out.ratings.imdb=o.imdbRating;
-            (o.Ratings||[]).forEach(function(r){
-              if(r.Source==="Rotten Tomatoes") out.ratings.rt=r.Value;
-              if(r.Source==="Metacritic") out.ratings.metacritic=r.Value;
-            });
-            if(!out.director && o.Director && o.Director!=="N/A") out.director=latinName(o.Director);
-            if((!out.cast||!out.cast.length) && o.Actors && o.Actors!=="N/A") out.cast=o.Actors.split(",").map(function(s){return latinName(s.trim());}).filter(Boolean);
-            if(!out.runtime && o.Runtime && /\d+/.test(o.Runtime)) out.runtime=parseInt(o.Runtime,10);
-            if(!out.country && o.Country && o.Country!=="N/A") out.country=o.Country;
-            if(!out.language && o.Language && o.Language!=="N/A") out.language=o.Language;
-          }
-          return out;
-        }).catch(function(){ return out; });
-    });
+  if(!(input||"").trim()) return Promise.reject(new Error("Bir IMDb/Letterboxd bağlantısı ya da film adı gir."));
+  return resolveTmdb(input, keys)
+    .then(function(r){ return loadDetails(r.type, r.id, keys); })
+    .then(function(out){ return omdbEnrich(out, keys); });
 }
 
 function hashStr(s){ var h=0,i; for(i=0;i<s.length;i++){ h=(h<<5)-h+s.charCodeAt(i); h|=0; } return h.toString(36); }
@@ -1051,8 +1085,8 @@ function renderForm(editId){
       +'<div class="field"><label>Orijinal ad</label><input type="text" id="f_title_orig" value="'+esc(it&&it.titleOriginal?it.titleOriginal:"")+'" placeholder="Orijinal başlık"></div>'
       +'<div class="field"><label>İngilizce ad</label><input type="text" id="f_title_en" value="'+esc(it&&it.titleEn?it.titleEn:"")+'" placeholder="İngilizce başlık"></div>'
     +'</div>'
-    +'<div class="field"><label>IMDb bağlantısı <span class="hint">— yapıştır, “Bilgileri çek” ile doldur</span></label>'
-      +'<div class="imdb-row"><input type="text" id="f_imdb" value="'+esc(it&&it.imdbUrl?it.imdbUrl:(it&&it.imdbId?"https://www.imdb.com/title/"+it.imdbId+"/":""))+'" placeholder="https://www.imdb.com/title/tt0111161/">'
+    +'<div class="field"><label>Bağlantı ya da film adı <span class="hint">— IMDb / Letterboxd / TMDB linki veya düz film adı</span></label>'
+      +'<div class="imdb-row"><input type="text" id="f_imdb" value="'+esc(it&&it.imdbUrl?it.imdbUrl:(it&&it.imdbId?"https://www.imdb.com/title/"+it.imdbId+"/":""))+'" placeholder="örn. letterboxd.com/film/parasite/  ·  tt6751668  ·  Yüzüğün Efendisi">'
       +'<button class="btn btn-ghost" id="fetchImdb" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Bilgileri çek</button></div></div>'
     +'<div id="imdbNote"></div>'
     +'<div class="row2">'
@@ -1096,6 +1130,7 @@ function renderForm(editId){
 
   var fetchedRatings=(it&&it.ratings)?Object.assign({},it.ratings):{};
   var fetchedTmdbId=it?it.tmdbId:null;
+  var fetchedImdbId=it?it.imdbId:null;
 
   var X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>';
 
@@ -1140,13 +1175,13 @@ function renderForm(editId){
   subSearch.addEventListener("input",paintSub);
   paintSub();
 
-  /* --- IMDb'den çek (TMDB + opsiyonel OMDb) --- */
+  /* --- bilgileri çek: IMDb / Letterboxd / TMDB linki ya da film adı --- */
   var fetchBtn=document.getElementById("fetchImdb"), imdbNote=document.getElementById("imdbNote");
   fetchBtn.onclick=function(){
     var url=document.getElementById("f_imdb").value.trim();
-    if(!url){ imdbNote.innerHTML='<div class="preview-note warn">Önce bir IMDb bağlantısı yapıştır.</div>'; return; }
+    if(!url){ imdbNote.innerHTML='<div class="preview-note warn">Önce bir bağlantı ya da film adı gir.</div>'; return; }
     imdbNote.innerHTML='<div class="preview-note warn">Çekiliyor…</div>'; fetchBtn.disabled=true;
-    fetchFromImdb(url).then(function(d){
+    fetchMeta(url).then(function(d){
       if(d.titleTr||d.title) document.getElementById("f_title").value=d.titleTr||d.title;
       if(d.titleOriginal) document.getElementById("f_title_orig").value=d.titleOriginal;
       if(d.titleEn) document.getElementById("f_title_en").value=d.titleEn;
@@ -1157,7 +1192,7 @@ function renderForm(editId){
       if(d.country) document.getElementById("f_country").value=d.country;
       if(d.language) document.getElementById("f_language").value=d.language;
       if(d.poster) document.getElementById("f_thumb").value=d.poster;
-      fetchedRatings=d.ratings||{}; fetchedTmdbId=d.tmdbId||null;
+      fetchedRatings=d.ratings||{}; fetchedTmdbId=d.tmdbId||null; fetchedImdbId=d.imdbId||fetchedImdbId;
       (d.genres||[]).forEach(function(g){
         var m=mapGenre(g); if(!m) return;
         if(ANA.indexOf(m)>-1){ if(selCats.indexOf(m)<0) selCats.push(m); }
@@ -1226,7 +1261,7 @@ function renderForm(editId){
       scoreNur:document.getElementById("f_nur").value?parseInt(document.getElementById("f_nur").value,10):null,
       scoreFirat:document.getElementById("f_firat").value?parseInt(document.getElementById("f_firat").value,10):null,
       ratings:fetchedRatings||{},
-      imdbId:extractImdbId(imdbUrlVal), imdbUrl:imdbUrlVal, tmdbId:fetchedTmdbId||null,
+      imdbId:fetchedImdbId||extractImdbId(imdbUrlVal), imdbUrl:imdbUrlVal, tmdbId:fetchedTmdbId||null,
       watched:watched,
       recommendedBy:rec.slice(),
       date:document.getElementById("f_date").value,
