@@ -1,5 +1,40 @@
 [
   {
+    "id": "mqmchu4o8odki",
+    "title": "Naked Lunch",
+    "titleTr": "Naked Lunch",
+    "titleOriginal": "",
+    "titleEn": "Naked Lunch",
+    "year": null,
+    "runtime": null,
+    "director": "",
+    "cast": [],
+    "country": "",
+    "language": "",
+    "categories": [],
+    "genres": [],
+    "collections": [
+      "NoraKült"
+    ],
+    "scoreNur": null,
+    "scoreFirat": 10,
+    "ratings": {},
+    "imdbId": "tt0102511",
+    "imdbUrl": "https://www.imdb.com/title/tt0102511/?ref_=fn_t_1",
+    "tmdbId": null,
+    "watched": false,
+    "recommendedBy": [
+      "Fırat"
+    ],
+    "date": "",
+    "people": [],
+    "description": "",
+    "thumb": "https://www.imdb.com/title/tt0102511/mediaviewer/rm3414044928/?ref_=tt_ov_i",
+    "embed": "https://ok.ru/videoembed/14716242954830",
+    "platform": "ok",
+    "_rawSrc": "https://ok.ru/video/14716242954830"
+  },
+  {
     "id": "mqmb24sq2hmmu",
     "title": "Çıplak",
     "titleTr": "Çıplak",
@@ -67,7 +102,7 @@
     "date": "",
     "people": [],
     "description": "",
-    "thumb": "",
+    "thumb": "https://www.imdb.com/title/tt15338066/mediaviewer/rm3958502145/?ref_=tt_ov_i",
     "embed": "https://ok.ru/videoembed/14702292503118",
     "platform": "ok",
     "_rawSrc": "https://ok.ru/video/14702292503118"
