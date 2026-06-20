@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salon</title>
+<title>CiNora</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -98,6 +98,7 @@
   .content-main{flex:1;min-width:0}
   .cloud-aside{width:248px;flex-shrink:0;position:sticky;top:88px;padding-top:26px}
   .cloud-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .cloud-box + .cloud-box{margin-top:16px}
   .cloud-head{font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
     color:var(--faint);margin-bottom:14px}
   .cloud-tags{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:baseline}
@@ -194,6 +195,33 @@
   .rchip.tmdb{background:rgba(1,180,130,.16);color:#3fcf9e}
   .rchip.rt{background:rgba(250,80,50,.14);color:#fa6450}
   .rchip.mc{background:rgba(255,204,51,.14);color:#ffcc33}
+  .rchip.nora{background:var(--accent);color:#1a120a}
+  .rchip.nur{background:rgba(224,122,200,.16);color:#e07ac8}
+  .rchip.firat{background:rgba(99,160,224,.16);color:#63a0e0}
+  .tabsep{width:1px;align-self:stretch;background:var(--line-hi);margin:0 4px}
+  .tab.col{font-family:"Fraunces",serif}
+  .card.faded{opacity:.42;transition:opacity .15s}
+  .card.faded:hover{opacity:1}
+  .score-in{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line-hi);border-radius:10px;padding:8px 12px}
+  .score-in span{font-size:13px;color:var(--muted);min-width:34px}
+  .score-in select{flex:1;background:none;border:none;color:var(--text);outline:none;font-size:15px}
+  .score-in select option{background:var(--surface)}
+  .nora-prev{margin-top:10px;font-size:14px;color:var(--muted)}
+  .nora-prev b{color:var(--accent);font-size:16px}
+  /* filtre menüsü (Letterboxd tarzı) */
+  .filter-menu{min-width:248px;padding:6px}
+  .fm-head{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);padding:12px 12px 6px}
+  .fm-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:9px 12px;border-radius:8px;color:var(--text);font-size:13.5px;text-align:left;transition:.12s}
+  .fm-row:hover{background:var(--accent-soft)}
+  .fm-row.reset{color:var(--muted);border-bottom:1px solid var(--line);border-radius:0;margin-bottom:4px}
+  .fm-row.reset:hover{color:var(--text)}
+  .sw{width:38px;height:22px;border-radius:999px;background:var(--raised-hi);border:1px solid var(--line-hi);
+    position:relative;flex-shrink:0;transition:.16s}
+  .sw .kn{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:.16s}
+  .sw.on{background:var(--accent);border-color:var(--accent)}
+  .sw.on .kn{left:18px;background:#1a120a}
   .imdb-row{display:flex;gap:8px}
   .imdb-row input{flex:1}
   .imdb-row .btn{white-space:nowrap;padding:11px 16px}
@@ -293,7 +321,7 @@
 <div class="gate" id="gate">
   <div class="gate-card">
     <div class="eyebrow">kapalı devre · reklamsız</div>
-    <h1>Salon<span class="dot">.</span></h1>
+    <h1>CiNora<span class="dot">.</span></h1>
     <p id="gateMsg">Devam etmek için parolayı gir.</p>
     <input type="password" id="gateInput" placeholder="parola" autocomplete="off">
     <div class="gate-err" id="gateErr"></div>
@@ -306,7 +334,7 @@
     <div class="wrap bar-inner">
       <div class="brand">
         <span class="eyebrow">kapalı devre · reklamsız</span>
-        <h1>Salon<span class="dot">.</span></h1>
+        <h1>CiNora<span class="dot">.</span></h1>
       </div>
       <button class="iconbtn" id="openAdmin" title="Yönet" aria-label="Yönet">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -398,7 +426,10 @@ var STORE_KEY="salon_catalog_v1", PASS_KEY="salon_pass", SESSION="salon_session"
 var TMDB_KEY="salon_tmdb", OMDB_KEY="salon_omdb";
 var DEFAULT_TMDB="bc01a2399b9defcc77636ac4a4378f31"; // mevcut TMDB anahtarın — Ayarlar'dan değiştirebilirsin
 var DEFAULT_PASS="3312"; // ilk girişte kullanılacak parola — Ayarlar'dan değiştirilebilir
-var state={ items:[], view:"all", cats:[], subs:[], years:[], query:"" };
+var COLLECTIONS=["NoraKült","N'Kısa","N'18","N'Yerli"];
+var CUR_YEAR=new Date().getFullYear();
+var state={ items:[], view:"all", cats:[], subs:[], years:[], countries:[], directors:[], actors:[], query:"",
+  ui:{ fadeWatched:false, showPosters:true, hideWatched:false, hideUnwatched:false, hideRated:false, hideShort:false, hideDocs:false, hideUnreleased:false } };
 
 function getKeys(){ return { tmdb: localStorage.getItem(TMDB_KEY)||"", omdb: localStorage.getItem(OMDB_KEY)||"" }; }
 
@@ -527,11 +558,13 @@ var CARET='<svg class="car" viewBox="0 0 24 24" fill="none" stroke="currentColor
 /* ===== sekmeler ===== */
 function counts(){
   var c={all:state.items.length,unwatched:0,watched:0,nur:0,firat:0};
+  COLLECTIONS.forEach(function(k){ c["col:"+k]=0; });
   state.items.forEach(function(it){
     if(it.watched) c.watched++; else c.unwatched++;
     var r=it.recommendedBy||[];
     if(r.indexOf("Nur")>-1) c.nur++;
     if(r.indexOf("Fırat")>-1) c.firat++;
+    (it.collections||[]).forEach(function(k){ if(c["col:"+k]!=null) c["col:"+k]++; });
   });
   return c;
 }
@@ -539,10 +572,15 @@ function renderTabs(){
   var c=counts();
   var defs=[{k:"all",label:"Tümü"},{k:"unwatched",label:"İzlenecek"},{k:"watched",label:"İzlendi"},
     {k:"nur",label:"Nur'un önerileri",heart:true},{k:"firat",label:"Fırat'ın önerileri",heart:true}];
-  document.getElementById("tabs").innerHTML=defs.map(function(d){
+  var main=defs.map(function(d){
     return '<button class="tab '+(state.view===d.k?"on":"")+'" data-v="'+d.k+'">'
       +(d.heart?HEART:"")+esc(d.label)+'<span class="cnt">'+c[d.k]+'</span></button>';
   }).join("");
+  var cols=COLLECTIONS.map(function(k){
+    return '<button class="tab col '+(state.view===("col:"+k)?"on":"")+'" data-v="col:'+esc(k)+'">'
+      +esc(k)+'<span class="cnt">'+c["col:"+k]+'</span></button>';
+  }).join("");
+  document.getElementById("tabs").innerHTML=main+'<span class="tabsep"></span>'+cols;
   document.querySelectorAll("#tabs .tab").forEach(function(b){
     b.onclick=function(){ state.view=b.getAttribute("data-v"); renderTabs(); renderGrid(); };
   });
@@ -587,14 +625,27 @@ function updateBadge(btn, n){
   if(n>0){ var b=document.createElement("span"); b.className="badge"; b.textContent=n;
     btn.insertBefore(b, btn.querySelector(".car")); }
 }
+function usedCountries(){
+  var set={}; state.items.forEach(function(it){ splitCountries(it).forEach(function(c){ set[c]=1; }); });
+  return Object.keys(set).sort(function(a,b){return a.localeCompare(b,"tr");});
+}
+function anyFilterActive(){
+  var u=state.ui;
+  return state.cats.length||state.subs.length||state.years.length||state.countries.length||state.directors.length||state.actors.length
+    || u.hideWatched||u.hideUnwatched||u.hideRated||u.hideShort||u.hideDocs||u.hideUnreleased;
+}
+function resetAllFilters(){
+  state.cats=[];state.subs=[];state.years=[];state.countries=[];state.directors=[];state.actors=[];
+  var u=state.ui; u.hideWatched=u.hideUnwatched=u.hideRated=u.hideShort=u.hideDocs=u.hideUnreleased=false;
+  renderFilterbar(); renderGrid();
+}
 function ensureClear(){
   var bar=document.getElementById("filterbar"), existing=bar.querySelector(".clearf");
-  var any=state.cats.length||state.subs.length||state.years.length;
-  if(any && !existing){
+  if(anyFilterActive() && !existing){
     var clr=document.createElement("button"); clr.className="clearf"; clr.textContent="Filtreleri temizle";
-    clr.onclick=function(e){ e.stopPropagation(); state.cats=[]; state.subs=[]; state.years=[]; renderFilterbar(); renderGrid(); };
+    clr.onclick=function(e){ e.stopPropagation(); resetAllFilters(); };
     bar.appendChild(clr);
-  }else if(!any && existing){ existing.remove(); }
+  }else if(!anyFilterActive() && existing){ existing.remove(); }
 }
 function makeDrop(label, arr, sel, searchable, onToggle, labelFn){
   var d=document.createElement("div"); d.className="fdrop";
@@ -611,6 +662,39 @@ function makeDrop(label, arr, sel, searchable, onToggle, labelFn){
   d.appendChild(btn); d.appendChild(panel);
   return d;
 }
+function makeFilterMenu(){
+  var u=state.ui;
+  function cnt(){ return (u.hideWatched?1:0)+(u.hideUnwatched?1:0)+(u.hideRated?1:0)+(u.hideShort?1:0)+(u.hideDocs?1:0)+(u.hideUnreleased?1:0)+(u.fadeWatched?1:0)+(!u.showPosters?1:0); }
+  var d=document.createElement("div"); d.className="fdrop";
+  var btn=document.createElement("button"); btn.className="fbtn"+(cnt()>0?" active":"");
+  btn.innerHTML="Filtreler"+(cnt()>0?'<span class="badge">'+cnt()+'</span>':'')+CARET;
+  var panel=document.createElement("div"); panel.className="fpanel filter-menu";
+  function row(label,key){ return '<button class="fm-row" data-key="'+key+'"><span>'+esc(label)+'</span><span class="sw'+(u[key]?" on":"")+'"><span class="kn"></span></span></button>'; }
+  function head(t){ return '<div class="fm-head">'+esc(t)+'</div>'; }
+  panel.innerHTML=
+    '<button class="fm-row reset" data-reset="1"><span>Filtreleri kaldır</span></button>'
+    +row("İzlenenleri soluklaştır","fadeWatched")
+    +row("Posterleri göster","showPosters")
+    +head("Hesap filtreleri")
+    +row("İzlenenleri gizle","hideWatched")
+    +row("İzlenecekleri gizle","hideUnwatched")
+    +row("Puanlananları gizle","hideRated")
+    +head("İçerik filtreleri")
+    +row("Kısa filmleri gizle","hideShort")
+    +row("Belgeselleri gizle","hideDocs")
+    +row("Yayınlanmamışları gizle","hideUnreleased");
+  panel.querySelectorAll(".fm-row").forEach(function(r){
+    r.onclick=function(e){ e.stopPropagation();
+      if(r.getAttribute("data-reset")){ u.fadeWatched=false; u.showPosters=true; resetAllFilters(); closePanels(); return; }
+      var key=r.getAttribute("data-key"); u[key]=!u[key];
+      var sw=r.querySelector(".sw"); if(sw) sw.classList.toggle("on",u[key]);
+      updateBadge(btn,cnt()); ensureClear(); renderGrid();
+    };
+  });
+  btn.onclick=function(e){ e.stopPropagation(); var open=panel.classList.contains("show"); closePanels(); if(!open){panel.classList.add("show"); btn.classList.add("open");} };
+  panel.addEventListener("click",function(e){e.stopPropagation();});
+  d.appendChild(btn); d.appendChild(panel); return d;
+}
 function renderFilterbar(){
   var bar=document.getElementById("filterbar"); bar.innerHTML="";
   bar.appendChild(makeDrop("Kategori", ANA, state.cats, ANA.length>12, function(x){
@@ -622,29 +706,51 @@ function renderFilterbar(){
       var i=state.subs.indexOf(x); if(i>-1) state.subs.splice(i,1); else state.subs.push(x);
     }));
   }
+  var ctys=usedCountries();
+  if(ctys.length){
+    bar.appendChild(makeDrop("Ülke", ctys, state.countries, ctys.length>12, function(x){
+      var i=state.countries.indexOf(x); if(i>-1) state.countries.splice(i,1); else state.countries.push(x);
+    }));
+  }
   bar.appendChild(makeDrop("Yıl", RANGES.map(function(r){return r.k;}), state.years, false, function(k){
     var i=state.years.indexOf(k); if(i>-1) state.years.splice(i,1); else state.years.push(k);
   }, labelOfRange));
+  bar.appendChild(makeFilterMenu());
   ensureClear();
 }
 
 /* ===== görünen öğeler ===== */
+function splitCountries(it){ return (it.country||"").split(",").map(function(s){return s.trim();}).filter(Boolean); }
 function visibleItems(){
   var q=state.query.toLocaleLowerCase("tr").trim();
+  var u=state.ui;
   return state.items.filter(function(it){
     if(state.view==="unwatched" && it.watched) return false;
     if(state.view==="watched" && !it.watched) return false;
     if(state.view==="nur" && (it.recommendedBy||[]).indexOf("Nur")<0) return false;
     if(state.view==="firat" && (it.recommendedBy||[]).indexOf("Fırat")<0) return false;
+    if(state.view.indexOf("col:")===0){ if((it.collections||[]).indexOf(state.view.slice(4))<0) return false; }
     if(state.cats.length){
-      var ic=it.categories||[]; var hit=state.cats.some(function(c){return ic.indexOf(c)>-1;});
-      if(!hit) return false;
+      var ic=it.categories||[]; if(!state.cats.some(function(c){return ic.indexOf(c)>-1;})) return false;
     }
     if(state.subs.length){
-      var ig=it.genres||[]; var hit2=state.subs.some(function(s){return ig.indexOf(s)>-1;});
-      if(!hit2) return false;
+      var ig=it.genres||[]; if(!state.subs.some(function(s){return ig.indexOf(s)>-1;})) return false;
+    }
+    if(state.countries.length){
+      var icty=splitCountries(it); if(!state.countries.some(function(c){return icty.indexOf(c)>-1;})) return false;
+    }
+    if(state.directors.length){ if(state.directors.indexOf(it.director)<0) return false; }
+    if(state.actors.length){
+      var ica=it.cast||[]; if(!state.actors.some(function(a){return ica.indexOf(a)>-1;})) return false;
     }
     if(state.years.length && !yearInSelected(it.year)) return false;
+    // görsel filtre menüsü
+    if(u.hideWatched && it.watched) return false;
+    if(u.hideUnwatched && !it.watched) return false;
+    if(u.hideRated && hasNora(it)) return false;
+    if(u.hideShort && isShort(it)) return false;
+    if(u.hideDocs && (it.categories||[]).indexOf("Belgesel")>-1) return false;
+    if(u.hideUnreleased && it.year && it.year>CUR_YEAR) return false;
     if(q){
       var hay=((it.title||"")+" "+(it.titleOriginal||"")+" "+(it.titleEn||"")+" "+(it.titleTr||"")+" "
         +(it.director||"")+" "+(it.cast||[]).join(" ")+" "+(it.country||"")+" "+(it.language||"")+" "
@@ -660,8 +766,8 @@ function visibleItems(){
 }
 
 function thumbHTML(it){
-  if(it.thumb) return '<img src="'+esc(it.thumb)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">';
-  var hue=hueFrom(it.title||"x"), letter=(it.title||"S").trim().charAt(0).toLocaleUpperCase("tr");
+  if(it.thumb && state.ui.showPosters) return '<img src="'+esc(it.thumb)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">';
+  var hue=hueFrom(it.title||it.titleOriginal||"x"), letter=((it.titleOriginal||it.title||"S").trim().charAt(0)||"S").toLocaleUpperCase("tr");
   return '<div class="thumb-ph" style="background:linear-gradient(140deg,hsl('+hue+',32%,22%),hsl('+((hue+40)%360)+',38%,14%))"><span class="glyph">'+esc(letter)+'</span></div>';
 }
 /* en güçlü tek puanı kısa göster (IMDb > TMDB) */
@@ -671,14 +777,28 @@ function ratingShort(it){
   if(r.tmdb) return "★ "+r.tmdb;
   return "";
 }
-/* birincil başlık + farklı olan diğer adlar */
+/* birincil = orijinal ad, ikincil = İngilizce */
 function titleSet(it){
-  var prim=it.title||it.titleTr||it.titleOriginal||it.titleEn||"İsimsiz";
+  var prim=it.titleOriginal||it.title||it.titleTr||it.titleEn||"İsimsiz";
+  var en=(it.titleEn && it.titleEn!==prim)?it.titleEn:"";
   var rows=[];
+  if(it.titleEn && it.titleEn!==prim) rows.push(["İngilizce", it.titleEn]);
+  if(it.titleTr && it.titleTr!==prim && it.titleTr!==it.titleEn) rows.push(["Türkçe", it.titleTr]);
   if(it.titleOriginal && it.titleOriginal!==prim) rows.push(["Orijinal", it.titleOriginal]);
-  if(it.titleEn && it.titleEn!==prim && it.titleEn!==it.titleOriginal) rows.push(["İngilizce", it.titleEn]);
-  if(it.titleTr && it.titleTr!==prim && it.titleTr!==it.titleOriginal && it.titleTr!==it.titleEn) rows.push(["Türkçe", it.titleTr]);
-  return { prim:prim, rows:rows };
+  return { prim:prim, secondary:en, rows:rows };
+}
+/* Nur & Fırat puanları → Nora Puanı (ortalama) */
+function noraScore(it){
+  var arr=[]; if(it.scoreNur) arr.push(it.scoreNur); if(it.scoreFirat) arr.push(it.scoreFirat);
+  if(!arr.length) return null;
+  return Math.round((arr.reduce(function(a,b){return a+b;},0)/arr.length)*10)/10;
+}
+function hasNora(it){ return !!(it.scoreNur||it.scoreFirat); }
+function isShort(it){ return ((it.collections||[]).indexOf("N'Kısa")>-1) || (it.runtime && it.runtime>0 && it.runtime<40); }
+function scoreSelect(id,val){
+  var opts='<option value="">—</option>';
+  for(var i=1;i<=10;i++){ opts+='<option value="'+i+'"'+(String(val)===String(i)?" selected":"")+'>'+i+'</option>'; }
+  return '<select id="'+id+'">'+opts+'</select>';
 }
 
 function renderGrid(){
@@ -693,18 +813,21 @@ function renderGrid(){
     return;
   }
   var items=visibleItems();
-  if(items.length===0){ el.innerHTML='<div class="empty"><h2>Sonuç yok</h2><p>Seçili sekme ya da filtreye uyan kayıt bulunamadı.</p></div>'; return; }
+  if(items.length===0){ el.innerHTML='<div class="empty"><h2>Sonuç yok</h2><p>Seçili sekme ya da filtreye uyan kayıt bulunamadı.</p></div>'; renderCloud(); return; }
   var html='<div class="grid">';
   items.forEach(function(it){
     var hasVideo=!!it.embed;
+    var ts=titleSet(it);
     var cat0=(it.categories&&it.categories[0])||(it.genres&&it.genres[0])||"";
     var meta=[]; if(it.year) meta.push(it.year); if(it.runtime) meta.push(it.runtime+" dk");
+    var ns=noraScore(it); if(ns!=null) meta.push("Nora "+ns);
     var rs=ratingShort(it); if(rs) meta.push(rs);
     if(cat0) meta.push(cat0);
     var tags=[]; (it.categories||[]).forEach(function(c){tags.push({t:c,cat:true});}); (it.genres||[]).forEach(function(g){tags.push({t:g,cat:false});});
     tags=tags.filter(function(x){return x.t!==cat0;}).slice(0,3);
     var rec=it.recommendedBy||[];
-    html+='<div class="card" tabindex="0" role="button" data-id="'+it.id+'">'
+    var faded=(state.ui.fadeWatched && it.watched)?" faded":"";
+    html+='<div class="card'+faded+'" tabindex="0" role="button" data-id="'+it.id+'">'
       +'<div class="thumb">'+thumbHTML(it)
         +(it.platform?'<span class="plat-tag">'+(it.platform==="vk"?"VK":it.platform==="ok"?"OK.ru":"link")+'</span>':'')
         +'<span class="watch-tag '+(it.watched?"yes":"no")+'">'+(it.watched?CHECK+" İzlendi":"İzlenecek")+'</span>'
@@ -714,8 +837,8 @@ function renderGrid(){
       +'</div>'
       +'<div class="card-body">'
         +(meta.length?'<div class="card-meta">'+esc(meta.join(" · "))+'</div>':'')
-        +'<div class="card-title">'+esc(titleSet(it).prim)+'</div>'
-        +(titleSet(it).rows.length?'<div class="card-alt">'+titleSet(it).rows.map(function(r){return esc(r[1]);}).join(" · ")+'</div>':'')
+        +'<div class="card-title">'+esc(ts.prim)+'</div>'
+        +(ts.secondary?'<div class="card-alt">'+esc(ts.secondary)+'</div>':'')
         +(tags.length?'<div class="card-genres">'+tags.map(function(x){return '<span class="gtag'+(x.cat?" cat":"")+'">'+esc(x.t)+'</span>';}).join("")+'</div>':'')
         +((rec.length)?'<div class="recs">'+rec.map(function(p){return '<span class="rec">'+HEART+esc(p)+'</span>';}).join("")+'</div>':'')
         +'<button class="quick-watch '+(it.watched?"on":"")+'" data-watch="'+it.id+'">'+EYE+(it.watched?"İzlendi":"İzledim olarak işaretle")+'</button>'
@@ -741,27 +864,43 @@ function toggleWatched(id){
 }
 
 /* ===== sağ kategori bulutu ===== */
-function renderCloud(){
-  var aside=document.getElementById("cloudAside"); if(!aside) return;
-  var freq={};
-  state.items.forEach(function(it){ (it.categories||[]).forEach(function(c){ freq[c]=(freq[c]||0)+1; }); });
+function cloudBox(title, freq, selArr, onToggle){
   var keys=Object.keys(freq);
-  if(keys.length===0){ aside.innerHTML=""; aside.style.display="none"; return; }
-  aside.style.display="";
+  if(keys.length===0) return "";
   var max=0,min=1e9; keys.forEach(function(k){ if(freq[k]>max)max=freq[k]; if(freq[k]<min)min=freq[k]; });
   keys.sort(function(a,b){ return freq[b]-freq[a] || a.localeCompare(b,"tr"); });
-  function size(n){ if(max===min) return 15; return Math.round(13+(n-min)/(max-min)*11); } // 13–24px
+  function size(n){ if(max===min) return 15; return Math.round(13+(n-min)/(max-min)*10); }
   var tags=keys.map(function(k){
-    var on=state.cats.indexOf(k)>-1;
-    return '<button class="cloud-tag'+(on?" on":"")+'" data-c="'+esc(k)+'" style="font-size:'+size(freq[k])+'px">'
+    var on=selArr.indexOf(k)>-1;
+    return '<button class="cloud-tag'+(on?" on":"")+'" data-k="'+esc(k)+'" style="font-size:'+size(freq[k])+'px">'
       +esc(k)+'<span class="cn">'+freq[k]+'</span></button>';
   }).join("");
-  aside.innerHTML='<div class="cloud-box"><div class="cloud-head">Kategori bulutu</div><div class="cloud-tags">'+tags+'</div></div>';
-  aside.querySelectorAll("[data-c]").forEach(function(b){ b.onclick=function(){
-    var c=b.getAttribute("data-c"), i=state.cats.indexOf(c);
-    if(i>-1) state.cats.splice(i,1); else state.cats.push(c);
-    renderFilterbar(); renderGrid();
-  }; });
+  return '<div class="cloud-box"><div class="cloud-head">'+esc(title)+'</div><div class="cloud-tags" data-cloud="1">'+tags+'</div></div>';
+}
+function renderCloud(){
+  var aside=document.getElementById("cloudAside"); if(!aside) return;
+  var catF={}, dirF={}, actF={};
+  state.items.forEach(function(it){
+    (it.categories||[]).forEach(function(c){ catF[c]=(catF[c]||0)+1; });
+    if(it.director) dirF[it.director]=(dirF[it.director]||0)+1;
+    (it.cast||[]).forEach(function(a){ if(a) actF[a]=(actF[a]||0)+1; });
+  });
+  var html=cloudBox("Kategori bulutu", catF, state.cats, null)
+          +cloudBox("Yönetmen bulutu", dirF, state.directors, null)
+          +cloudBox("Oyuncu bulutu", actF, state.actors, null);
+  if(!html){ aside.innerHTML=""; aside.style.display="none"; return; }
+  aside.style.display=""; aside.innerHTML=html;
+  var boxes=aside.querySelectorAll(".cloud-box");
+  function wire(box, selArr){
+    box.querySelectorAll("[data-k]").forEach(function(b){ b.onclick=function(){
+      var k=b.getAttribute("data-k"), i=selArr.indexOf(k);
+      if(i>-1) selArr.splice(i,1); else selArr.push(k);
+      renderFilterbar(); renderGrid();
+    }; });
+  }
+  if(boxes[0]) wire(boxes[0], state.cats);
+  if(boxes[1]) wire(boxes[1], state.directors);
+  if(boxes[2]) wire(boxes[2], state.actors);
 }
 
 /* ===== detay / oynatıcı ===== */
@@ -794,6 +933,12 @@ function openDetail(id){
     +((it.cast&&it.cast.length)?'<div class="pm-row"><span class="pm-lbl">Oyuncular</span>'+it.cast.map(function(c){return '<span class="gtag">'+esc(c)+'</span>';}).join("")+'</div>':'')
     +((it.country||it.language)?'<div class="pm-row">'+(it.country?'<span class="pm-lbl">Ülke</span><span class="gtag">'+esc(it.country)+'</span>':'')+(it.language?'<span class="pm-lbl" style="margin-left:8px">Dil</span><span class="gtag">'+esc(it.language)+'</span>':'')+'</div>':'')
     +ratingsRow(it)
+    +(function(){ var ns=noraScore(it); if(ns==null && !it.scoreNur && !it.scoreFirat) return "";
+       var parts=['<span class="rchip nora">Nora '+(ns!=null?ns:"–")+'</span>'];
+       if(it.scoreNur) parts.push('<span class="rchip nur">Nur '+esc(it.scoreNur)+'</span>');
+       if(it.scoreFirat) parts.push('<span class="rchip firat">Fırat '+esc(it.scoreFirat)+'</span>');
+       return '<div class="pm-row"><span class="pm-lbl">Nora Puanı</span>'+parts.join("")+'</div>'; })()
+    +((it.collections&&it.collections.length)?'<div class="pm-row"><span class="pm-lbl">Koleksiyon</span>'+it.collections.map(function(c){return '<span class="gtag cat">'+esc(c)+'</span>';}).join("")+'</div>':'')
     +((it.categories&&it.categories.length)?'<div class="pm-row"><span class="pm-lbl">Tür</span>'+it.categories.map(function(g){return '<span class="gtag cat">'+esc(g)+'</span>';}).join("")+'</div>':'')
     +((it.genres&&it.genres.length)?'<div class="pm-row"><span class="pm-lbl">Alt tür</span>'+it.genres.map(function(g){return '<span class="gtag">'+esc(g)+'</span>';}).join("")+'</div>':'')
     +((it.people&&it.people.length)?'<div class="pm-row"><span class="pm-lbl">Kişiler</span>'+it.people.map(function(p){return '<span class="gtag">'+esc(p)+'</span>';}).join("")+'</div>':'')
@@ -887,6 +1032,7 @@ function renderForm(editId){
   var selCats=(it&&it.categories)?it.categories.slice():[];
   var selSubs=(it&&it.genres)?it.genres.slice():[];
   var rec=(it&&it.recommendedBy)?it.recommendedBy.slice():[];
+  var selCols=(it&&it.collections)?it.collections.slice():[];
   var watched=it?!!it.watched:false;
 
   document.getElementById("adminBody").innerHTML=
@@ -920,6 +1066,14 @@ function renderForm(editId){
     +'<div class="field"><label>Tavsiye eden</label><div class="checks">'
       +'<div class="check '+(rec.indexOf("Nur")>-1?"on":"")+'" data-rec="Nur"><span class="box">'+CHECK+'</span><span>Nur tavsiyesi</span></div>'
       +'<div class="check '+(rec.indexOf("Fırat")>-1?"on":"")+'" data-rec="Fırat"><span class="box">'+CHECK+'</span><span>Fırat tavsiyesi</span></div></div></div>'
+    +'<div class="field"><label>Puanlama <span class="hint">(1–10) — ikisinin ortalaması Nora Puanı olur</span></label>'
+      +'<div class="row2">'
+        +'<div class="score-in"><span>Nur</span>'+scoreSelect("f_nur", it?it.scoreNur:null)+'</div>'
+        +'<div class="score-in"><span>Fırat</span>'+scoreSelect("f_firat", it?it.scoreFirat:null)+'</div>'
+      +'</div><div id="noraPrev" class="nora-prev"></div></div>'
+    +'<div class="field"><label>Koleksiyonlar <span class="hint">— tik attıkların ilgili sekmede listelenir</span></label><div class="checks">'
+      +COLLECTIONS.map(function(k){ return '<div class="check '+(selCols.indexOf(k)>-1?"on":"")+'" data-col="'+esc(k)+'"><span class="box">'+CHECK+'</span><span>'+esc(k)+'</span></div>'; }).join("")
+      +'</div></div>'
     +'<div class="field"><label>Kişiler <span class="hint">(kendi videon için, virgülle ayır)</span></label><input type="text" id="f_people" value="'+esc(it&&it.people?it.people.join(", "):"")+'" placeholder="Nur, Elanur…"></div>'
     +'<div class="field"><label>Tarih <span class="hint">(kendi videon için)</span></label><input type="date" id="f_date" value="'+esc(it?it.date:"")+'"></div>'
     +'<div class="field"><label>Açıklama / not <span class="hint">(isteğe bağlı)</span></label><textarea id="f_desc" placeholder="Kısa bir not…">'+esc(it?it.description:"")+'</textarea></div>'
@@ -1014,6 +1168,15 @@ function renderForm(editId){
   document.querySelectorAll("[data-rec]").forEach(function(c){ c.onclick=function(){
     var v=c.getAttribute("data-rec"), i=rec.indexOf(v);
     if(i>-1){ rec.splice(i,1); c.classList.remove("on"); } else { rec.push(v); c.classList.add("on"); } }; });
+  document.querySelectorAll("[data-col]").forEach(function(c){ c.onclick=function(){
+    var v=c.getAttribute("data-col"), i=selCols.indexOf(v);
+    if(i>-1){ selCols.splice(i,1); c.classList.remove("on"); } else { selCols.push(v); c.classList.add("on"); } }; });
+  var nurSel=document.getElementById("f_nur"), firatSel=document.getElementById("f_firat"), noraPrev=document.getElementById("noraPrev");
+  function updNora(){
+    var a=[]; if(nurSel.value) a.push(+nurSel.value); if(firatSel.value) a.push(+firatSel.value);
+    noraPrev.innerHTML = a.length ? 'Nora Puanı: <b>'+(Math.round(a.reduce(function(x,y){return x+y;},0)/a.length*10)/10)+'</b>' : '';
+  }
+  nurSel.onchange=updNora; firatSel.onchange=updNora; updNora();
 
   var srcEl=document.getElementById("f_src"), noteEl=document.getElementById("srcNote");
   function checkSrc(){
@@ -1049,6 +1212,9 @@ function renderForm(editId){
       language:document.getElementById("f_language").value.trim(),
       categories:selCats.slice(),
       genres:selSubs.slice(),
+      collections:selCols.slice(),
+      scoreNur:document.getElementById("f_nur").value?parseInt(document.getElementById("f_nur").value,10):null,
+      scoreFirat:document.getElementById("f_firat").value?parseInt(document.getElementById("f_firat").value,10):null,
       ratings:fetchedRatings||{},
       imdbId:extractImdbId(imdbUrlVal), imdbUrl:imdbUrlVal, tmdbId:fetchedTmdbId||null,
       watched:watched,
