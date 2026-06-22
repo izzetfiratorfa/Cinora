@@ -244,6 +244,78 @@
   .rchip.nur{background:rgba(224,122,200,.16);color:#e07ac8}
   .rchip.firat{background:rgba(99,160,224,.16);color:#63a0e0}
   .tabsep{width:1px;align-self:stretch;background:var(--line-hi);margin:0 4px}
+
+  /* favori kalbi (kart) */
+  .fav-btn{position:absolute;top:8px;left:8px;z-index:3;width:32px;height:32px;border-radius:50%;border:none;
+    background:rgba(15,11,8,.5);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:0;transition:.16s}
+  .card:hover .fav-btn,.fav-btn.on{opacity:1}
+  .fav-btn svg{width:17px;height:17px;fill:rgba(255,255,255,.55);transition:.16s}
+  .fav-btn:hover svg{fill:#fff;transform:scale(1.1)}
+  .fav-btn.on{background:rgba(192,71,59,.92)}
+  .fav-btn.on svg{fill:#fff}
+  /* undo toast butonu */
+  .toast-undo{background:var(--accent);color:#1a120a;border:none;border-radius:7px;padding:3px 11px;margin-left:10px;
+    font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit}
+  /* kısayol kartı */
+  .sc-list{display:flex;flex-direction:column;gap:2px}
+  .sc-row{display:flex;align-items:center;gap:14px;padding:9px 4px;border-bottom:1px solid var(--line)}
+  .sc-row:last-child{border-bottom:none}
+  .sc-row kbd{font-family:"DM Mono",monospace;font-size:12.5px;background:var(--raised);border:1px solid var(--line-hi);
+    border-radius:6px;padding:4px 9px;min-width:120px;text-align:center;color:var(--text)}
+  .sc-row span{color:var(--muted);font-size:14px}
+
+  /* === detay redesign: hero + cam + dairesel rozet === */
+  .detail-poster{padding:0;display:block;position:relative;height:380px;overflow:hidden;border-radius:18px 18px 0 0}
+  .detail-poster::before{content:"";position:absolute;inset:0;background-image:var(--poster-bg);background-size:cover;background-position:center;
+    filter:blur(26px) saturate(1.2);transform:scale(1.18);opacity:.55}
+  .detail-poster img{position:relative;z-index:1;display:block;height:100%;width:auto;max-width:72%;margin:0 auto;
+    object-fit:contain;border-radius:0;border:none;box-shadow:0 24px 60px -20px rgba(0,0,0,.8);max-height:380px}
+  .detail-poster::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;z-index:2;
+    background:linear-gradient(180deg,transparent,var(--surface))}
+  .player-meta{padding:22px 26px 26px;position:relative;z-index:3}
+  .player-meta h3{font-family:"Fraunces",serif;font-weight:500;font-size:30px;line-height:1.1;margin-bottom:12px;letter-spacing:-.01em}
+  .player-meta .pm-overview{font-size:15px;line-height:1.62}
+  .player-meta .pm-row{margin-top:13px}
+  /* dairesel puan rozetleri */
+  .score-circles{display:flex;gap:14px;margin:20px 0 6px}
+  .sc-badge{width:74px;height:74px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    border:2px solid;background:var(--surface)}
+  .sc-badge .sc-v{font-family:"Fraunces",serif;font-size:25px;font-weight:600;line-height:1}
+  .sc-badge .sc-k{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-top:3px;opacity:.8}
+  .sc-badge.nora{border-color:var(--accent);background:var(--accent);color:#1a120a}
+  .sc-badge.nur{border-color:#e07ac8;color:#e07ac8}
+  .sc-badge.firat{border-color:#63a0e0;color:#63a0e0}
+
+  /* === mikro-animasyonlar === */
+  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.32)}100%{transform:scale(1)}}
+  .quick-watch.on svg,.fav-btn.on svg{animation:pop .32s ease}
+  @keyframes burst{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+  .celebrate::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--accent);animation:burst .5s ease-out forwards;pointer-events:none}
+  .card{transition:transform .18s cubic-bezier(.2,.8,.25,1),box-shadow .18s}
+  .tab{transition:background .16s,color .16s}
+
+  /* yükleme iskeletleri */
+  .sk-card{border-radius:12px;overflow:hidden}
+  .sk-thumb{aspect-ratio:2/3;border-radius:12px;margin-bottom:10px}
+  .sk-line{height:11px;border-radius:5px;margin-bottom:7px}
+  .sk-line.w70{width:70%}.sk-line.w40{width:40%}
+  .sk-thumb,.sk-line{background:linear-gradient(100deg,var(--raised) 30%,var(--line-hi) 50%,var(--raised) 70%);
+    background-size:200% 100%;animation:shimmer 1.3s ease-in-out infinite}
+  @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+  /* tipografi & boşluk cilası */
+  body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .card-title{line-height:1.28;letter-spacing:-.005em}
+  .card-meta{letter-spacing:.02em}
+  .cloud-head,.set-h{font-feature-settings:"tnum"}
+  .pm-overview{max-width:62ch}
+
+  /* hareket azaltma tercihi */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+      transition-duration:.001ms!important;scroll-behavior:auto!important}
+    .sk-thumb,.sk-line{animation:none;background:var(--raised)}
+  }
   .tab.col{font-family:"Fraunces",serif}
   .card.faded{opacity:.42;transition:opacity .15s}
   .card.faded:hover{opacity:1}
@@ -381,6 +453,16 @@
 
   /* son açılanlar şeridi */
   .rstrip{margin-bottom:22px}
+  .related{margin-top:24px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:18px}
+  .rel-h{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+  .rel-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+  .rel-card{flex:0 0 92px;width:92px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
+  .rel-thumb{display:block;width:92px;height:138px;border-radius:9px;overflow:hidden;background:var(--raised);border:1px solid var(--line);transition:.16s}
+  .rel-card:hover .rel-thumb{border-color:var(--accent);transform:translateY(-2px)}
+  .rel-thumb img{width:100%;height:100%;object-fit:cover}
+  .rel-thumb .thumb-ph{width:100%;height:100%}
+  .rel-t{display:block;font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.3;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .rstrip-head{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
   .rstrip-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
   .rcard{flex:0 0 104px;width:104px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
@@ -423,6 +505,18 @@
   .bk-when{font-size:14px;color:var(--text)}
   .bk-sub{font-size:12px;color:var(--muted);margin-top:2px}
   .bk-restore{padding:7px 13px;font-size:13px}
+  /* etiket/tür düzenleyici */
+  .te-tabs{display:flex;gap:8px;margin-bottom:14px}
+  .te-tab{background:var(--surface);border:1px solid var(--line-hi);color:var(--muted);border-radius:9px;padding:8px 14px;cursor:pointer;font-size:13.5px}
+  .te-tab.on{background:var(--accent);color:#1a120a;font-weight:600;border-color:var(--accent)}
+  .te-list{display:flex;flex-direction:column;gap:6px;max-height:52vh;overflow:auto;margin-bottom:14px}
+  .te-row{display:flex;align-items:center;gap:10px;background:var(--raised);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
+  .te-name{flex:1;color:var(--text);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .te-n{font-family:"DM Mono",monospace;font-size:12px;color:var(--muted);min-width:28px;text-align:right}
+  .te-acts{display:flex;gap:6px;flex-shrink:0}
+  .te-acts button{background:none;border:1px solid var(--line-hi);color:var(--muted);border-radius:7px;padding:5px 10px;font-size:12px;cursor:pointer}
+  .te-ren:hover{border-color:var(--accent);color:var(--accent)}
+  .te-del:hover{border-color:var(--danger);color:var(--danger)}
   /* profil */
   .profile-btn{font-family:"DM Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--accent)}
   .pp-h{font-family:"Fraunces",serif;font-size:24px;font-weight:600;margin-bottom:18px;text-align:center}
@@ -783,6 +877,36 @@ function matchSubgenres(keywords){
   });
   return Object.keys(found);
 }
+/* Etiketleri gösterirken Türkçeleştirme (değer İngilizce kalır, filtreleme tutarlı olsun diye) */
+var TAG_TR={
+  "based on novel or book":"romandan uyarlama","based on novel":"romandan uyarlama","based on book":"kitaptan uyarlama",
+  "based on true story":"gerçek olaylardan","based on play":"tiyatrodan uyarlama","based on comic":"çizgi romandan","based on comic book":"çizgi romandan",
+  "based on short story":"öyküden uyarlama","based on video game":"oyundan uyarlama",
+  "friendship":"dostluk","love":"aşk","romance":"romantizm","revenge":"intikam","family":"aile","family relationships":"aile ilişkileri",
+  "murder":"cinayet","death":"ölüm","loss of loved one":"sevilen birini kaybetme","grief":"yas","loneliness":"yalnızlık",
+  "coming of age":"büyüme çağı","dystopia":"distopya","dystopian future":"distopik gelecek","future":"gelecek","post-apocalyptic":"kıyamet sonrası",
+  "war":"savaş","world war ii":"2. Dünya Savaşı","world war i":"1. Dünya Savaşı","cold war":"Soğuk Savaş",
+  "police":"polis","detective":"dedektif","serial killer":"seri katil","crime":"suç","corruption":"yolsuzluk",
+  "small town":"küçük kasaba","new york city":"New York","paris france":"Paris","los angeles":"Los Angeles","london england":"Londra",
+  "depression":"depresyon","mental illness":"akıl sağlığı","suicide":"intihar","addiction":"bağımlılık","alcohol":"alkol","drugs":"uyuşturucu","drug addiction":"uyuşturucu bağımlılığı",
+  "betrayal":"ihanet","redemption":"kefaret","survival":"hayatta kalma","isolation":"izolasyon","nostalgia":"nostalji","childhood":"çocukluk",
+  "brother sister relationship":"kardeşlik","father son relationship":"baba-oğul ilişkisi","mother daughter relationship":"anne-kız ilişkisi","father daughter relationship":"baba-kız ilişkisi",
+  "marriage":"evlilik","divorce":"boşanma","infidelity":"aldatma","pregnancy":"hamilelik",
+  "immigrant":"göçmen","immigration":"göç","poverty":"yoksulluk","class differences":"sınıf farkı","capitalism":"kapitalizm","social commentary":"toplumsal eleştiri",
+  "religion":"din","faith":"inanç","existentialism":"varoluşçuluk","philosophy":"felsefe",
+  "time travel":"zaman yolculuğu","artificial intelligence":"yapay zekâ","robot":"robot","space":"uzay","outer space":"uzay","alien":"uzaylı",
+  "apocalypse":"kıyamet","zombie":"zombi","vampire":"vampir","ghost":"hayalet","supernatural":"doğaüstü","haunted house":"perili ev",
+  "heist":"soygun","prison":"hapishane","escape":"kaçış","road trip":"yol yolculuğu","coming out":"açılma (coming out)",
+  "lgbt":"LGBT","female protagonist":"kadın başrol","strong female lead":"güçlü kadın karakter",
+  "superhero":"süper kahraman","martial arts":"dövüş sanatları","nonlinear timeline":"doğrusal olmayan kurgu","flashback":"geri dönüş",
+  "dark comedy":"kara komedi","satire":"hiciv","black and white":"siyah beyaz","silent film":"sessiz film","surrealism":"gerçeküstücülük",
+  "dream":"rüya","memory":"hafıza","identity":"kimlik","obsession":"saplantı","jealousy":"kıskançlık","cult film":"kült film","independent film":"bağımsız film",
+  "biography":"biyografi","musician":"müzisyen","artist":"sanatçı","writer":"yazar","journalist":"gazeteci","painter":"ressam",
+  "teenager":"ergen","high school":"lise","wedding":"düğün","christmas":"Noel","winter":"kış","summer":"yaz",
+  "ocean":"okyanus","desert":"çöl","forest":"orman","island":"ada","train":"tren","violence":"şiddet","gun violence":"silahlı şiddet",
+  "father":"baba","mother":"anne","childhood trauma":"çocukluk travması","trauma":"travma","loss":"kayıp","hope":"umut","loss of father":"baba kaybı"
+};
+function tagLabel(t){ var k=norm(t); return TAG_TR[k]||t; }
 function extractImdbId(s){ var m=(s||"").match(/(tt\d{6,9})/i); return m?m[1].toLowerCase():null; }
 /* kişi adlarını yalnızca Latin harflere indirger (Kiril/CJK/Arap vb. atılır) */
 function latinName(s){
@@ -1039,6 +1163,13 @@ function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(
 function hueFrom(str){ var h=0; for(var i=0;i<str.length;i++){ h=str.charCodeAt(i)+((h<<5)-h);} return Math.abs(h)%360; }
 function toast(msg){ var t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
   clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove("show"); },2200); }
+function undoToast(msg, fn){
+  var t=document.getElementById("toast"); t.innerHTML=esc(msg)+' <button class="toast-undo">Geri al</button>';
+  t.classList.add("show"); clearTimeout(t._t);
+  var btn=t.querySelector(".toast-undo");
+  btn.onclick=function(){ clearTimeout(t._t); t.classList.remove("show"); t.innerHTML=""; fn(); };
+  t._t=setTimeout(function(){ t.classList.remove("show"); t.innerHTML=""; },6000);
+}
 var HEART='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-8.5C.5 9 2 5.5 5.2 5.2 7 5 8.4 6 12 9c3.6-3 5-4 6.8-3.8C22 5.5 23.5 9 21.5 12.5 19 16.5 12 21 12 21z"/></svg>';
 var EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
 var CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
@@ -1046,10 +1177,11 @@ var CARET='<svg class="car" viewBox="0 0 24 24" fill="none" stroke="currentColor
 
 /* ===== sekmeler ===== */
 function counts(){
-  var c={all:state.items.length,unwatched:0,watched:0,nur:0,firat:0};
+  var c={all:state.items.length,unwatched:0,watched:0,nur:0,firat:0,fav:0};
   COLLECTIONS.forEach(function(k){ c["col:"+k]=0; });
   state.items.forEach(function(it){
     if(it.watched) c.watched++; else c.unwatched++;
+    if(it.fav) c.fav++;
     var r=it.recommendedBy||[];
     if(r.indexOf("Nur")>-1) c.nur++;
     if(r.indexOf("Fırat")>-1) c.firat++;
@@ -1060,6 +1192,7 @@ function counts(){
 function renderTabs(){
   var c=counts();
   var defs=[{k:"all",label:"Tümü"},{k:"unwatched",label:"İzlenecek"},{k:"watched",label:"İzlendi"},
+    {k:"fav",label:"Favoriler",heart:true},
     {k:"nur",label:"Nur'un önerileri",heart:true},{k:"firat",label:"Fırat'ın önerileri",heart:true}];
   var main=defs.map(function(d){
     return '<button class="tab '+(state.view===d.k?"on":"")+'" role="tab" aria-selected="'+(state.view===d.k?"true":"false")+'" data-v="'+d.k+'">'
@@ -1290,6 +1423,7 @@ function visibleItems(){
     }
     if(state.view==="unwatched" && it.watched) return false;
     if(state.view==="watched" && !it.watched) return false;
+    if(state.view==="fav" && !it.fav) return false;
     if(state.view==="nur" && (it.recommendedBy||[]).indexOf("Nur")<0) return false;
     if(state.view==="firat" && (it.recommendedBy||[]).indexOf("Fırat")<0) return false;
     if(state.view.indexOf("col:")===0){ if((it.collections||[]).indexOf(state.view.slice(4))<0) return false; }
@@ -1425,6 +1559,7 @@ function cardHTML(it){
   var faded=(state.ui.fadeWatched && it.watched)?" faded":"";
   return '<div class="card'+faded+'" tabindex="0" role="button" aria-label="'+esc(ts.prim)+(it.year?" ("+it.year+")":"")+'" data-id="'+it.id+'">'
     +'<div class="thumb">'+thumbHTML(it)
+      +'<button class="fav-btn'+(it.fav?" on":"")+'" data-fav="'+it.id+'" aria-label="Favori" aria-pressed="'+(it.fav?"true":"false")+'"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2.3 4.5 5.7 4.5c2 0 3.4 1.2 4.3 2.5.9-1.3 2.3-2.5 4.3-2.5 3.4 0 5.2 3.5 3.7 7.2C19.5 16.4 12 21 12 21z"/></svg></button>'
       +(it.platform?'<span class="plat-tag">'+(it.platform==="vk"?"VK":it.platform==="ok"?"OK.ru":"link")+'</span>':'')
       +(inProgress(it)?'<span class="prog-tag">Yarım kaldı</span>':'<span class="watch-tag '+(it.watched?"yes":"no")+'">'+(it.watched?CHECK+" İzlendi":"İzlenecek")+'</span>')
       +'<div class="play-badge '+(hasVideo?"":"info")+'"><span>'+(hasVideo?PLAY_SVG:INFO_SVG)+'</span></div>'
@@ -1461,7 +1596,9 @@ function renderGrid(){
   }
   var items=visibleItems();
   if(items.length===0){
-    el.innerHTML='<div class="empty"><h2>Sonuç yok</h2><p>Seçili sekme ya da filtreye uyan kayıt bulunamadı.</p>'
+    el.innerHTML='<div class="empty">'
+      +'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
+      +'<h2>Sonuç yok</h2><p>Seçili sekme ya da filtreye uyan kayıt bulunamadı.</p>'
       +(anyFilterActive()?'<button class="btn btn-ghost" id="clrAll">Filtreleri temizle</button>':'')+'</div>';
     var c=document.getElementById("clrAll"); if(c) c.onclick=function(){ resetAllFilters(); };
     renderCloud(); return;
@@ -1486,6 +1623,11 @@ function observeSentinel(){
   gridObs.observe(s);
 }
 
+function toggleFav(id){
+  var it=state.items.find(function(x){return x.id===id;}); if(!it) return;
+  it.fav=!it.fav; save(); renderTabs(); renderGrid();
+  toast(it.fav?"♥ Favorilere eklendi":"Favorilerden çıkarıldı");
+}
 function toggleWatched(id){
   var it=state.items.find(function(x){return x.id===id;}); if(!it) return;
   it.watched=!it.watched;
@@ -1495,7 +1637,7 @@ function toggleWatched(id){
 }
 
 /* ===== sağ kategori bulutu ===== */
-function cloudBox(title, freq, selArr, onToggle){
+function cloudBox(title, freq, selArr, labelFn){
   var keys=Object.keys(freq);
   if(keys.length===0) return "";
   var max=0,min=1e9; keys.forEach(function(k){ if(freq[k]>max)max=freq[k]; if(freq[k]<min)min=freq[k]; });
@@ -1503,9 +1645,9 @@ function cloudBox(title, freq, selArr, onToggle){
   if(keys.length>50){ var top=keys.slice(0,50); (selArr||[]).forEach(function(s){ if(freq[s]&&top.indexOf(s)<0) top.push(s); }); keys=top; }
   function size(n){ if(max===min) return 15; return Math.round(13+(n-min)/(max-min)*10); }
   var tags=keys.map(function(k){
-    var on=selArr.indexOf(k)>-1;
+    var on=selArr.indexOf(k)>-1, lbl=labelFn?labelFn(k):k;
     return '<button class="cloud-tag'+(on?" on":"")+'" data-k="'+esc(k)+'" style="font-size:'+size(freq[k])+'px">'
-      +esc(k)+'<span class="cn">'+freq[k]+'</span></button>';
+      +esc(lbl)+'<span class="cn">'+freq[k]+'</span></button>';
   }).join("");
   return '<div class="cloud-box"><div class="cloud-head">'+esc(title)+'</div><div class="cloud-tags" data-cloud="1">'+tags+'</div></div>';
 }
@@ -1519,7 +1661,7 @@ function renderCloud(){
     (it.tags||[]).forEach(function(t){ if(t) tagF[t]=(tagF[t]||0)+1; });
   });
   var html=cloudBox("Kategori bulutu", catF, state.cats, null)
-          +cloudBox("Etiket bulutu", tagF, state.tags, null)
+          +cloudBox("Etiket bulutu", tagF, state.tags, tagLabel)
           +cloudBox("Yönetmen bulutu", dirF, state.directors, null)
           +cloudBox("Oyuncu bulutu", actF, state.actors, null);
   if(!html){ aside.innerHTML=""; aside.style.display="none"; return; }
@@ -1577,6 +1719,28 @@ function applyDetailTint(it){
   img.onerror=function(){};
   img.src=it.thumb;
 }
+/* ===== ilişkili filmler ===== */
+function relMini(it){
+  return '<button class="rel-card" data-rel="'+it.id+'" aria-label="'+esc(titleSet(it).prim)+'">'
+    +'<span class="rel-thumb">'+thumbHTML(it)+'</span><span class="rel-t">'+esc(titleSet(it).prim)+'</span></button>';
+}
+function relRow(title, items){
+  if(!items.length) return "";
+  return '<div class="rel-sec"><div class="rel-h">'+esc(title)+'</div><div class="rel-row">'+items.map(relMini).join("")+'</div></div>';
+}
+function relatedHTML(it){
+  var others=state.items.filter(function(x){ return x.id!==it.id; });
+  if(childMode()) others=others.filter(function(x){ return (x.collections||[]).indexOf("N'18")<0; });
+  var sameDir=it.director?others.filter(function(x){return x.director===it.director;}).slice(0,10):[];
+  var cast=it.cast||[];
+  var sameAct=cast.length?others.filter(function(x){ return (x.cast||[]).some(function(a){return cast.indexOf(a)>-1;}); }).slice(0,10):[];
+  var tg=it.tags||[];
+  var shared=tg.length?others.map(function(x){ var n=(x.tags||[]).filter(function(t){return tg.indexOf(t)>-1;}).length; return {x:x,n:n}; })
+    .filter(function(o){return o.n>=2;}).sort(function(a,b){return b.n-a.n;}).slice(0,10).map(function(o){return o.x;}):[];
+  // çakışmayı azalt: ortak etiketlerde yönetmen/oyuncu zaten varsa bırak
+  var html=relRow("Aynı yönetmen", sameDir)+relRow("Bu oyuncularla", sameAct)+relRow("Ortak etiketler", shared);
+  return html?'<div class="related">'+html+'</div>':'';
+}
 function openDetail(id){
   var it=state.items.find(function(x){return x.id===id;}); if(!it) return;
   if(it.embed) recentPush(it.id);
@@ -1585,9 +1749,9 @@ function openDetail(id){
   if(it.embed){ top.className="player-frame";
     top.innerHTML='<iframe src="'+esc(it.embed)+'" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>'
       +'<button class="cinema-btn" id="cinemaBtn" title="Sinema modu (tam ekran)" aria-label="Sinema modu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg></button>';
-  }else if(it.thumb){ top.className="detail-poster";
+  }else if(it.thumb){ top.className="detail-poster"; top.style.setProperty("--poster-bg",'url("'+it.thumb+'")');
     top.innerHTML='<img src="'+esc(it.thumb)+'" alt="'+esc(titleSet(it).prim)+' afişi" referrerpolicy="no-referrer" onerror="this.parentNode.style.display=\'none\'">';
-  }else{ top.className="detail-head"; top.innerHTML=""; }
+  }else{ top.className="detail-head"; top.style.removeProperty("--poster-bg"); top.innerHTML=""; }
   var meta=document.getElementById("playerMeta");
   var line=[]; if(it.year) line.push(it.year); if(it.runtime) line.push(it.runtime+" dk");
   line.push(it.watched?("İzlendi"+(it.watchedDate?" · "+fmtDateTR(it.watchedDate):"")):"İzlenecek");
@@ -1604,10 +1768,10 @@ function openDetail(id){
     +((it.country||it.language)?'<div class="pm-row">'+(it.country?'<span class="pm-lbl">Ülke</span><span class="gtag">'+esc(it.country)+'</span>':'')+(it.language?'<span class="pm-lbl" style="margin-left:8px">Dil</span><span class="gtag">'+esc(it.language)+'</span>':'')+'</div>':'')
     +ratingsRow(it)
     +(function(){ var ns=noraScore(it); if(ns==null && !it.scoreNur && !it.scoreFirat) return "";
-       var parts=['<span class="rchip nora">Nora '+(ns!=null?ns:"–")+'</span>'];
-       if(it.scoreNur) parts.push('<span class="rchip nur">Nur '+esc(it.scoreNur)+'</span>');
-       if(it.scoreFirat) parts.push('<span class="rchip firat">Fırat '+esc(it.scoreFirat)+'</span>');
-       return '<div class="pm-row"><span class="pm-lbl">Nora Puanı</span>'+parts.join("")+'</div>'; })()
+       var b=[]; b.push('<div class="sc-badge nora"><span class="sc-v">'+(ns!=null?ns:"–")+'</span><span class="sc-k">Nora</span></div>');
+       if(it.scoreNur) b.push('<div class="sc-badge nur"><span class="sc-v">'+esc(it.scoreNur)+'</span><span class="sc-k">Nur</span></div>');
+       if(it.scoreFirat) b.push('<div class="sc-badge firat"><span class="sc-v">'+esc(it.scoreFirat)+'</span><span class="sc-k">Fırat</span></div>');
+       return '<div class="score-circles">'+b.join("")+'</div>'; })()
     +((it.reviewNur||it.reviewFirat)?'<div class="reviews">'
         +(it.reviewNur?'<div class="review nur"><span class="r-who">Nur</span>'+esc(it.reviewNur)+'</div>':'')
         +(it.reviewFirat?'<div class="review firat"><span class="r-who">Fırat</span>'+esc(it.reviewFirat)+'</div>':'')
@@ -1615,7 +1779,7 @@ function openDetail(id){
     +((it.collections&&it.collections.length)?'<div class="pm-row"><span class="pm-lbl">Koleksiyon</span>'+it.collections.map(function(c){return '<span class="gtag cat">'+esc(c)+'</span>';}).join("")+'</div>':'')
     +((it.categories&&it.categories.length)?'<div class="pm-row"><span class="pm-lbl">Tür</span>'+it.categories.map(function(g){return '<span class="gtag cat">'+esc(g)+'</span>';}).join("")+'</div>':'')
     +((it.genres&&it.genres.length)?'<div class="pm-row"><span class="pm-lbl">Alt tür</span>'+it.genres.map(function(g){return '<span class="gtag">'+esc(g)+'</span>';}).join("")+'</div>':'')
-    +((it.tags&&it.tags.length)?'<div class="pm-row pm-tags"><span class="pm-lbl">Etiketler</span>'+it.tags.slice(0,30).map(function(t){return '<button class="gtag tag-chip" data-tag="'+esc(t)+'">'+esc(t)+'</button>';}).join("")+'</div>':'')
+    +((it.tags&&it.tags.length)?'<div class="pm-row pm-tags"><span class="pm-lbl">Etiketler</span>'+it.tags.slice(0,30).map(function(t){return '<button class="gtag tag-chip" data-tag="'+esc(t)+'">'+esc(tagLabel(t))+'</button>';}).join("")+'</div>':'')
     +((it.people&&it.people.length)?'<div class="pm-row"><span class="pm-lbl">Kişiler</span>'+it.people.map(function(p){return '<span class="gtag">'+esc(p)+'</span>';}).join("")+'</div>':'')
     +((rec.length)?'<div class="pm-row">'+rec.map(function(p){return '<span class="rec">'+HEART+esc(p)+' önerdi</span>';}).join("")+'</div>':'')
     +(function(){
@@ -1631,8 +1795,10 @@ function openDetail(id){
       +'<button class="quick-watch" id="detShare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v14"/></svg>Bağlantıyı kopyala</button>'
       +'<button class="quick-watch" id="detCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg>Kart olarak paylaş</button>'
       +'<button class="quick-watch" id="detTrailer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M8 5v14l11-7z"/></svg>Fragman</button>'
-    +'</div>';
+    +'</div>'
+    +relatedHTML(it);
   document.getElementById("detWatch").onclick=function(){ toggleWatched(it.id); openDetail(it.id); };
+  document.querySelectorAll("#playerMeta [data-rel]").forEach(function(b){ b.onclick=function(){ openDetail(b.getAttribute("data-rel")); }; });
   document.querySelectorAll("#playerMeta .tag-chip").forEach(function(b){ b.onclick=function(){
     var t=b.getAttribute("data-tag"); state.tags=[t]; state.view="all"; closePlayer(); renderTabs(); renderFilterbar(); renderGrid();
     window.scrollTo({top:0,behavior:"smooth"}); }; });
@@ -1693,6 +1859,7 @@ function renderAdminList(){
       +'<button class="btn btn-ghost" id="importBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 9l5-5 5 5M12 4v12"/></svg>İçe aktar</button>'
       +'<button class="btn btn-ghost" id="settingsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82M4.6 9a1.65 1.65 0 00-.33-1.82"/><circle cx="12" cy="12" r="9"/></svg>Ayarlar</button>'
       +'<button class="btn btn-ghost" id="backupBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7M21 3v6h-6"/></svg>Yedekler</button>'
+      +'<button class="btn btn-ghost" id="tagEditBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 8.6L12 17l-4-4M3 12h.01"/><path d="M7 7h.01"/></svg>Etiket/Tür düzenle</button>'
       +'<input type="file" id="importFile" accept="application/json" style="display:none"></div>'
     +(rows||'<p style="color:var(--muted);text-align:center;padding:20px">Henüz kayıt yok.</p>');
   document.getElementById("addNew").onclick=function(){ renderForm(); };
@@ -1701,13 +1868,20 @@ function renderAdminList(){
   document.getElementById("importFile").onchange=importCatalog;
   document.getElementById("settingsBtn").onclick=renderSettings;
   document.getElementById("backupBtn").onclick=renderBackups;
+  document.getElementById("tagEditBtn").onclick=function(){ renderTagEditor("tags"); };
   document.querySelectorAll("#adminBody [data-edit]").forEach(function(b){ b.onclick=function(){ renderForm(b.getAttribute("data-edit")); }; });
   document.querySelectorAll("#adminBody [data-del]").forEach(function(b){ b.onclick=function(){
-    if(confirm("Bu kaydı silmek istediğine emin misin?")){
-      snapshot("silme öncesi");
-      var id=b.getAttribute("data-del"); state.items=state.items.filter(function(x){return x.id!==id;});
-      save(); renderAdminList(); renderTabs(); renderFilterbar(); renderGrid(); toast("Silindi");
-    }
+    var id=b.getAttribute("data-del");
+    var idx=state.items.findIndex(function(x){return x.id===id;});
+    if(idx<0) return;
+    var removed=state.items[idx];
+    snapshot("silme öncesi");
+    state.items.splice(idx,1);
+    save(); renderAdminList(); renderTabs(); renderFilterbar(); renderGrid();
+    undoToast("Silindi: "+titleSet(removed).prim, function(){
+      state.items.splice(Math.min(idx,state.items.length),0,removed);
+      save(); renderAdminList(); renderTabs(); renderFilterbar(); renderGrid(); toast("Geri alındı");
+    });
   }; });
 }
 
@@ -1760,6 +1934,50 @@ function renderSettings(){
     if(o) localStorage.setItem(OMDB_KEY,o); else localStorage.removeItem(OMDB_KEY);
     toast("Anahtarlar kaydedildi"); renderAdminList();
   };
+}
+
+/* ===== etiket / alt tür düzenleyici (birleştir & yeniden adlandır) ===== */
+function tagEditorField(mode){ return mode==="tags"?"tags":"genres"; }
+function applyValueOp(field, from, to){
+  // to boş => sil; aksi halde yeniden adlandır/birleştir
+  state.items.forEach(function(it){
+    var arr=it[field]; if(!arr||!arr.length) return;
+    var out=[]; arr.forEach(function(v){
+      if(v===from){ if(to){ if(out.indexOf(to)<0) out.push(to); } }
+      else if(out.indexOf(v)<0) out.push(v);
+    });
+    it[field]=out;
+  });
+}
+function renderTagEditor(mode){
+  mode=mode||"tags"; var field=tagEditorField(mode);
+  document.getElementById("adminTitle").textContent="Etiket / Tür düzenle";
+  var freq={}; state.items.forEach(function(it){ (it[field]||[]).forEach(function(v){ if(v) freq[v]=(freq[v]||0)+1; }); });
+  var rows=Object.keys(freq).map(function(k){return [k,freq[k]];}).sort(function(a,b){return b[1]-a[1]||a[0].localeCompare(b[0],"tr");});
+  var head='<div class="te-tabs"><button class="te-tab '+(mode==="tags"?"on":"")+'" data-m="tags">Etiketler ('+(mode==="tags"?rows.length:"")+')</button>'
+    +'<button class="te-tab '+(mode==="genres"?"on":"")+'" data-m="genres">Alt türler</button></div>'
+    +'<p style="color:var(--faint);font-size:12.5px;margin:0 0 14px">Yeniden adlandır yazımı düzeltir; var olan bir değere yazarsan birleşir. Boş bırakırsan siler. Tüm kütüphanede uygulanır.</p>';
+  var list = rows.length ? '<div class="te-list">'+rows.map(function(r){
+    return '<div class="te-row"><span class="te-name">'+esc(mode==="tags"?tagLabel(r[0]):r[0])+'</span><span class="te-n">'+r[1]+'</span>'
+      +'<span class="te-acts"><button class="te-ren" data-v="'+esc(r[0])+'">Yeniden adlandır</button>'
+      +'<button class="te-del" data-v="'+esc(r[0])+'">Sil</button></span></div>';
+  }).join("")+'</div>' : '<p style="color:var(--muted);text-align:center;padding:20px">Kayıt yok.</p>';
+  document.getElementById("adminBody").innerHTML=head+list+'<div class="form-actions"><button class="btn btn-ghost" id="teBack">Geri</button></div>';
+  document.getElementById("teBack").onclick=renderAdminList;
+  document.querySelectorAll(".te-tab").forEach(function(b){ b.onclick=function(){ renderTagEditor(b.getAttribute("data-m")); }; });
+  document.querySelectorAll(".te-ren").forEach(function(b){ b.onclick=function(){
+    var from=b.getAttribute("data-v");
+    var to=prompt("Yeni ad (var olan bir değer yazarsan birleşir):", from);
+    if(to===null) return; to=to.trim(); if(!to||to===from) return;
+    snapshot("etiket düzenleme"); applyValueOp(field, from, to); save();
+    renderTabs(); renderFilterbar(); renderGrid(); renderTagEditor(mode); toast("Güncellendi");
+  }; });
+  document.querySelectorAll(".te-del").forEach(function(b){ b.onclick=function(){
+    var from=b.getAttribute("data-v");
+    if(!confirm('"'+from+'" tüm filmlerden kaldırılsın mı?')) return;
+    snapshot("etiket silme"); applyValueOp(field, from, ""); save();
+    renderTabs(); renderFilterbar(); renderGrid(); renderTagEditor(mode); toast("Kaldırıldı");
+  }; });
 }
 
 /* ===== yedekler görünümü ===== */
@@ -1846,6 +2064,19 @@ function renderStats(){
   }
   function filmLine(it,suffix){ if(!it) return "–"; return esc(titleSet(it).prim)+" · "+it.runtime+" dk"; }
 
+  /* en uzun izleme serisi (ardışık gün) */
+  var days=Object.keys(watched.reduce(function(a,x){ if(x.watchedDate) a[x.watchedDate.slice(0,10)]=1; return a; },{})).sort();
+  var longestStreak=0, curStreak=0, prev=null;
+  days.forEach(function(d){
+    if(prev){ var diff=Math.round((new Date(d)-new Date(prev))/864e5); curStreak=(diff===1)?curStreak+1:1; }
+    else curStreak=1;
+    if(curStreak>longestStreak) longestStreak=curStreak; prev=d;
+  });
+  /* çeşitlilik skorları */
+  var wDirs={}, wCtry={}; watched.forEach(function(x){ if(x.director) wDirs[x.director]=1; splitCountries(x).forEach(function(c){ if(c) wCtry[c]=1; }); });
+  var dirDiv=watched.length?Math.round(Object.keys(wDirs).length/watched.length*100):0;
+  var ctryDiv=watched.length?Math.round(Object.keys(wCtry).length/watched.length*100):0;
+
   document.getElementById("adminBody").innerHTML=
     '<div class="stat-grid">'
       +statCard(total, "Toplam film")
@@ -1864,6 +2095,13 @@ function renderStats(){
     +((longest||shortest)?'<div class="set-section"><div class="set-h">Uçlar</div>'
       +'<div class="pm-row"><span class="pm-lbl">En uzun</span><span>'+filmLine(longest)+'</span></div>'
       +'<div class="pm-row"><span class="pm-lbl">En kısa</span><span>'+filmLine(shortest)+'</span></div></div>':'')
+    +'<div class="set-section"><div class="set-h">Seri & çeşitlilik</div>'
+      +'<div class="stat-grid">'
+        +statCard(longestStreak+(longestStreak===1?" gün":" gün"), "En uzun izleme serisi")
+        +statCard("%"+dirDiv, "Yönetmen çeşitliliği")
+        +statCard("%"+ctryDiv, "Ülke çeşitliliği")
+      +'</div>'
+      +'<p style="color:var(--faint);font-size:12px;margin-top:8px">Çeşitlilik = izlenenler içinde benzersiz yönetmen/ülke oranı. Yüksek = daha geniş yelpaze.</p></div>'
     +'<div class="set-section"><div class="set-h">En çok izlenen yönetmenler</div>'+barList(dirs, dirs.length?dirs[0][1]:1)+'</div>'
     +'<div class="set-section"><div class="set-h">Tür dağılımı</div>'+barList(cats, catMax)+'</div>'
     +'<div class="form-actions"><button class="btn btn-ghost" id="statsBack">Geri</button></div>';
@@ -2025,7 +2263,7 @@ function renderForm(editId){
   var tagArr=(it&&it.tags)?it.tags.slice():((it&&it.keywords)?it.keywords.slice():[]);
   var tagChips=document.getElementById("tagChips"), tagInput=document.getElementById("f_tag_input");
   function paintTags(){
-    tagChips.innerHTML=tagArr.map(function(a){return '<span class="chip">'+esc(a)+'<button data-xt="'+esc(a)+'" aria-label="çıkar">'+X+'</button></span>';}).join("");
+    tagChips.innerHTML=tagArr.map(function(a){return '<span class="chip">'+esc(tagLabel(a))+'<button data-xt="'+esc(a)+'" aria-label="çıkar">'+X+'</button></span>';}).join("");
     tagChips.querySelectorAll("[data-xt]").forEach(function(b){ b.onclick=function(){ var a=b.getAttribute("data-xt"); tagArr=tagArr.filter(function(z){return z!==a;}); paintTags(); }; });
   }
   function addTag(raw){ (raw||"").split(",").map(function(s){return s.trim();}).filter(Boolean).forEach(function(n){ if(tagArr.indexOf(n)<0) tagArr.push(n); }); paintTags(); }
@@ -2203,7 +2441,7 @@ function renderForm(editId){
       tags:tagArr.slice(),
       ratings:fetchedRatings||{},
       imdbId:fetchedImdbId||extractImdbId(imdbUrlVal), imdbUrl:imdbUrlVal, lbUrl:document.getElementById("f_lb").value.trim(), tmdbId:fetchedTmdbId||null,
-      watched:watched, watchedDate:wdate||"",
+      watched:watched, watchedDate:wdate||"", fav:editId?!!(it&&it.fav):false,
       recommendedBy:rec.slice(),
       date:document.getElementById("f_date").value,
       people:document.getElementById("f_people").value.split(",").map(function(s){return s.trim();}).filter(Boolean),
@@ -2645,6 +2883,25 @@ function shareTicket(it){
   exportCard(c, ts.prim+" — bilet");
 }
 
+/* ===== klavye kısayolları kartı ===== */
+function openShortcuts(){
+  var ov=document.getElementById("helpOverlay");
+  if(!ov){ ov=document.createElement("div"); ov.id="helpOverlay"; ov.className="overlay";
+    ov.innerHTML='<div class="modal" role="dialog" aria-modal="true" aria-label="Kısayollar"><div class="modal-head"><h2>Klavye kısayolları</h2>'
+      +'<button class="iconbtn" id="helpClose" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>'
+      +'<div class="modal-body"><div class="sc-list">'
+      +[["/","Aramaya odaklan"],["?","Bu kısayol kartını aç"],["Enter / Boşluk","Seçili kartı aç"],["Esc","Açık pencereyi kapat"],
+        ["♥ (kart üstü)","Favorilere ekle/çıkar"],["👁 (kart üstü)","İzledim işaretle"]]
+        .map(function(r){return '<div class="sc-row"><kbd>'+esc(r[0])+'</kbd><span>'+esc(r[1])+'</span></div>';}).join("")
+      +'</div></div></div>';
+    document.body.appendChild(ov);
+    ov.addEventListener("click",function(e){ if(e.target===ov) closeShortcuts(); });
+    ov.querySelector("#helpClose").onclick=closeShortcuts;
+  }
+  ov.classList.add("show"); document.body.style.overflow="hidden";
+}
+function closeShortcuts(){ var ov=document.getElementById("helpOverlay"); if(ov){ ov.classList.remove("show"); document.body.style.overflow=""; } }
+
 /* ===== başlat ===== */
 function boot(){
   applyAppearance();
@@ -2652,6 +2909,7 @@ function boot(){
 
   var content=document.getElementById("content");
   content.addEventListener("click",function(e){
+    var f=e.target.closest("[data-fav]"); if(f){ e.stopPropagation(); toggleFav(f.getAttribute("data-fav")); return; }
     var w=e.target.closest("[data-watch]"); if(w){ e.stopPropagation(); toggleWatched(w.getAttribute("data-watch")); return; }
     var r=e.target.closest("[data-rid]"); if(r){ openDetail(r.getAttribute("data-rid")); return; }
     var card=e.target.closest(".card[data-id]"); if(card){ openDetail(card.getAttribute("data-id")); }
@@ -2690,14 +2948,28 @@ function boot(){
   document.getElementById("playerOverlay").onclick=function(e){ if(e.target.id==="playerOverlay") closePlayer(); };
   document.getElementById("adminOverlay").onclick=function(e){ if(e.target.id==="adminOverlay") closeAdmin(); };
   document.addEventListener("click",function(){ closePanels(); });
-  document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ closePanels(); closePlayer(); closeAdmin(); closeMoodPicker();
-    var pov=document.getElementById("passportOverlay"); if(pov.classList.contains("show")){ pov.classList.remove("show"); document.body.style.overflow=""; }
-    if(getProfile()){ var po=document.getElementById("profileOverlay"); po.classList.remove("show"); document.body.style.overflow=""; } } trapTab(e); });
+  document.addEventListener("keydown",function(e){
+    var typing=/^(INPUT|TEXTAREA|SELECT)$/.test((e.target&&e.target.tagName)||"");
+    if(!typing){
+      if(e.key==="?"||(e.shiftKey&&e.key==="/")){ e.preventDefault(); openShortcuts(); return; }
+      if(e.key==="/"){ e.preventDefault(); var s=document.getElementById("search"); if(s) s.focus(); return; }
+    }
+    if(e.key==="Escape"){ closePanels(); closePlayer(); closeAdmin(); closeMoodPicker(); closeShortcuts();
+      var pov=document.getElementById("passportOverlay"); if(pov.classList.contains("show")){ pov.classList.remove("show"); document.body.style.overflow=""; }
+      if(getProfile()){ var po=document.getElementById("profileOverlay"); po.classList.remove("show"); document.body.style.overflow=""; } }
+    trapTab(e);
+  });
   window.addEventListener("hashchange",openFromHash);
   openFromHash();
   maybeExportReminder();
   if(getProfile()) applyProfile(); else setTimeout(openProfilePicker, 300);
 }
+function renderSkeleton(){
+  var el=document.getElementById("content"); if(!el) return;
+  var cards=""; for(var i=0;i<12;i++){ cards+='<div class="sk-card"><div class="sk-thumb"></div><div class="sk-line w70"></div><div class="sk-line w40"></div></div>'; }
+  el.innerHTML='<div class="grid">'+cards+'</div>';
+}
+renderSkeleton();
 load().then(function(){
   if(!localStorage.getItem(TMDB_KEY)) localStorage.setItem(TMDB_KEY, DEFAULT_TMDB);
   if(!localStorage.getItem(PASS_KEY)) localStorage.setItem(PASS_KEY, DEFAULT_PASS);
