@@ -701,6 +701,38 @@ function getKeys(){ return { tmdb: localStorage.getItem(TMDB_KEY)||"", omdb: loc
 /* TMDB tür adlarını ana kategorilerimize eşle */
 var TMDB_GENRE_MAP={ "Bilim Kurgu":"Bilimkurgu","Bilimkurgu":"Bilimkurgu","Müzik":"Müzikal","Vahşi Batı":"Western","TV Filmi":null,"Gerilim":"Gerilim" };
 function mapGenre(name){ if(TMDB_GENRE_MAP.hasOwnProperty(name)) return TMDB_GENRE_MAP[name]; return name; }
+
+/* TMDB anahtar kelimeleri → alt tür eşlemesi.
+   Uluslararası terimler doğrudan; bazı yaygın İngilizce etiketler için Türkçe takma ad. */
+var KW_ALIASES={
+  "coming of age":"Coming of Age","coming-of-age":"Coming of Age",
+  "dystopia":"Distopya","dystopian":"Distopya","post-apocalyptic":"Kıyamet Sonrası","post apocalyptic":"Kıyamet Sonrası",
+  "time travel":"Zaman Yolculuğu","serial killer":"Seri Katil","heist":"Soygun","road movie":"Yol Filmi",
+  "coming out":"Coming of Age","slasher":"Slasher","giallo":"Giallo","neo-noir":"Neo-Noir","film noir":"Kara Film",
+  "mockumentary":"Mockumentary","found footage":"Found Footage","cyberpunk":"Cyberpunk","steampunk":"Steampunk",
+  "space opera":"Uzay Operası","kaiju":"Kaiju","spaghetti western":"Spagetti Western","whodunit":"Polisiye",
+  "psychological thriller":"Psikolojik Gerilim","psychological horror":"Psikolojik Korku","body horror":"Body Horror",
+  "zombie":"Zombi","vampire":"Vampir","werewolf":"Kurt Adam","haunted house":"Perili Ev","supernatural":"Doğaüstü",
+  "martial arts":"Dövüş Sanatları","superhero":"Süper Kahraman","disaster":"Felaket","survival":"Hayatta Kalma",
+  "courtroom":"Mahkeme","prison":"Hapishane","spy":"Casusluk","war":"Savaş","biography":"Biyografi",
+  "musical":"Müzikal","satire":"Hiciv","dark comedy":"Kara Komedi","black comedy":"Kara Komedi",
+  "romantic comedy":"Romantik Komedi","coming of age story":"Coming of Age","anime":"Anime",
+  "buddy":"Buddy","mystery":"Gizem","gangster":"Gangster","mafia":"Mafya","western":"Western",
+  "erotic":"Erotik","lgbt":"LGBT+","lgbtq":"LGBT+"
+};
+function matchSubgenres(keywords){
+  if(!keywords||!keywords.length) return [];
+  var subNorm={}; SUBGENRES.forEach(function(s){ subNorm[norm(s)]=s; });
+  var found={};
+  keywords.forEach(function(kw){
+    var nk=norm(kw);
+    if(KW_ALIASES[kw.toLowerCase()] && SUBGENRES.indexOf(KW_ALIASES[kw.toLowerCase()])>-1){ found[KW_ALIASES[kw.toLowerCase()]]=1; return; }
+    if(subNorm[nk]){ found[subNorm[nk]]=1; return; }                 // birebir
+    // anahtar kelime bir alt türü içeriyorsa (örn. "neo-noir thriller" → "neo noir")
+    Object.keys(subNorm).forEach(function(sn){ if(sn.length>=4 && (nk===sn || nk.indexOf(sn)>-1)){ found[subNorm[sn]]=1; } });
+  });
+  return Object.keys(found);
+}
 function extractImdbId(s){ var m=(s||"").match(/(tt\d{6,9})/i); return m?m[1].toLowerCase():null; }
 /* kişi adlarını yalnızca Latin harflere indirger (Kiril/CJK/Arap vb. atılır) */
 function latinName(s){
@@ -761,7 +793,7 @@ function resolveTmdb(input, keys){
 function loadDetails(type, id, keys){
   var out={ ratings:{} };
   return Promise.all([
-    tfetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=tr-TR&append_to_response=credits,external_ids").then(function(r){ if(!r.ok) throw tmdbErr(r); return r.json(); }),
+    tfetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=tr-TR&append_to_response=credits,external_ids,keywords").then(function(r){ if(!r.ok) throw tmdbErr(r); return r.json(); }),
     tfetch(TMDB_BASE+"/"+type+"/"+id+"?api_key="+keys.tmdb+"&language=en-US").then(function(r){ return r.ok?r.json():null; })
   ]).then(function(res){
     var d=res[0], en=res[1]||{};
@@ -785,6 +817,8 @@ function loadDetails(type, id, keys){
     var langs=(d.spoken_languages||[]).map(function(l){return l.english_name||l.name;}).filter(Boolean);
     out.language=langs.join(", ")||(d.original_language?d.original_language.toUpperCase():"");
     out.overview=(d.overview&&d.overview.trim())||(en.overview&&en.overview.trim())||"";
+    var kw=(d.keywords&&(d.keywords.keywords||d.keywords.results))||[];
+    out.keywords=kw.map(function(k){return k.name;}).filter(Boolean);
     return out;
   });
 }
@@ -1813,6 +1847,7 @@ function renderForm(editId){
     +'<div class="field"><label>Tür (ana kategori) <span class="hint">— tik atarak seç</span></label>'
       +'<div class="selchips" id="catChips"></div><div class="pickgrid" id="catGrid"></div></div>'
     +'<div class="field"><label>Alt tür <span class="hint">— ara, tik atarak ekle</span></label>'
+      +'<div id="subSuggest" class="col-suggest"></div>'
       +'<div class="selchips" id="subChips"></div>'
       +'<div class="picklist"><div class="pls"><input type="text" id="subSearch" placeholder="Alt tür ara… (Giallo, Slasher, Spagetti Western…)" autocomplete="off"></div>'
       +'<div class="plbody" id="subBody"></div></div></div>'
@@ -1891,6 +1926,22 @@ function renderForm(editId){
   }
   subSearch.addEventListener("input",paintSub);
   paintSub();
+
+  /* --- otomatik alt tür önerisi (TMDB keywords) --- */
+  var subSuggestEl=document.getElementById("subSuggest");
+  function refreshSubSuggest(keywords){
+    var s=matchSubgenres(keywords||[]).filter(function(g){ return selSubs.indexOf(g)<0; });
+    if(!s.length){ subSuggestEl.innerHTML=""; return; }
+    subSuggestEl.innerHTML='<span class="cs-lbl">Önerilen alt tür:</span>'
+      +s.map(function(g){return '<button type="button" class="cs-chip" data-sub="'+esc(g)+'">+ '+esc(g)+'</button>';}).join("")
+      +(s.length>1?'<button type="button" class="cs-chip cs-all" data-suball="1">Tümünü ekle</button>':'');
+    subSuggestEl.querySelectorAll("[data-sub]").forEach(function(b){ b.onclick=function(){
+      var g=b.getAttribute("data-sub"); if(selSubs.indexOf(g)<0) selSubs.push(g); paintSub(); refreshSubSuggest(lastKeywords); }; });
+    var all=subSuggestEl.querySelector("[data-suball]");
+    if(all) all.onclick=function(){ s.forEach(function(g){ if(selSubs.indexOf(g)<0) selSubs.push(g); }); paintSub(); refreshSubSuggest(lastKeywords); toast(s.length+" alt tür eklendi"); };
+  }
+  var lastKeywords=(it&&it.keywords)?it.keywords.slice():[];
+  refreshSubSuggest(lastKeywords);
 
   /* --- oyuncular: chip editörü + isim önerisi --- */
   var castArr=(it&&it.cast)?it.cast.slice():[];
@@ -1983,6 +2034,8 @@ function renderForm(editId){
       if(ANA.indexOf(m)>-1){ if(selCats.indexOf(m)<0) selCats.push(m); }
       else if(SUBGENRES.indexOf(m)>-1){ if(selSubs.indexOf(m)<0) selSubs.push(m); } });
     paintCat(); paintSub(); refreshColSuggest(); checkDup();
+    lastKeywords=(d.keywords&&d.keywords.length)?d.keywords.slice():lastKeywords;
+    refreshSubSuggest(lastKeywords);
     var rk=Object.keys(fetchedRatings);
     imdbNote.innerHTML='<div class="preview-note ok">Bilgiler dolduruldu ✓'
       +(rk.length?' &nbsp;|&nbsp; Puan: '+rk.map(function(k){return k.toUpperCase()+" "+fetchedRatings[k];}).join(" · "):'')+'</div>';
@@ -2070,6 +2123,7 @@ function renderForm(editId){
       reviewNur:document.getElementById("f_revNur").value.trim(),
       reviewFirat:document.getElementById("f_revFirat").value.trim(),
       overview:document.getElementById("f_overview").value.trim(),
+      keywords:lastKeywords&&lastKeywords.length?lastKeywords.slice():((it&&it.keywords)?it.keywords:[]),
       ratings:fetchedRatings||{},
       imdbId:fetchedImdbId||extractImdbId(imdbUrlVal), imdbUrl:imdbUrlVal, lbUrl:document.getElementById("f_lb").value.trim(), tmdbId:fetchedTmdbId||null,
       watched:watched, watchedDate:wdate||"",
