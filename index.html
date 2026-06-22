@@ -171,11 +171,52 @@
     display:none;align-items:flex-start;justify-content:center;padding:40px 18px;overflow-y:auto}
   .overlay.show{display:flex}
   .modal{background:var(--surface);border:1px solid var(--line-hi);border-radius:18px;width:100%;
-    max-width:560px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);animation:rise .26s cubic-bezier(.2,.8,.25,1)}
+    max-width:560px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);animation:rise .26s cubic-bezier(.2,.8,.25,1);transition:background .45s ease}
   .modal.wide{max-width:920px}
   @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
   .modal-head{display:flex;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
-  .modal-head h3{font-family:"Fraunces",serif;font-weight:500;font-size:21px;margin-right:auto}
+  .modal-head h3,.modal-head h2{font-family:"Fraunces",serif;font-weight:500;font-size:21px;margin-right:auto}
+  /* profil alt kısayol */
+  .pp-foot{margin-top:16px;display:flex;justify-content:center}
+  /* Film Pasaportu */
+  .pass-band{border-top:3px solid var(--accent);border-bottom:3px solid var(--accent);padding:14px 0;margin-bottom:20px;
+    display:flex;flex-direction:column;gap:4px}
+  .pass-eyebrow{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
+  .pass-name{font-family:"Fraunces",serif;font-size:30px;font-weight:600}
+  .pass-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+  .pass-stat{text-align:center;border-left:2px solid var(--line-hi);padding-left:10px}
+  .pass-stat:first-child{border-left:none}
+  .ps-n{font-family:"Fraunces",serif;font-size:24px;font-weight:600;color:var(--accent)}
+  .ps-l{font-size:11px;color:var(--muted);margin-top:3px}
+  .pass-sec{margin-bottom:26px}
+  .pass-h{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
+    margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .bh-svg{width:100%;height:auto}
+  .bh-lbl{fill:var(--text);font-size:13px;font-family:"Inter",sans-serif}
+  .bh-n{fill:var(--muted);font-size:12px;font-family:"DM Mono",monospace}
+  .donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .bh-donut{width:140px;height:140px;flex-shrink:0}
+  .bh-legs{display:flex;flex-direction:column;gap:7px}
+  .bh-leg{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text)}
+  .bh-leg span{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+  .pass-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  /* Bilet Koçanı */
+  .tic-album{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+  .ticket{display:flex;background:#f3ecdf;color:#0e0a08;border-radius:12px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.35)}
+  .tic-main{flex:1;padding:14px 16px;min-width:0}
+  .tic-row{display:flex;justify-content:space-between;align-items:center}
+  .tic-brand{font-family:"DM Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.08em}
+  .tic-admit{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;color:#7a6a55}
+  .tic-title{font-family:"Fraunces",serif;font-size:19px;font-weight:600;margin-top:8px;line-height:1.15;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tic-sub{font-size:12px;color:#5a4a38;margin-top:3px;font-family:"DM Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tic-foot{display:flex;justify-content:space-between;margin-top:14px;font-family:"DM Mono",monospace;font-size:11px;color:#7a6a55}
+  .tic-stub{width:78px;flex-shrink:0;border-left:2px dashed #c9bda9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:8px 4px;position:relative}
+  .tic-score{font-family:"Fraunces",serif;font-size:30px;font-weight:700;color:#C0473B;line-height:1}
+  .tic-score-l{font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.1em;color:#7a6a55}
+  .tic-share{margin-top:8px;background:#0e0a08;border:none;color:#f3ecdf;width:30px;height:30px;border-radius:7px;cursor:pointer;display:grid;place-items:center}
+  .tic-share svg{width:14px;height:14px}
+  @media (max-width:560px){ .pass-stats{grid-template-columns:repeat(3,1fr)} }
   .modal-body{padding:22px}
 
   .player-frame{position:relative;width:100%;aspect-ratio:16/9;background:#000}
@@ -586,10 +627,18 @@
   </div>
 </div>
 
+<div class="overlay" id="passportOverlay">
+  <div class="modal" id="passportModal" role="dialog" aria-modal="true" aria-label="Film Pasaportu">
+    <div class="modal-head"><h2 id="passTitle">Film Pasaportu</h2><button class="iconbtn" id="passClose" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="modal-body" id="passBody"></div>
+  </div>
+</div>
+
 <div class="overlay" id="profileOverlay">
   <div class="modal" id="profileModal" role="dialog" aria-modal="true" aria-label="Profil seç">
     <h2 class="pp-h">Kim izliyor?</h2>
     <div class="pp-grid"></div>
+    <div class="pp-foot"></div>
   </div>
 </div>
 
@@ -1355,7 +1404,7 @@ function toggleWatched(id){
   it.watched=!it.watched;
   if(it.watched && !it.watchedDate){ it.watchedDate=new Date().toISOString().slice(0,10); }
   save(); renderTabs(); renderGrid();
-  toast(it.watched?"İzlendi olarak işaretlendi":"İzlenecek olarak işaretlendi");
+  toast(it.watched?"🎟️ Bilet kesildi · Bilet Koçanı'na eklendi":"İzlenecek olarak işaretlendi");
 }
 
 /* ===== sağ kategori bulutu ===== */
@@ -1407,9 +1456,40 @@ function ratingsRow(it){
   if(r.metacritic) parts.push('<span class="rchip mc">Metacritic '+esc(r.metacritic)+'</span>');
   return parts.length?'<div class="pm-row"><span class="pm-lbl">Puan</span>'+parts.join("")+'</div>':"";
 }
+/* ===== afiş renginden dinamik arka plan (Color Thieving) ===== */
+function resetDetailTint(){ var m=document.getElementById("playerModal"); if(m) m.style.background=""; }
+function applyDetailTint(it){
+  var modal=document.getElementById("playerModal"); if(!modal) return;
+  resetDetailTint();
+  if(!it.thumb){ return; }
+  var img=new Image(); img.crossOrigin="anonymous";
+  img.onload=function(){
+    try{
+      var cv=document.createElement("canvas"), s=12; cv.width=s; cv.height=Math.round(s*1.5);
+      var cx=cv.getContext("2d"); cx.drawImage(img,0,0,cv.width,cv.height);
+      var data=cx.getImageData(0,0,cv.width,cv.height).data, r=0,g=0,b=0,n=0;
+      for(var i=0;i<data.length;i+=4){
+        var rr=data[i],gg=data[i+1],bb=data[i+2];
+        var mx=Math.max(rr,gg,bb), mn=Math.min(rr,gg,bb);
+        if(mx<26||mn>235) continue;            // çok koyu/açık pikselleri atla
+        r+=rr; g+=gg; b+=bb; n++;
+      }
+      if(!n){ return; }
+      r=Math.round(r/n); g=Math.round(g/n); b=Math.round(b/n);
+      // doygunluğu hafif artır
+      var avg=(r+g+b)/3, boost=1.25;
+      r=Math.min(255,Math.round(avg+(r-avg)*boost)); g=Math.min(255,Math.round(avg+(g-avg)*boost)); b=Math.min(255,Math.round(avg+(b-avg)*boost));
+      var c="rgba("+r+","+g+","+b+",", base=getComputedStyle(document.body).getPropertyValue("--surface").trim()||"#17120f";
+      modal.style.background="radial-gradient(120% 80% at 50% 0%, "+c+".5) 0%, "+c+".18) 32%, "+base+" 70%)";
+    }catch(e){ /* CORS taint → sessizce geç */ }
+  };
+  img.onerror=function(){};
+  img.src=it.thumb;
+}
 function openDetail(id){
   var it=state.items.find(function(x){return x.id===id;}); if(!it) return;
   if(it.embed) recentPush(it.id);
+  applyDetailTint(it);
   var top=document.getElementById("playerTop");
   if(it.embed){ top.className="player-frame";
     top.innerHTML='<iframe src="'+esc(it.embed)+'" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>'
@@ -1486,6 +1566,7 @@ function closePlayer(){
   document.getElementById("playerTop").innerHTML="";
   document.body.style.overflow="";
   if(location.hash){ try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){} }
+  resetDetailTint();
   overlayClosed();
 }
 function openFromHash(){
@@ -2277,14 +2358,160 @@ function applyProfile(){
 }
 function openProfilePicker(){
   var ov=document.getElementById("profileOverlay");
+  var cur=getProfile();
   ov.querySelector(".pp-grid").innerHTML=PROFILES.map(function(p){
-    var cur=getProfile(); var on=cur&&cur.id===p.id;
+    var on=cur&&cur.id===p.id;
     return '<button class="pp-card'+(on?" on":"")+'" data-pid="'+p.id+'"><span class="pp-av">'+esc(p.short)+'</span>'
       +'<span class="pp-lbl">'+esc(p.label)+'</span>'+(p.child?'<span class="pp-tag">Çocuk modu</span>':'')+'</button>';
   }).join("");
+  var foot=ov.querySelector(".pp-foot");
+  if(foot) foot.innerHTML = cur ? '<button class="btn btn-ghost" id="ppPassport">🪪 '+esc(cur.label)+' — Film Pasaportu</button>' : '';
   ov.classList.add("show"); document.body.style.overflow="hidden";
-  ov.querySelectorAll("[data-pid]").forEach(function(b){ b.onclick=function(){ setProfile(b.getAttribute("data-pid"));
-    ov.classList.remove("show"); document.body.style.overflow=""; toast("Profil: "+(getProfile()?getProfile().label:"")); }; });
+  if(cur){ var pb=document.getElementById("ppPassport"); if(pb) pb.onclick=function(){ closeProfileOverlay(); openPassport(cur); }; }
+  ov.querySelectorAll("[data-pid]").forEach(function(b){ b.onclick=function(){
+    setProfile(b.getAttribute("data-pid")); closeProfileOverlay();
+    var p=getProfile(); toast("Profil: "+(p?p.label:"")); if(p) openPassport(p);
+  }; });
+}
+function closeProfileOverlay(){ var ov=document.getElementById("profileOverlay"); ov.classList.remove("show"); document.body.style.overflow=""; }
+
+/* ===== Film Pasaportu (profil bazlı, Bauhaus) ===== */
+function profileItems(p){
+  if(!p || p.who.length===0){ return state.items.filter(function(it){ return !(p&&p.child) || (it.collections||[]).indexOf("N'18")<0; }); }
+  if(p.who.length>=2) return state.items.slice();
+  var who=p.who[0];
+  return state.items.filter(function(it){
+    var recd=(it.recommendedBy||[]).indexOf(who)>-1;
+    var scored=(who==="Nur"&&it.scoreNur)||(who==="Fırat"&&it.scoreFirat);
+    return recd||scored;
+  });
+}
+var BAUHAUS=["#E0A33E","#C0473B","#3B6FB0","#E8D7C3","#7BA05B"];
+function topFreqOf(items, getArr, n){
+  var f={}; items.forEach(function(it){ getArr(it).forEach(function(k){ if(k) f[k]=(f[k]||0)+1; }); });
+  return Object.keys(f).map(function(k){return [k,f[k]];}).sort(function(a,b){return b[1]-a[1]||a[0].localeCompare(b[0],"tr");}).slice(0,n);
+}
+function bauhausBars(rows, title){
+  if(!rows.length) return '';
+  var max=rows[0][1], W=300, rowH=34, H=rows.length*rowH+10;
+  var bars=rows.map(function(r,i){
+    var w=Math.round(r[1]/max*(W-150)), col=BAUHAUS[i%BAUHAUS.length], y=i*rowH+6;
+    return '<text x="0" y="'+(y+15)+'" class="bh-lbl">'+esc(r[0].length>16?r[0].slice(0,15)+"…":r[0])+'</text>'
+      +'<rect x="150" y="'+y+'" width="'+Math.max(8,w)+'" height="20" fill="'+col+'"/>'
+      +'<text x="'+(150+Math.max(8,w)+8)+'" y="'+(y+15)+'" class="bh-n">'+r[1]+'</text>';
+  }).join("");
+  return '<div class="pass-sec"><div class="pass-h">'+esc(title)+'</div><svg viewBox="0 0 '+W+' '+H+'" class="bh-svg">'+bars+'</svg></div>';
+}
+function bauhausDonut(rows, title){
+  if(!rows.length) return '';
+  var total=rows.reduce(function(a,b){return a+b[1];},0), cx=70,cy=70,r=54, ang=-Math.PI/2;
+  var segs=rows.map(function(row,i){
+    var frac=row[1]/total, a2=ang+frac*Math.PI*2, large=frac>0.5?1:0, col=BAUHAUS[i%BAUHAUS.length];
+    var x1=cx+r*Math.cos(ang), y1=cy+r*Math.sin(ang), x2=cx+r*Math.cos(a2), y2=cy+r*Math.sin(a2);
+    var d='M '+cx+' '+cy+' L '+x1.toFixed(1)+' '+y1.toFixed(1)+' A '+r+' '+r+' 0 '+large+' 1 '+x2.toFixed(1)+' '+y2.toFixed(1)+' Z';
+    ang=a2; return '<path d="'+d+'" fill="'+col+'"/>';
+  }).join("");
+  var leg=rows.map(function(row,i){ return '<div class="bh-leg"><span style="background:'+BAUHAUS[i%BAUHAUS.length]+'"></span>'+esc(row[0])+' <b>'+row[1]+'</b></div>'; }).join("");
+  return '<div class="pass-sec"><div class="pass-h">'+esc(title)+'</div><div class="donut-wrap">'
+    +'<svg viewBox="0 0 140 140" class="bh-donut">'+segs+'<circle cx="70" cy="70" r="26" fill="var(--surface)"/></svg>'
+    +'<div class="bh-legs">'+leg+'</div></div></div>';
+}
+function openPassport(p){
+  p=p||getProfile(); if(!p) return openProfilePicker();
+  var ov=document.getElementById("passportOverlay");
+  renderPassport(p);
+  ov.classList.add("show"); document.body.style.overflow="hidden";
+  document.getElementById("passClose").onclick=function(){ ov.classList.remove("show"); document.body.style.overflow=""; };
+}
+function renderPassport(p){
+  document.getElementById("passTitle").textContent="Film Pasaportu · "+p.label;
+  var its=profileItems(p), watched=its.filter(function(x){return x.watched;});
+  var thisYear=watched.filter(function(x){return x.watchedDate&&x.watchedDate.slice(0,4)===String(CUR_YEAR);});
+  var totMin=watched.reduce(function(s,x){return s+(x.runtime||0);},0), hrs=Math.round(totMin/60);
+  var scored=its.filter(function(x){return noraScore(x)!=null;});
+  var avgNora=scored.length?Math.round(scored.reduce(function(s,x){return s+noraScore(x);},0)/scored.length*10)/10:null;
+  var dirs=topFreqOf(its,function(it){return it.director?[it.director]:[];},5);
+  var ctry=topFreqOf(its,function(it){return splitCountries(it);},5);
+  var cats=topFreqOf(its,function(it){return it.categories||[];},5);
+  var deca={}; its.forEach(function(it){ if(it.year){ var d=Math.floor(it.year/10)*10+"’ler"; deca[d]=(deca[d]||0)+1; } });
+  var decaRows=Object.keys(deca).map(function(k){return [k,deca[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+  var stat=function(n,l){ return '<div class="pass-stat"><div class="ps-n">'+esc(n)+'</div><div class="ps-l">'+esc(l)+'</div></div>'; };
+  document.getElementById("passBody").innerHTML=
+    '<div class="pass-band"><span class="pass-eyebrow">CiNora · Sinefil Karnesi</span><span class="pass-name">'+esc(p.label)+'</span></div>'
+    +'<div class="pass-stats">'+stat(its.length,"film")+stat(watched.length,"izlendi")+stat(thisYear.length,CUR_YEAR)
+      +stat(hrs+" sa","toplam")+stat(avgNora!=null?avgNora:"–","ort. Nora")+'</div>'
+    +bauhausBars(dirs,"En çok izlenen yönetmenler")
+    +bauhausDonut(ctry,"Favori ülkeler")
+    +bauhausBars(cats,"Tür eğilimi")
+    +(decaRows.length?bauhausBars(decaRows,"On yıllara göre"):'')
+    +'<div class="pass-actions"><button class="btn btn-ghost" id="passTickets">🎟️ Bilet Koçanı</button>'
+      +'<button class="btn btn-primary" id="passShare">Pasaportu paylaş</button></div>';
+  document.getElementById("passTickets").onclick=function(){ renderTickets(p); };
+  document.getElementById("passShare").onclick=function(){ sharePassport(p); };
+}
+
+/* ===== Bilet Koçanı ===== */
+function renderTickets(p){
+  document.getElementById("passTitle").textContent="Bilet Koçanı · "+p.label;
+  var watched=profileItems(p).filter(function(x){return x.watched;}).sort(function(a,b){ return (b.watchedDate||"").localeCompare(a.watchedDate||""); });
+  var body='<div class="pass-actions" style="margin:0 0 16px"><button class="btn btn-ghost" id="ticBack">← Pasaport</button></div>';
+  if(!watched.length){ body+='<p style="color:var(--muted);text-align:center;padding:24px">Henüz kesilmiş bilet yok. Bir filmi “izledim” işaretleyince bileti burada belirir.</p>'; }
+  else{ body+='<div class="tic-album">'+watched.map(ticketHTML).join("")+'</div>'; }
+  document.getElementById("passBody").innerHTML=body;
+  document.getElementById("ticBack").onclick=function(){ renderPassport(p); };
+  document.querySelectorAll("[data-tic]").forEach(function(b){ b.onclick=function(e){ e.stopPropagation();
+    var it=state.items.find(function(x){return x.id===b.getAttribute("data-tic");}); if(it) shareTicket(it); }; });
+}
+function ticketHTML(it){
+  var ts=titleSet(it), ns=noraScore(it), serial=(it.id||"").slice(0,6).toUpperCase();
+  return '<div class="ticket"><div class="tic-main"><div class="tic-row"><span class="tic-brand">NORA CINEMA</span><span class="tic-admit">ADMIT ONE</span></div>'
+    +'<div class="tic-title">'+esc(ts.prim)+'</div><div class="tic-sub">'+(it.year||"")+(it.director?' · '+esc(it.director):'')+'</div>'
+    +'<div class="tic-foot"><span>'+(it.watchedDate?fmtDateTR(it.watchedDate):"—")+'</span><span class="tic-serial">No '+esc(serial)+'</span></div></div>'
+    +'<div class="tic-stub"><div class="tic-score">'+(ns!=null?ns:"–")+'</div><div class="tic-score-l">NORA</div>'
+      +'<button class="tic-share" data-tic="'+it.id+'" title="Bileti paylaş"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v14"/></svg></button></div></div>';
+}
+function sharePassport(p){
+  var its=profileItems(p), watched=its.filter(function(x){return x.watched;});
+  var dirs=topFreqOf(its,function(it){return it.director?[it.director]:[];},3);
+  var ctry=topFreqOf(its,function(it){return splitCountries(it);},3);
+  var totMin=watched.reduce(function(s,x){return s+(x.runtime||0);},0), hrs=Math.round(totMin/60);
+  var scored=its.filter(function(x){return noraScore(x)!=null;});
+  var avgNora=scored.length?Math.round(scored.reduce(function(s,x){return s+noraScore(x);},0)/scored.length*10)/10:null;
+  var W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;var ctx=c.getContext("2d");
+  ctx.fillStyle="#14100c";ctx.fillRect(0,0,W,H);
+  ["#E0A33E","#C0473B","#3B6FB0"].forEach(function(col,i){ ctx.fillStyle=col; ctx.fillRect(70,150+i*16,940-i*200,9); });
+  ctx.fillStyle="#8a7866";ctx.font='600 30px "DM Mono", monospace';ctx.fillText("CiNora · SİNEFİL KARNESİ",70,116);
+  ctx.fillStyle="#f3e9dd";ctx.font='600 84px "Fraunces", Georgia, serif';ctx.fillText(p.label,68,300);
+  var rows=[["Toplam film",its.length],["İzlenen",watched.length],[CUR_YEAR+" yılı",watched.filter(function(x){return x.watchedDate&&x.watchedDate.slice(0,4)===String(CUR_YEAR);}).length],["Toplam saat",hrs],["Ort. Nora",avgNora!=null?avgNora:"–"]];
+  var y=420;ctx.font='400 40px "DM Mono", monospace';
+  rows.forEach(function(r){ ctx.fillStyle="#b89a7e";ctx.textAlign="left";ctx.fillText(r[0],70,y); ctx.fillStyle="#E0A33E";ctx.textAlign="right";ctx.fillText(String(r[1]),W-70,y);ctx.textAlign="left"; y+=66; });
+  function block(title, arr, yy){ ctx.fillStyle="#8a7866";ctx.font='600 28px "DM Mono", monospace';ctx.fillText(title.toUpperCase(),70,yy);
+    ctx.fillStyle="#f3e9dd";ctx.font='500 38px "Fraunces", Georgia, serif'; arr.forEach(function(r,i){ ctx.fillText("· "+r[0]+"  ("+r[1]+")",70,yy+52+i*52); }); }
+  block("En çok yönetmen", dirs, y+24);
+  block("Favori ülkeler", ctry, y+24+(dirs.length*52+110));
+  ctx.fillStyle="rgba(224,163,62,.9)";ctx.font='600 34px "DM Mono", monospace';ctx.textAlign="right";ctx.fillText("CiNora",W-70,H-50);ctx.textAlign="left";
+  toast("Pasaport hazırlanıyor…");
+  exportCard(c, p.label+" — Film Pasaportu");
+}
+function shareTicket(it){
+  var ts=titleSet(it), ns=noraScore(it), W=1080,H=560,c=document.createElement("canvas");c.width=W;c.height=H;var ctx=c.getContext("2d");
+  ctx.fillStyle="#0e0a08";ctx.fillRect(0,0,W,H);
+  var pad=50,bw=W-pad*2,bh=H-pad*2,bx=pad,by=pad;
+  roundRect(ctx,bx,by,bw,bh,18);ctx.fillStyle="#f3ecdf";ctx.fill();
+  var sx=bx+bw-220;
+  ctx.strokeStyle="#0e0a08";ctx.lineWidth=3;ctx.setLineDash([14,12]);ctx.beginPath();ctx.moveTo(sx,by+14);ctx.lineTo(sx,by+bh-14);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle="#0e0a08";ctx.textAlign="left";ctx.font='600 26px "DM Mono", monospace';ctx.fillText("NORA CINEMA",bx+44,by+62);
+  ctx.textAlign="right";ctx.font='400 20px "DM Mono", monospace';ctx.fillText("ADMIT ONE",sx-30,by+62);ctx.textAlign="left";
+  ctx.font='700 60px "Fraunces", Georgia, serif';
+  var title=ts.prim; if(ctx.measureText(title).width>sx-bx-80){ while(title.length>1 && ctx.measureText(title+"…").width>sx-bx-80) title=title.slice(0,-1); title+="…"; }
+  ctx.fillText(title,bx+44,by+170);
+  ctx.fillStyle="#5a4a38";ctx.font='400 30px "DM Mono", monospace';ctx.fillText((it.year||"")+(it.director?"  ·  "+it.director:""),bx+44,by+220);
+  ctx.fillStyle="#0e0a08";ctx.font='400 26px "DM Mono", monospace';ctx.fillText(it.watchedDate?fmtDateTR(it.watchedDate):"—",bx+44,by+bh-46);
+  ctx.fillStyle="#a08a6e";ctx.fillText("No "+(it.id||"").slice(0,6).toUpperCase(),bx+280,by+bh-46);
+  ctx.fillStyle="#C0473B";ctx.textAlign="center";ctx.font='700 96px "Fraunces", Georgia, serif';ctx.fillText(ns!=null?String(ns):"–",sx+110,by+bh/2);
+  ctx.fillStyle="#0e0a08";ctx.font='600 26px "DM Mono", monospace';ctx.fillText("NORA",sx+110,by+bh/2+50);ctx.textAlign="left";
+  toast("Bilet hazırlanıyor…");
+  exportCard(c, ts.prim+" — bilet");
 }
 
 /* ===== başlat ===== */
@@ -2326,12 +2553,14 @@ function boot(){
   document.getElementById("openStats").onclick=function(){ openAdmin(); renderStats(); };
   document.getElementById("profileBtn").onclick=openProfilePicker;
   document.getElementById("moodOverlay").onclick=function(e){ if(e.target.id==="moodOverlay") closeMoodPicker(); };
+  document.getElementById("passportOverlay").onclick=function(e){ if(e.target.id==="passportOverlay"){ e.currentTarget.classList.remove("show"); document.body.style.overflow=""; } };
   document.getElementById("profileOverlay").onclick=function(e){ if(e.target.id==="profileOverlay" && getProfile()){ e.currentTarget.classList.remove("show"); document.body.style.overflow=""; } };
   document.getElementById("closeAdmin").onclick=closeAdmin;
   document.getElementById("playerOverlay").onclick=function(e){ if(e.target.id==="playerOverlay") closePlayer(); };
   document.getElementById("adminOverlay").onclick=function(e){ if(e.target.id==="adminOverlay") closeAdmin(); };
   document.addEventListener("click",function(){ closePanels(); });
   document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ closePanels(); closePlayer(); closeAdmin(); closeMoodPicker();
+    var pov=document.getElementById("passportOverlay"); if(pov.classList.contains("show")){ pov.classList.remove("show"); document.body.style.overflow=""; }
     if(getProfile()){ var po=document.getElementById("profileOverlay"); po.classList.remove("show"); document.body.style.overflow=""; } } trapTab(e); });
   window.addEventListener("hashchange",openFromHash);
   openFromHash();
