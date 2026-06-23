@@ -297,6 +297,40 @@
   .vault-ribbon svg{width:15px;height:15px}
   .vault-ribbon button{background:#8c2f39;color:#f7e9eb;border:none;border-radius:7px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
 
+  /* ===== kasa teması (Bir Üç · tenha saatler) ===== */
+  .vault-theme{
+    --bg:#120a0d;--surface:#1b1013;--raised:#241419;--raised-hi:#2f1a20;
+    --text:#f1e7e7;--muted:#a78c8f;--faint:#6f5b5e;
+    --accent:#c25b66;--accent-soft:rgba(194,91,102,.16);
+    --line:rgba(241,231,231,.07);--line-hi:rgba(241,231,231,.14);
+  }
+  body.vault-theme{background:var(--bg)}
+  body.vault-theme .topbar{background:rgba(18,10,13,.82)}
+  /* portal başlığı + atmosfer */
+  .vault-portal{position:relative;margin:6px 0 30px;padding:34px 0 22px;border-bottom:1px solid var(--line);overflow:hidden}
+  .vp-drape{position:absolute;top:0;left:-2%;width:104%;height:26px;
+    background:radial-gradient(40px 26px at 30px 0,#3a1820 0 60%,transparent 61%) repeat-x;
+    background-size:60px 26px;opacity:.9;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+  .vp-glow{position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:520px;height:300px;pointer-events:none;
+    background:radial-gradient(ellipse at center,rgba(224,140,110,.20),rgba(194,91,102,.08) 45%,transparent 70%)}
+  .vp-top{position:relative;display:flex;align-items:center;justify-content:space-between;margin:8px 0 18px;z-index:1}
+  .vp-eyebrow{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#9c7a80}
+  .vp-lock{display:flex;align-items:center;gap:6px;background:none;border:.5px solid var(--line-hi);color:#cf8a92;
+    border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:"DM Mono",monospace}
+  .vp-lock:hover{border-color:#c25b66;color:#e3aab0}
+  .vp-title{position:relative;z-index:1;font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:46px;
+    letter-spacing:.01em;color:#f4eaea;line-height:1;text-shadow:0 2px 30px rgba(224,140,110,.25)}
+  .vp-sub{position:relative;z-index:1;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:#b9858c;margin-top:12px}
+  .vp-epi{position:relative;z-index:1;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:18px;color:#c9a6ab;margin-top:10px}
+  .vp-rule{position:relative;z-index:1;height:3px;width:58px;background:linear-gradient(90deg,#c25b66,#e08c6e);margin-top:18px;border-radius:2px}
+  /* afişler örtülü → üstüne gelince mum ışığında açılır (yavaş, sıcak) */
+  .vault-theme .card .thumb::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
+    background:linear-gradient(180deg,rgba(18,10,13,.42),rgba(18,10,13,.66));transition:opacity .5s ease}
+  .vault-theme .card:hover .thumb::after,.vault-theme .card:focus-within .thumb::after{opacity:0}
+  .vault-theme .card .thumb{box-shadow:inset 0 0 60px rgba(120,40,50,.18)}
+  @media (max-width:560px){ .vp-title{font-size:34px} }
+
   /* === detay redesign: hero + cam + dairesel rozet === */
   .detail-poster{padding:0;display:block;position:relative;height:380px;overflow:hidden;border-radius:18px 18px 0 0}
   .detail-poster::before{content:"";position:absolute;inset:0;background-image:var(--poster-bg);background-size:cover;background-position:center;
@@ -1239,7 +1273,7 @@ function renderTabs(){
   }).join("");
   var vaultTab="";
   if(vaultUnlocked){
-    vaultTab='<span class="tabsep"></span><button class="tab vault-tab '+(state.view==="vault"?"on":"")+'" role="tab" data-v="vault"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Özel<span class="cnt">'+c.vault+'</span></button>'
+    vaultTab='<span class="tabsep"></span><button class="tab vault-tab '+(state.view==="vault"?"on":"")+'" role="tab" data-v="vault"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Bir Üç<span class="cnt">'+c.vault+'</span></button>'
       +'<button class="tab vault-lock" id="vaultLockTab" title="Özel alanı kilitle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M18 6L6 18M6 6l12 12"/></svg> Kilitle</button>';
   }
   document.getElementById("tabs").innerHTML=main+'<span class="tabsep"></span>'+cols+vaultTab;
@@ -1626,8 +1660,20 @@ function recentStripHTML(){
 }
 
 var BATCH=60, gridAll=[], gridShown=0, gridObs=null;
+function vaultPortalHTML(){
+  return '<div class="vault-portal">'
+    +'<div class="vp-drape" aria-hidden="true"></div>'
+    +'<div class="vp-glow" aria-hidden="true"></div>'
+    +'<div class="vp-top"><span class="vp-eyebrow">CiNora · kapalı perde</span>'
+      +'<button class="vp-lock" id="ribbonLock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Kilitle</button></div>'
+    +'<h2 class="vp-title">Bir Üç</h2>'
+    +'<div class="vp-sub">tenha saatler · yalnızca ikimize</div>'
+    +'<div class="vp-epi">"Işıklar kısıldı; gerisi yalnızca ikimize kaldı."</div>'
+    +'<div class="vp-rule"></div></div>';
+}
 function renderGrid(){
   var el=document.getElementById("content");
+  document.body.classList.toggle("vault-theme", state.view==="vault");
   if(state.items.length===0){
     el.innerHTML='<div class="empty">'
       +'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M10 9l5 3-5 3V9z"/></svg>'
@@ -1639,16 +1685,19 @@ function renderGrid(){
   }
   var items=visibleItems();
   if(items.length===0){
-    el.innerHTML='<div class="empty">'
+    var vp=(state.view==="vault")?vaultPortalHTML():"";
+    el.innerHTML=vp+'<div class="empty">'
       +'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
-      +'<h2>Sonuç yok</h2><p>Seçili sekme ya da filtreye uyan kayıt bulunamadı.</p>'
+      +'<h2>'+(state.view==="vault"?"Bu locada kayıt yok":"Sonuç yok")+'</h2><p>'+(state.view==="vault"?"Bir filme kaydında N'18 koleksiyonunu işaretleyince burada belirir.":"Seçili sekme ya da filtreye uyan kayıt bulunamadı.")+'</p>'
       +(anyFilterActive()?'<button class="btn btn-ghost" id="clrAll">Filtreleri temizle</button>':'')+'</div>';
     var c=document.getElementById("clrAll"); if(c) c.onclick=function(){ resetAllFilters(); };
+    var rl0=document.getElementById("ribbonLock"); if(rl0) rl0.onclick=function(){ lockVault(); };
     renderCloud(); return;
   }
   gridAll=items; gridShown=0;
-  var ribbon=vaultUnlocked?'<div class="vault-ribbon"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Özel alan açık'+(state.view==="vault"?" · yalnızca +18":"")+'</span><button id="ribbonLock">Kilitle</button></div>':"";
-  el.innerHTML=ribbon+recentStripHTML()+'<div class="grid" id="grid" role="list"></div><div id="gridSentinel" aria-hidden="true"></div>';
+  var head = (state.view==="vault") ? vaultPortalHTML()
+    : (vaultUnlocked?'<div class="vault-ribbon"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Bir Üç açık</span><button id="ribbonLock">Kilitle</button></div>':"");
+  el.innerHTML=head+recentStripHTML()+'<div class="grid" id="grid" role="list"></div><div id="gridSentinel" aria-hidden="true"></div>';
   var rl=document.getElementById("ribbonLock"); if(rl) rl.onclick=function(){ lockVault(); };
   appendCards(); observeSentinel(); renderCloud();
 }
@@ -2792,7 +2841,7 @@ function openVaultGate(){
     '<div class="modal vault-modal" role="dialog" aria-modal="true" aria-label="Özel alan">'
     +'<button class="vault-x" id="vaultClose" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>'
     +'<div class="vault-key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>'
-    +'<div class="vault-epi" id="vaultEpi">'+(setup?"Özel alanın için bir PIN belirle.":"“Bazı raflar yalnızca gece açılır.”")+'</div>'
+    +'<div class="vault-epi" id="vaultEpi">'+(setup?"Bir Üç için bir PIN belirle.":"“Bir Üç… perde iner, ışık kısılır.”")+'</div>'
     +'<div class="vault-dots" id="vaultDots"></div>'
     +'<div class="vault-pad" id="vaultPad"></div>'
     +'<div class="vault-note" id="vaultNote">'+(setup?"4–6 hane · sonra tekrar girersin":"oturum sonunda yeniden kilitlenir")+'</div>'
