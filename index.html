@@ -331,6 +331,24 @@
   .vault-theme .card .thumb{box-shadow:inset 0 0 60px rgba(120,40,50,.18)}
   @media (max-width:560px){ .vp-title{font-size:34px} }
 
+  /* perde animasyonu (Bir Üç açılışı) */
+  .curtain{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden}
+  .curtain-l,.curtain-r{position:absolute;top:0;bottom:0;width:51%;
+    background:repeating-linear-gradient(90deg,#24121a 0,#3a1c26 14px,#1c0e14 28px);box-shadow:inset 0 0 80px rgba(0,0,0,.7)}
+  .curtain-l{left:0;border-right:2px solid #4a2530;transition:transform 1s cubic-bezier(.66,0,.2,1)}
+  .curtain-r{right:0;border-left:2px solid #4a2530;transition:transform 1s cubic-bezier(.66,0,.2,1)}
+  .curtain.open .curtain-l{transform:translateX(-101%)}
+  .curtain.open .curtain-r{transform:translateX(101%)}
+  .curtain-word{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:40px;color:#e3aab0;letter-spacing:.02em;
+    opacity:0;animation:curtainWord 1.1s ease forwards}
+  @keyframes curtainWord{0%{opacity:0}25%{opacity:1}70%{opacity:1}100%{opacity:0}}
+  /* +18 alt tür katlanır grubu */
+  .sub-adult-toggle{display:block;width:100%;text-align:left;background:rgba(194,91,102,.1);border:1px dashed rgba(194,91,102,.5);
+    color:#c0707a;border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13px;cursor:pointer;font-family:inherit}
+  .sub-adult-toggle:hover{background:rgba(194,91,102,.16)}
+  .sub-adult{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border:1px dashed rgba(194,91,102,.35);border-radius:8px;background:rgba(194,91,102,.05)}
+
   /* === detay redesign: hero + cam + dairesel rozet === */
   .detail-poster{padding:0;display:block;position:relative;height:380px;overflow:hidden;border-radius:18px 18px 0 0}
   .detail-poster::before{content:"";position:absolute;inset:0;background-image:var(--poster-bg);background-size:cover;background-position:center;
@@ -872,7 +890,7 @@ var DEFAULT_TMDB="bc01a2399b9defcc77636ac4a4378f31"; // mevcut TMDB anahtarın �
 var DEFAULT_PASS="3312"; // ilk girişte kullanılacak parola — Ayarlar'dan değiştirilebilir
 var COLLECTIONS=["NoraKült","N'Kısa","N'18","N'Yerli"];
 var CUR_YEAR=new Date().getFullYear();
-var state={ items:[], view:"all", cats:[], subs:[], years:[], countries:[], directors:[], actors:[], tags:[], query:"", sort:"year",
+var state={ items:[], vaultBlob:null, view:"all", cats:[], subs:[], years:[], countries:[], directors:[], actors:[], tags:[], query:"", sort:"year",
   ui:{ fadeWatched:false, showPosters:true, hideWatched:false, hideUnwatched:false, hideRated:false, hideShort:false, hideDocs:false, hideUnreleased:false } };
 
 function getKeys(){ return { tmdb: localStorage.getItem(TMDB_KEY)||"", omdb: localStorage.getItem(OMDB_KEY)||"" }; }
@@ -1154,43 +1172,42 @@ function readLocal(){ try{ var raw=localStorage.getItem(STORE_KEY); return raw?(
 
 /* Yayın (catalog.json) yalnızca GERÇEKTEN değiştiğinde ve DOLU olduğunda herkese yayılır.
    Yereldeki kayıtlar asla boş/eski yayınla ezilmez. */
+function parseCatalog(txt){
+  var parsed=null; try{ parsed=JSON.parse(txt); }catch(e){ parsed=null; }
+  var items = Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.items) ? parsed.items : null);
+  var vault = (parsed && parsed.vault) ? parsed.vault : null;
+  return { items:items, vault:vault };
+}
 function load(){
   return fetch("./catalog.json",{cache:"no-store"})
     .then(function(r){ return r.ok?r.text():null; })
     .then(function(txt){
-      var localItems=readLocal();                 // yoksa null
-      if(txt==null){ state.items=localItems||[]; return; }   // catalog.json yok / file://
+      var localItems=readLocal();                 // yalnızca +18 DIŞI kayıtlar (cihaz önbelleği)
+      if(txt==null){ state.items=localItems||[]; state.vaultBlob=null; return; }
       var h=hashStr(txt), pub=localStorage.getItem(PUB_HASH_KEY);
-      var pubItems=null; try{ pubItems=JSON.parse(txt); }catch(e){ pubItems=null; }
+      var parsed=parseCatalog(txt);
+      var pubItems=parsed.items;
+      state.vaultBlob=parsed.vault||null;          // şifreli +18 kasası (varsa)
       var pubHasData=Array.isArray(pubItems)&&pubItems.length>0;
-
-      if(!localItems){                            // hiç yerel veri yok → yayını al (boş olsa da)
-        state.items=Array.isArray(pubItems)?pubItems:[];
-        save(); localStorage.setItem(PUB_HASH_KEY,h); return;
-      }
-      if(pub==null){                              // ilk açılış: yereli KORU, imzayı taban al
-        localStorage.setItem(PUB_HASH_KEY,h);
-        state.items=localItems; return;
-      }
-      if(h!==pub && pubHasData){                  // yayın gerçekten değişti ve dolu → yeni listeyi al
-        state.items=pubItems;
-        save(); localStorage.setItem(PUB_HASH_KEY,h); return;
-      }
-      state.items=localItems;                     // değişmemiş ya da yayın boş → yereli koru
+      if(!localItems){ state.items=Array.isArray(pubItems)?pubItems:[]; save(); localStorage.setItem(PUB_HASH_KEY,h); return; }
+      if(pub==null){ localStorage.setItem(PUB_HASH_KEY,h); state.items=localItems; return; }
+      if(h!==pub && pubHasData){ state.items=pubItems; save(); localStorage.setItem(PUB_HASH_KEY,h); return; }
+      state.items=localItems;
     })
-    .catch(function(){ state.items=readLocal()||[]; });
+    .catch(function(){ state.items=readLocal()||[]; state.vaultBlob=null; });
 }
-function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(state.items)); }catch(e){} }
+function save(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(publicItemsArr())); }catch(e){}
+  if(vaultUnlocked && vaultCryptoKey){ updateVaultBlob(); } }
 
 /* ===== otomatik yedek (cihaza özel) ===== */
 var BACKUP_KEY="cinora_backups", LASTEXP_KEY="cinora_last_export";
 function backupsGet(){ try{ return JSON.parse(localStorage.getItem(BACKUP_KEY)||"[]"); }catch(e){ return []; } }
 function snapshot(reason){
   try{
-    var data=JSON.stringify(state.items);
+    var data=JSON.stringify(publicItemsArr());
     var arr=backupsGet();
     if(arr.length && arr[0].data===data) return;           // değişmediyse atlama
-    arr.unshift({ ts:Date.now(), count:state.items.length, reason:reason||"", data:data });
+    arr.unshift({ ts:Date.now(), count:publicItemsArr().length, reason:reason||"", data:data });
     arr=arr.slice(0,6);
     try{ localStorage.setItem(BACKUP_KEY, JSON.stringify(arr)); }
     catch(e){ arr=arr.slice(0,3); try{ localStorage.setItem(BACKUP_KEY, JSON.stringify(arr)); }catch(e2){} }
@@ -2011,6 +2028,11 @@ function renderSettings(){
     +'<p style="color:var(--muted);font-size:13.5px;margin-bottom:14px">Uygulama ilk açıldığında bu parola istenir. Boş bırakırsan parola kapısı kalkar. (Bu basit bir kilittir; gerçek gizlilik için Supabase gerekir.)</p>'
     +'<div class="field"><label>Parola</label><input type="text" id="s_pass" value="'+esc(curPass)+'" placeholder="örn. 3312" autocomplete="off"></div>'
     +'<div class="form-actions" style="margin-top:6px"><button class="btn btn-primary" id="savePass">Parolayı kaydet</button></div></div>'
+    +'<div class="set-section"><div class="set-h">Bir Üç (özel alan)</div>'
+    +'<p style="color:var(--muted);font-size:13.5px;margin-bottom:14px">+18 kayıtlar PIN\'den türetilen anahtarla <b>AES-GCM</b> ile şifrelenir; catalog.json\'da bile okunamaz. PIN\'i unutursan şifreli kayıtlara erişim kalıcı kaybolur.</p>'
+    +'<div class="form-actions" style="margin-top:2px"><button class="btn btn-ghost" id="changePin">PIN değiştir</button>'
+      +'<button class="btn btn-ghost" id="resetPin" style="color:var(--danger);border-color:var(--danger)">PIN\'i sıfırla</button></div>'
+    +'<p style="color:var(--faint);font-size:12px;margin-top:8px">PIN değiştirmek için önce Bir Üç açık olmalı (logoya üç tık). Değişiklikten sonra catalog.json\'u dışa aktarıp commit et.</p></div>'
     +'<div class="set-section"><div class="set-h">API anahtarları</div>'
     +'<p style="color:var(--muted);font-size:13.5px;margin-bottom:14px">IMDb bağlantısından bilgi çekmek için kullanılır. Yalnızca bu tarayıcıda saklanır.</p>'
     +'<div class="field"><label>TMDB API anahtarı <span class="hint">— yönetmen, oyuncu, süre, tür, poster, TMDB puanı</span></label>'
@@ -2026,6 +2048,8 @@ function renderSettings(){
     sessionStorage.removeItem(SESSION); localStorage.removeItem(REMEMBER_KEY);
     toast(p?"Parola güncellendi":"Parola kaldırıldı");
   };
+  document.getElementById("changePin").onclick=function(){ openVaultGate("change"); };
+  document.getElementById("resetPin").onclick=resetVaultPin;
   /* görünüm */
   var curDens=localStorage.getItem(APP_DENS)||"comfortable";
   var seg=document.getElementById("densSeg");
@@ -2329,12 +2353,20 @@ function renderForm(editId){
     subChips.querySelectorAll("[data-g]").forEach(function(b){ b.onclick=function(){
       var g=b.getAttribute("data-g"); selSubs=selSubs.filter(function(x){return x!==g;}); paintSub(); }; });
   }
+  var subAdultOpen=false;
   function paintSub(){
     var f=(subSearch.value||"").toLocaleLowerCase("tr").trim();
-    var list=f?SUBGENRES.filter(function(g){return g.toLocaleLowerCase("tr").indexOf(f)>-1;}):SUBGENRES;
-    subBody.innerHTML=list.map(function(g){
-      return '<div class="tick '+(selSubs.indexOf(g)>-1?"on":"")+'" data-g="'+esc(g)+'"><span class="box">'+CHECK+'</span><span>'+esc(g)+'</span></div>';
-    }).join("")||'<div class="tick" style="cursor:default;color:var(--faint)">Eşleşme yok</div>';
+    function flt(list){ return f?list.filter(function(g){return g.toLocaleLowerCase("tr").indexOf(f)>-1;}):list; }
+    var normal=flt(SUBGENRES.filter(function(g){ return !ADULT_SET[norm(g)]; }));
+    var adult=flt(SUBGENRES.filter(function(g){ return ADULT_SET[norm(g)]; }));
+    var tick=function(g){ return '<div class="tick '+(selSubs.indexOf(g)>-1?"on":"")+'" data-g="'+esc(g)+'"><span class="box">'+CHECK+'</span><span>'+esc(g)+'</span></div>'; };
+    var html=normal.map(tick).join("")||'<div class="tick" style="cursor:default;color:var(--faint)">Eşleşme yok</div>';
+    if(adult.length){
+      html+='<button type="button" class="sub-adult-toggle" id="subAdultToggle">'+(subAdultOpen?"▾":"▸")+' +18 alt türleri ('+adult.length+')</button>';
+      if(subAdultOpen) html+='<div class="sub-adult">'+adult.map(tick).join("")+'</div>';
+    }
+    subBody.innerHTML=html;
+    var tg=document.getElementById("subAdultToggle"); if(tg) tg.onclick=function(){ subAdultOpen=!subAdultOpen; paintSub(); };
     subBody.querySelectorAll("[data-g]").forEach(function(t){ t.onclick=function(){
       var g=t.getAttribute("data-g"), i=selSubs.indexOf(g);
       if(i>-1) selSubs.splice(i,1); else selSubs.push(g);
@@ -2588,24 +2620,34 @@ function renderForm(editId){
 
 /* ===== yedekleme ===== */
 function exportCatalog(){
-  if(!state.items.length){
-    if(!confirm("Liste BOŞ. Boş bir catalog.json'u repoya koyarsan yayındaki filmler silinir.\n\nYine de boş dosyayı indirmek istiyor musun?")) return;
+  var pub=publicItemsArr();
+  function writeOut(){
+    var out={ items:pub };
+    if(state.vaultBlob) out.vault=state.vaultBlob;
+    if(!pub.length && !out.vault){
+      if(!confirm("Liste BOŞ. Boş bir catalog.json'u repoya koyarsan yayındaki filmler silinir.\n\nYine de boş dosyayı indirmek istiyor musun?")) return;
+    }
+    var txt=JSON.stringify(out,null,2);
+    var blob=new Blob([txt],{type:"application/json"});
+    var url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url; a.download="catalog.json"; a.click(); URL.revokeObjectURL(url);
+    try{ localStorage.setItem(PUB_HASH_KEY, hashStr(txt)); localStorage.setItem(LASTEXP_KEY, String(Date.now())); }catch(e){}
+    var n18=adultItemsArr().length;
+    toast("catalog.json indirildi ("+pub.length+" film"+(out.vault?" + "+(vaultUnlocked?n18:"şifreli")+" gizli":"")+") — repoya commit et");
   }
-  var txt=JSON.stringify(state.items,null,2);
-  var blob=new Blob([txt],{type:"application/json"});
-  var url=URL.createObjectURL(blob), a=document.createElement("a");
-  a.href=url; a.download="catalog.json"; a.click(); URL.revokeObjectURL(url);
-  try{ localStorage.setItem(PUB_HASH_KEY, hashStr(txt)); localStorage.setItem(LASTEXP_KEY, String(Date.now())); }catch(e){}
-  toast(state.items.length?("catalog.json indirildi ("+state.items.length+" film) — repoya commit et"):"Boş catalog.json indirildi");
+  if(vaultUnlocked && vaultCryptoKey){ updateVaultBlob().then(writeOut).catch(writeOut); }
+  else writeOut();
 }
 function importCatalog(e){
   var file=e.target.files[0]; if(!file) return;
   var r=new FileReader();
   r.onload=function(){ try{
-    var data=JSON.parse(r.result); if(!Array.isArray(data)) throw 0;
+    var parsed=parseCatalog(r.result);
+    if(!Array.isArray(parsed.items)) throw 0;
     snapshot("içe aktarma öncesi");
-    state.items=data; save(); renderTabs(); renderFilterbar(); renderGrid(); renderAdminList();
-    toast("İçe aktarıldı ("+data.length+" kayıt)");
+    state.items=parsed.items; if(parsed.vault) state.vaultBlob=parsed.vault;
+    save(); renderTabs(); renderFilterbar(); renderGrid(); renderAdminList();
+    toast("İçe aktarıldı ("+parsed.items.length+" film"+(parsed.vault?" + şifreli kasa":"")+")");
   }catch(err){ toast("Dosya okunamadı"); } };
   r.readAsText(file); e.target.value="";
 }
@@ -2832,41 +2874,90 @@ var PROFILES=[
 function getProfile(){ var id=localStorage.getItem(PROFILE_KEY); return PROFILES.find(function(p){return p.id===id;})||null; }
 function childMode(){ var p=getProfile(); return !!(p&&p.child); }
 
-/* ===== Özel alan (yumuşak kilit / vault) ===== */
-var VAULT_PIN_KEY="cinora_vault_pin";
+/* ===== Özel alan (Bir Üç · AES şifreli kasa, yalnızca GitHub'da) ===== */
 var vaultUnlocked=false, vaultTimer=null, VAULT_TIMEOUT=10*60*1000;
+var vaultCryptoKey=null, vaultSaltBuf=null;
 function isAdult(it){ return (it.collections||[]).indexOf("N'18")>-1 || isAdultTax(it); }
-function vaultHidden(){ return childMode() || !vaultUnlocked; }       // kilitliyse +18 gizli
+function vaultHidden(){ return childMode() || !vaultUnlocked; }
 function vaultAllows(it){ return !(isAdult(it) && vaultHidden()); }
-function vaultHasPin(){ return !!localStorage.getItem(VAULT_PIN_KEY); }
-function resetVaultTimer(){ if(!vaultUnlocked) return; clearTimeout(vaultTimer); vaultTimer=setTimeout(lockVault, VAULT_TIMEOUT); }
-function unlockVault(){ vaultUnlocked=true; resetVaultTimer(); renderTabs(); renderFilterbar(); renderGrid(); renderCloud(); toast("Özel alan açıldı"); }
-function lockVault(silent){
-  vaultUnlocked=false; clearTimeout(vaultTimer);
-  if(state.view==="vault"||state.view==="col:N'18") state.view="all";
-  if(state.tags) state.tags=[];
-  renderTabs(); renderFilterbar(); renderGrid(); renderCloud();
-  if(!silent) toast("Özel alan kilitlendi");
-}
+function vaultHasPin(){ return !!(state.vaultBlob); }
 function vaultUniverse(){ return state.items.filter(vaultAllows); }
-function pinHash(s){ return hashStr("nora:"+s); }
-function openVaultGate(){
-  var ov=document.getElementById("vaultOverlay");
-  if(!ov){
-    ov=document.createElement("div"); ov.id="vaultOverlay"; ov.className="overlay";
-    document.body.appendChild(ov);
-    ov.addEventListener("click",function(e){ if(e.target===ov) closeVaultGate(); });
+function adultItemsArr(){ return state.items.filter(isAdult); }
+function publicItemsArr(){ return state.items.filter(function(it){ return !isAdult(it); }); }
+function resetVaultTimer(){ if(!vaultUnlocked) return; clearTimeout(vaultTimer); vaultTimer=setTimeout(function(){ lockVault(); }, VAULT_TIMEOUT); }
+
+/* --- kripto (PBKDF2 + AES-GCM) --- */
+function b64enc(buf){ var b=new Uint8Array(buf),s=""; for(var i=0;i<b.length;i++) s+=String.fromCharCode(b[i]); return btoa(s); }
+function b64dec(str){ var s=atob(str),b=new Uint8Array(s.length); for(var i=0;i<s.length;i++) b[i]=s.charCodeAt(i); return b.buffer; }
+function deriveVaultKey(pin, saltBuf){
+  var enc=new TextEncoder();
+  return crypto.subtle.importKey("raw", enc.encode(pin), "PBKDF2", false, ["deriveKey"]).then(function(base){
+    return crypto.subtle.deriveKey({name:"PBKDF2", salt:saltBuf, iterations:250000, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
+  });
+}
+function vaultEncrypt(key, obj){
+  var iv=crypto.getRandomValues(new Uint8Array(12)), enc=new TextEncoder();
+  return crypto.subtle.encrypt({name:"AES-GCM", iv:iv}, key, enc.encode(JSON.stringify(obj))).then(function(ct){
+    return { iv:b64enc(iv), ct:b64enc(ct) };
+  });
+}
+function vaultDecrypt(key, ivB64, ctB64){
+  return crypto.subtle.decrypt({name:"AES-GCM", iv:new Uint8Array(b64dec(ivB64))}, key, b64dec(ctB64)).then(function(pt){
+    return JSON.parse(new TextDecoder().decode(pt));
+  });
+}
+function updateVaultBlob(){
+  if(!vaultCryptoKey||!vaultSaltBuf) return Promise.resolve();
+  return vaultEncrypt(vaultCryptoKey, {marker:"CINORA_VAULT", items:adultItemsArr()}).then(function(e){
+    state.vaultBlob={ v:1, salt:b64enc(vaultSaltBuf), iv:e.iv, ct:e.ct };
+  });
+}
+
+function finishUnlock(){
+  vaultUnlocked=true; resetVaultTimer();
+  playCurtain();
+  renderTabs(); renderFilterbar(); renderGrid(); renderCloud();
+}
+function lockVault(silent){
+  function done(){
+    vaultUnlocked=false; clearTimeout(vaultTimer); vaultCryptoKey=null; vaultSaltBuf=null;
+    state.items=publicItemsArr();              // +18'i bellekten düşür (cihazda kalmaz)
+    if(state.view==="vault"||state.view==="col:N'18") state.view="all";
+    state.tags=[];
+    renderTabs(); renderFilterbar(); renderGrid(); renderCloud();
+    if(!silent) toast("Bir Üç kilitlendi");
   }
-  var setup=!vaultHasPin();
-  ov._buf=""; ov._first=null; ov._setup=setup;
+  if(vaultCryptoKey){ updateVaultBlob().then(done).catch(done); } else done();
+}
+
+/* --- perde animasyonu --- */
+function playCurtain(){
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var c=document.createElement("div"); c.className="curtain";
+  c.innerHTML='<div class="curtain-l"></div><div class="curtain-r"></div><div class="curtain-word">Bir Üç</div>';
+  document.body.appendChild(c);
+  requestAnimationFrame(function(){ c.classList.add("open"); });
+  setTimeout(function(){ if(c.parentNode) c.parentNode.removeChild(c); }, 1300);
+}
+
+/* --- giriş / PIN ekranı --- */
+function openVaultGate(mode){
+  if(mode==="change" && !vaultUnlocked){ toast("Önce Bir Üç'ü aç (logoya üç tık)"); return; }
+  var ov=document.getElementById("vaultOverlay");
+  if(!ov){ ov=document.createElement("div"); ov.id="vaultOverlay"; ov.className="overlay";
+    document.body.appendChild(ov); ov.addEventListener("click",function(e){ if(e.target===ov) closeVaultGate(); }); }
+  var setup = mode==="change" ? "change" : (!vaultHasPin() ? "setup" : "enter");
+  ov._buf=""; ov._first=null; ov._mode=setup; ov._busy=false;
+  var epi = setup==="setup" ? "Bir Üç için bir PIN belirle." : setup==="change" ? "Yeni PIN belirle." : "“Bir Üç… perde iner, ışık kısılır.”";
+  var note = setup==="enter" ? "4–8 hane · ✓ ile onayla" : "4–8 hane · sonra tekrar girersin";
   ov.innerHTML=
-    '<div class="modal vault-modal" role="dialog" aria-modal="true" aria-label="Özel alan">'
+    '<div class="modal vault-modal" role="dialog" aria-modal="true" aria-label="Bir Üç">'
     +'<button class="vault-x" id="vaultClose" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>'
     +'<div class="vault-key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>'
-    +'<div class="vault-epi" id="vaultEpi">'+(setup?"Bir Üç için bir PIN belirle.":"“Bir Üç… perde iner, ışık kısılır.”")+'</div>'
+    +'<div class="vault-epi" id="vaultEpi">'+epi+'</div>'
     +'<div class="vault-dots" id="vaultDots"></div>'
     +'<div class="vault-pad" id="vaultPad"></div>'
-    +'<div class="vault-note" id="vaultNote">'+(setup?"4–6 hane · sonra tekrar girersin":"oturum sonunda yeniden kilitlenir")+'</div>'
+    +'<div class="vault-note" id="vaultNote">'+note+'</div>'
     +'</div>';
   var pad=ov.querySelector("#vaultPad");
   ["1","2","3","4","5","6","7","8","9","ok","0","del"].forEach(function(k){
@@ -2874,7 +2965,7 @@ function openVaultGate(){
     if(k==="del"){ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M20 6H9l-5 6 5 6h11a2 2 0 002-2V8a2 2 0 00-2-2z"/><path d="M18 9l-5 6M13 9l5 6"/></svg>'; b.setAttribute("aria-label","sil"); }
     else if(k==="ok"){ b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="width:20px;height:20px"><path d="M20 6L9 17l-5-5"/></svg>'; b.setAttribute("aria-label","onayla"); b.classList.add("kp-ok"); }
     else { b.textContent=k; }
-    b.onclick=function(){ vaultKey(k); };
+    b.onclick=function(){ vaultPadKey(k); };
     pad.appendChild(b);
   });
   ov.querySelector("#vaultClose").onclick=closeVaultGate;
@@ -2883,36 +2974,64 @@ function openVaultGate(){
 }
 function paintVaultDots(){
   var ov=document.getElementById("vaultOverlay"); if(!ov) return;
-  var d=ov.querySelector("#vaultDots"), n=ov._buf.length, max=6, h="";
+  var d=ov.querySelector("#vaultDots"), n=ov._buf.length, max=8, h="";
   for(var i=0;i<max;i++){ h+='<span class="vd'+(i<n?" on":"")+'"></span>'; }
   d.innerHTML=h;
 }
-function vaultKey(k){
-  var ov=document.getElementById("vaultOverlay"); if(!ov) return;
+function vaultPadKey(k){
+  var ov=document.getElementById("vaultOverlay"); if(!ov||ov._busy) return;
   if(k==="del"){ ov._buf=ov._buf.slice(0,-1); paintVaultDots(); return; }
   if(k==="ok"){ vaultSubmit(); return; }
-  if(ov._buf.length>=6) return;
+  if(ov._buf.length>=8) return;
   ov._buf+=k; paintVaultDots();
-  if(ov._buf.length===6) setTimeout(vaultSubmit, 120);
 }
 function vaultShake(){ var m=document.querySelector(".vault-modal"); if(m){ m.classList.remove("shake"); void m.offsetWidth; m.classList.add("shake"); } }
+function vaultNote(t){ var n=document.getElementById("vaultNote"); if(n) n.textContent=t; }
+function vaultEpiTxt(t){ var e=document.getElementById("vaultEpi"); if(e) e.textContent=t; }
 function vaultSubmit(){
-  var ov=document.getElementById("vaultOverlay"); if(!ov) return;
-  var buf=ov._buf;
-  if(ov._setup){
-    if(buf.length<4){ document.getElementById("vaultNote").textContent="En az 4 hane gerekli."; vaultShake(); return; }
-    if(ov._first===null){ ov._first=buf; ov._buf=""; paintVaultDots();
-      document.getElementById("vaultEpi").textContent="Bir daha gir, doğrulayalım.";
-      document.getElementById("vaultNote").textContent="aynı PIN'i tekrar gir"; return; }
-    if(buf!==ov._first){ ov._first=null; ov._buf=""; paintVaultDots();
-      document.getElementById("vaultEpi").textContent="Eşleşmedi. Yeniden belirle.";
-      document.getElementById("vaultNote").textContent="4–6 hane"; vaultShake(); return; }
-    localStorage.setItem(VAULT_PIN_KEY, pinHash(buf)); closeVaultGate(); unlockVault(); return;
+  var ov=document.getElementById("vaultOverlay"); if(!ov||ov._busy) return;
+  var buf=ov._buf, mode=ov._mode;
+  if(mode==="setup"||mode==="change"){
+    if(buf.length<4){ vaultNote("En az 4 hane gerekli."); vaultShake(); return; }
+    if(ov._first===null){ ov._first=buf; ov._buf=""; paintVaultDots(); vaultEpiTxt("Bir daha gir, doğrulayalım."); vaultNote("aynı PIN'i tekrar gir"); return; }
+    if(buf!==ov._first){ ov._first=null; ov._buf=""; paintVaultDots(); vaultEpiTxt("Eşleşmedi. Yeniden belirle."); vaultNote("4–8 hane"); vaultShake(); return; }
+    ov._busy=true; vaultNote("Anahtar hazırlanıyor…");
+    var salt=crypto.getRandomValues(new Uint8Array(16));
+    deriveVaultKey(buf, salt.buffer).then(function(key){
+      vaultCryptoKey=key; vaultSaltBuf=salt.buffer;
+      return updateVaultBlob();          // mevcut +18'leri yeni anahtarla şifrele (setup'ta boş)
+    }).then(function(){
+      closeVaultGate();
+      if(mode==="change"){ toast("PIN değiştirildi — kalıcı olması için catalog.json'u dışa aktar"); resetVaultTimer(); }
+      else finishUnlock();
+    }).catch(function(){ ov._busy=false; vaultNote("Bir hata oldu, tekrar dene."); vaultShake(); });
+    return;
   }
-  if(pinHash(buf)===localStorage.getItem(VAULT_PIN_KEY)){ closeVaultGate(); state.view="vault"; unlockVault(); }
-  else{ ov._buf=""; paintVaultDots(); document.getElementById("vaultNote").textContent="Yanlış PIN."; vaultShake(); }
+  // enter
+  if(buf.length<4){ vaultNote("PIN en az 4 hane."); vaultShake(); return; }
+  if(!state.vaultBlob){ ov._busy=false; vaultNote("Kasa bulunamadı."); return; }
+  ov._busy=true; vaultNote("Çözülüyor…");
+  var saltBuf=b64dec(state.vaultBlob.salt);
+  deriveVaultKey(buf, saltBuf).then(function(key){
+    return vaultDecrypt(key, state.vaultBlob.iv, state.vaultBlob.ct).then(function(data){
+      if(!data||data.marker!=="CINORA_VAULT") throw new Error("bad");
+      vaultCryptoKey=key; vaultSaltBuf=saltBuf;
+      var ids={}; state.items.forEach(function(x){ ids[x.id]=1; });
+      (data.items||[]).forEach(function(a){ if(!ids[a.id]) state.items.push(a); });
+      closeVaultGate(); state.view="vault"; finishUnlock();
+    });
+  }).catch(function(){ ov._busy=false; ov._buf=""; paintVaultDots(); vaultNote("Yanlış PIN."); vaultShake(); });
 }
 function closeVaultGate(){ var ov=document.getElementById("vaultOverlay"); if(ov){ ov.classList.remove("show"); document.body.style.overflow=""; } }
+function resetVaultPin(){
+  if(!confirm("Bir Üç PIN'ini sıfırla?\n\nUYARI: Şifreli +18 kayıtların bu PIN olmadan AÇILAMAZ. Sıfırlarsan onlara erişim kalıcı olarak kaybolur.")) return;
+  if(!confirm("Emin misin? Bu işlem geri alınamaz.")) return;
+  state.vaultBlob=null; vaultCryptoKey=null; vaultSaltBuf=null; vaultUnlocked=false; clearTimeout(vaultTimer);
+  state.items=publicItemsArr();
+  if(state.view==="vault") state.view="all";
+  renderTabs(); renderFilterbar(); renderGrid(); renderCloud();
+  toast("Bir Üç sıfırlandı — catalog.json'u dışa aktarıp commit et");
+}
 
 function setProfile(id){ localStorage.setItem(PROFILE_KEY,id); applyProfile(); }
 function applyProfile(){
