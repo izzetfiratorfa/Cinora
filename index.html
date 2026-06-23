@@ -817,19 +817,34 @@ var ANA = ("Aksiyon, Macera, Komedi, Dram, Korku, Bilimkurgu, Fantastik, Gerilim
   +"Kara Film (Film Noir), Deneysel Sinema, Sanat Filmi (Art House), Bağımsız Sinema, Kült Film, "
   +"Erotik Film, Pornografik Film, Propaganda Filmi, Dini Film, Eğitim Filmi, Kuir Sineması (Queer Cinema), "
   +"Yeraltı Sineması (Underground Cinema), Sessiz Film, Kısa Metraj, Orta Metraj, Uzun Metraj, "
-  +"İnteraktif Film, Antoloji Filmi").split(",").map(function(s){return s.trim();}).filter(Boolean);
+  +"İnteraktif Film, Antoloji Filmi, "
+  +"Yetişkin (+18), Amatör (+18), Profesyonel (+18), Fetiş & BDSM (+18), Rol & Senaryo (+18), Voyeur & Teşhir (+18)"
+  ).split(",").map(function(s){return s.trim();}).filter(Boolean);
 
 /* ===== tüm türler (iki listeden birleştirildi, tekilleştirildi) ===== */
 var GENRES_A = "Absürt Komedi, Acid Western, Aile Dramı, Aksiyon Gerilim, Alegorik Film, Alternatif Tarih, Amnezi Filmleri, Anahtarlı Film (Roman à Clef), Anime, Anti-Savaş, Araba Kovalamacası, Arkadaş Komedisi (Buddy Film), Art House, Askeri, Askeri Bilimkurgu, Atlı Kovalamaca, Avant-Garde, Avrupa Westerni, Avustralya Westerni, B Tipi Film (B-Movie), Beyaz Telefon Filmleri (Telefoni Bianchi), Bildungsroman, Bilgisayar Animasyonu, Bilgisayar Ekranı Filmi (Screenlife), Bilimkurgu Komedisi, Bilimkurgu Western, Bilimsel Belgesel, Biopunk, Biyografik Belgesel, Biyografik Dram, Blaxploitation, Boks Filmleri, Bulaşıcı Hastalık Filmleri, Büyülü Gerçekçilik, Büyüme Hikayesi, C Tipi Film, Casusluk, Casusluk Gerilimi, CGI Animasyon, Chicano Cinema, Cinema Novo, Cinéma Vérité, Claymation (Kil Animasyonu), Cli-Fi (İklim Kurgu), Çağdaş Fantezi, Çağdaş Western, Çizgi Film, Çizgi Roman Fantezisi, Dans Filmi, Dedektif Gizemi, Deniz Macerası, Denizaltı Filmleri, Dışavurumcu Film, Dini Dram, Direct Cinema (Doğrudan Sinema), Distopik Bilimkurgu, Dogme 95, Doğa Belgeseli, Doğaüstü Gerilim, Doğaüstü Gizem, Dostluk Filmi, Dönem Draması, Dönem Filmi, Dövüş Sanatları, Durum Komedisi (Sitcom), Düşük Fantezi (Low Fantasy), Egzotik Macera, Eko-Gerilim, Epik Fantezi, Epik Tarih, Epik Western, Erotik Dram, Erotik Gerilim, Ev İstilası Gerilimi, Fars (Farce), Felaket Filmi, Fransız Yeni Dalgası, Futbol Filmleri, Fütüristik Gerilim, Gangster Filmi, Gençlik Draması, Gençlik Komedisi, Gençlik Romantizmi, Gendai-geki, Gerçek Suç (True Crime), Gerçek Suç Belgeseli, Gezi Belgeseli, Ghetto Film, Gizemli Gerilim, Gözetim Toplumu Filmleri, Gözlemci Belgesel, Güney Denizleri Türü, Haneye Tecavüz Gerilimi, Hapishane Filmi, Havacılık Filmleri, Hayatta Kalma (Survival) Filmi, Hazine Avı, Hiciv, Hicivli Komedi, High Fantasy (Yüksek Fantezi), Hukuk Draması, Hukuki Gerilim, İklim Kurgu, İnteraktif Macera, İntikam Filmi, İskandinav Noir (Nordik Noir), Jidai-geki, Jukebox Müzikali, Kaba Komedi, Kahramanlık Fantezisi, Kahramanlık Kan Banyosu (Heroic Bloodshed), Kaiju, Kapalı Oda Polisiye, Kara Komedi, Kara Mizah, Kara Mizah Suç, Kara Romantizm, Karakter Komedisi, Karanlık Fantezi, Katılımcı Belgesel, Katil Kim (Whodunit), Kayıp Kişi Gizemi, Kent Fantezisi, Kentsel Aksiyon, Kılıç ve Büyü (Sword and Sorcery), Klasik Canlandırma, Klasik Western, Klonlama Bilimkurgusu, Komplo Gerilimi, Korsan Filmi, Kovalamaca, Köri Western, Kuir Sineması, Kukla Animasyonu, Kum Animasyonu, Kuzey Western, Lirik Sinema, Low Fantasy, Macaroni Combat, Mafya Filmi, Mahkeme Draması, Masal Filmi, Masaüstü Filmi, Medikal Dram, Melodram, Miras Filmi, Mitolojik Epik, Mitolojik Film, Mockumentary (Sahte Belgesel), Mondo Filmi, Mumblecore, Mutfak Draması, Müzik Belgeseli, Müzik Filmi, Müzikal Dram, Müzikal Komedi, Nanopunk, Neo-Noir, Neo-Western, No Wave Cinema, Nunploitation, Ofis Komedisi, Olay Yeri İnceleme, Ordu Filmleri, Orman Macerası, Otobiyografi, Ozploitation, Ölen Dünya Bilimkurgusu, Paralı Asker Filmleri, Parodi, Pembe Film (Pinku Eiga), Peplum, Polisiye Gerilim, Politik Belgesel, Politik Dram, Politik Gerilim, Poliziotteschi, Portal Fantezisi, Post-Apokaliptik, Postmodern Film, Reşit Olma Öyküsü, Retro-Fütürizm, Revizyonist Western, Rock Operası, Romantik Dram, Romantik Fantezi, Romantik Gerilim, Romantik Komedi, Romantik Macera, Romantizm, Ruh Sağlığı Draması, Sahne Müzikali, Salgın Filmleri, Samuray Filmi, Savaş Draması, Savaş-Aksiyon, Screenlife, Screwball Komedisi, Seks Komedisi, Serbest Sinema, Sert Bilimkurgu (Hard Sci-Fi), Siber Gerçeklik, Siber-Gerilim, Siberprep, Siberpunk, Silahlı Çatışma, Siluet Animasyonu, Sirk Filmleri, Siyasi Gerilim, Slapstick, Solarpunk, Sosyal Bilimkurgu, Sosyal Dram, Sosyal Gerçekçi Dram, Sosyal Gerçekçilik, Sosyolojik Belgesel, Soygun Filmi, Spagetti Western, Spor Belgeseli, Spor Draması, Spor Komedisi, Steampunk, Steampunk Fantezisi, Stop-Motion Animasyon, Suç Komedisi, Süper Kahraman, Sürrealist Film, Şehir Fantezisi, Şiirsel Belgesel, Şiirsel Gerçekçilik, Şizofreni Filmleri, Tarih Belgeseli, Tarihi Dram, Tarihsel Dönem Filmi, Tarihsel Fantezi, Tarihsel Romantizm, Taşlama, Tekno-Gerilim, Tıbbi Gerilim, Tokusatsu, Trajedi, Trajik Romantizm, Transgresif Sanat Filmi, Trash Film, Triad Filmleri, Uzay Macerası, Uzay Operası, Uzay Westerni, Uzaylı İstilası, Üçüncü Sinema, Ütopik Bilimkurgu, Vahşi Batı, Varoluşçu Dram, Vigilante, Wuxia, Yakuza Filmleri, Yanlışlıklar Komedisi, Yapay Zeka Bilimkurgusu, Yarı Belgesel, Yarış Filmleri, Yavaş Sinema, Yeni Dalga, Yeni Gerçekçilik, Yeni Queer Sineması, Yetişkin Animasyonu, Yeşilçam Westerni, Yol Filmi, Yol Komedisi, Yumuşak Bilimkurgu (Soft Sci-Fi), Zaman Yolculuğu";
 var GENRES_B = "Kara Film (Film Noir), Deneysel Sinema, Sanat Filmi (Art House), Bağımsız Sinema, Kült Film, Erotik Film, Pornografik Film, Propaganda Filmi, Dini Film, Eğitim Filmi, Kuir Sineması (Queer Cinema), Yeraltı Sineması (Underground Cinema), Sessiz Film, Kısa Metraj, Orta Metraj, Uzun Metraj, İnteraktif Film, Antoloji Filmi, Aksiyon Korku, Animasyon Korku, Asya Korkusu (J-Horror / K-Horror), Aşırı Sinema (Extreme Cinema), Beden Korkusu (Body Horror), Bilimkurgu-Korku, Biyolojik Korku, Bol Kanlı Korku, Büyü Korkusu, Büyücü Korkusu, Cadı Korkusu, Canavar Filmi, Cehennem Korkusu, Cin Filmi, Demon (İblis) Filmleri, Din Hakkında Korku Filmleri, Doğa Korkusu (Eco-Horror), Doğal Korku, Doğaüstü Korku, Dramatik Korku, Ekofeminist Korku, Ekolojik Korku, Erotik Korku, Ev İstilası (Home Invasion), Exploitation Korku, Folklorik Korku (Halk Korkusu), Found Footage (Buluntu Görüntü), Gençlik Korkusu, Giallo, Golem Filmi, Gotik Korku, Gotik Melodram, Gotik Romantizm, Grindhouse, Halk Korkusu, Haneye Tecavüz Korkusu, Hayalet Filmi, Hayatta Kalma Korkusu, Hillbilly Korkusu (Taşra-Tepelik Korkusu), İşkence Pornosu (Torture Porn), Karabasan Filmleri, Karanlık Korku, Katil Hayvan Korkusu, Katil Oyuncak Korkusu, Kentsel Efsane Korkusu, Kış Korkusu, Kıyamet Korkusu, Korku Antolojisi, Korku Komedisi, Korku-Gerilim, Kozmik Korku (Lovecraftvari Korku), Kötü Çocuk Korkusu, Kurt Adam Korkusu, Mumya Filmi, Musallat Filmleri, Mumblegore, Nazisploitation Korku, Okült Korku, Polisiye Korku, Psikolojik Korku, Psikolojik Slasher, Ruhani Korku, Sanat Evi Korkusu (Elevated Horror), Slasher, Slasher Komedisi, Splatstick, Splatter (Gore), Sömürü Korkusu, Şeytani Korku, Tekno-Korku, Tepelik Korkusu, Ucube Filmleri (Freak Show), Vampir Korkusu, Vücut Korkusu, Yamyam Sömürü (Cannibal Exploitation), Yamyamlık Filmi, Yaratık Korkusu, Zombi Komedisi, Zombi Korkusu";
+
+/* ===== yetişkin alt türleri (+18) — yalnızca etiket; seçilince kayıt otomatik Bir Üç'e düşer ===== */
+var GENRES_ADULT = "Amatör (+18), Profesyonel (+18), Anal, Oral, Vajinal, Klasik (+18), Gonzo, POV (Bakış Açısı), Solo Kadın, Solo Erkek, Lezbiyen (+18), Gay (+18), Biseksüel (+18), Trans (+18), İnterseks (+18), Üçlü (Threesome), Grup Seks, Orji, Gangbang, Çiftler (Couples), Gerçeklik (Reality +18), Gizli Kamera (Kurgu), İlk Defa (First Time), Kameralı Sohbet (Cam), Genç (18+), Olgun (Mature), MILF, COUGAR, Yaşlı (GILF / Granny), Baba (DILF), Üvey Aile (Step), Tabu (+18), Bakıcı (Babysitter), Öğretmen / Öğrenci (Yetişkin), Hizmetçi (Maid), Sekreter / Patron, Doktor / Hemşire, Erotik Masaj, Otostopçu, Kurye / Tesisatçı, BDSM, Bondage (Bağlama), Dominasyon, İtaat (Submission), Sadizm, Mazoşizm, Spanking (Şaplaklama), Kırbaçlama, Deri / Lateks (Leather/Latex), Ayak Fetişi (Foot), Çorap / Külotlu Çorap (Stockings), İç Çamaşırı (Lingerie), Topuklu Ayakkabı Fetişi, Büyük Göğüs (Big Tits), Küçük Göğüs (Small Tits), Büyük Kalça (Big Booty), Kıllı (Hairy), Tıraşlı (Shaved), Devlik / Küçüklük (Macro/Micro), Hamile (Pregnant), Emzirme (Lactation), Islak ve Dağınık (WAM), Finansal Dominasyon (Findom), Yağlı Güreş / Çamur, Asyalı (+18), Siyahi (Ebony), Latin (Latina), Kültürlerarası (Interracial), Hintli (Desi), Orta Doğulu (+18), Sarışın (+18), Esmer (+18), Kızıl (+18), Minyon (Petite), Kıvrımlı (BBW), Kaslı (Muscular), Atletik (+18), Uzun Boylu (+18), Kısa Boylu (+18), Sinematik (+18), Parodi (+18), Cosplay (+18), Hentai (Anime +18), Oyun (Machinima +18), Kamusal Alan (Public), Açık Hava (Outdoor), Havuz / Plaj, Ofis (+18), Arabada, Spor Salonu (+18), Asansör, Otel Odası, Gece Kulübü (+18), Festival (+18), Kostümlü / Tarihsel (+18), Antik / Gladyatör (+18), Bilim Kurgu (+18), Fütüristik (+18), Röntgencilik (Voyeur), Teşhircilik (Exhibitionist), Soyunma (Flashing), Soyunma Odası, Cuckold, Cuckqueen, Yakalanma (Caught), İfşa (Amatör), Cumshot (Boşalma), Facial (Yüze), Creampie (İçe), Internal Cumshot, Swallow (Yutma), Deepthroat (Derin Oral), Gaping, Squirt (Fışkırtma), Handjob, Footjob, Titjob, Cum Eating, Golden Shower (Soft/Kurgu), Scat (Uç Kinky), ASMR (+18), Seks Oyuncakları (Dildo/Vibratör), Strap-on, Pegging, Double Penetration (DP), Triple Penetration (TP), Seks Makineleri, VR (Sanal Gerçeklik +18), İnteraktif Porno, Sesli Porno (Audio), Hızlı Seks (Quickie), Romantik / Tutkulu (Sensual), Hardcore, Softcore, Kaba Seks (Rough), Choking (Nefes Oyunu), Spitting (Tükürme), Bukkake, Glory Hole, Edging, JOI (Talimatlı), Striptiz, Lap Dance, Rimming (Anilingus), Fisting, File Çorap (Nylon), Üniforma (Uniform), Yağ Masajı (Oil), Shibari, Gıdıklama (Tickling), 69, Karşılıklı Mastürbasyon";
 var GENRES = (function(){
-  var arr=(GENRES_A+", "+GENRES_B).split(",").map(function(s){return s.trim();}).filter(Boolean);
+  var arr=(GENRES_A+", "+GENRES_B+", "+GENRES_ADULT).split(",").map(function(s){return s.trim();}).filter(Boolean);
   var seen={},out=[]; arr.forEach(function(g){ var k=g.toLocaleLowerCase("tr"); if(!seen[k]){seen[k]=1;out.push(g);} });
   return out.sort(function(a,b){return a.localeCompare(b,"tr");});
 })();
 /* alt türler = tüm türler eksi ana kategoriler */
 var ANA_SET=(function(){var s={};ANA.forEach(function(a){s[a.toLocaleLowerCase("tr")]=1;});return s;})();
 var SUBGENRES=GENRES.filter(function(g){ return !ANA_SET[g.toLocaleLowerCase("tr")]; });
+
+/* yetişkin taksonomisi: bu ana kategori ya da alt tür seçilirse kayıt otomatik Bir Üç'e (N'18) düşer */
+var ADULT_LABELS=("Yetişkin (+18), Amatör (+18), Profesyonel (+18), Fetiş & BDSM (+18), Rol & Senaryo (+18), Voyeur & Teşhir (+18), "
+  +"Erotik Film, Pornografik Film, Erotik Dram, Erotik Gerilim, Erotik Korku, Seks Komedisi, Pembe Film (Pinku Eiga), İşkence Pornosu (Torture Porn)")
+  .split(",").map(function(s){return s.trim();}).filter(Boolean)
+  .concat(GENRES_ADULT.split(",").map(function(s){return s.trim();}).filter(Boolean));
+var ADULT_SET=(function(){ var s={}; ADULT_LABELS.forEach(function(g){ s[norm(g)]=1; }); return s; })();
+function isAdultTax(it){
+  return (it.categories||[]).concat(it.genres||[]).some(function(g){ return ADULT_SET[norm(g)]; });
+}
 
 /* ===== yıl aralıkları ===== */
 var RANGES=[
@@ -1937,7 +1952,8 @@ function closeAdmin(){ document.getElementById("adminOverlay").classList.remove(
 
 function renderAdminList(){
   document.getElementById("adminTitle").textContent="Kütüphaneyi Yönet";
-  var rows=state.items.slice().sort(function(a,b){return (b.year||0)-(a.year||0);}).map(function(it){
+  var hiddenAdult=vaultHidden()?state.items.filter(isAdult).length:0;
+  var rows=state.items.filter(vaultAllows).slice().sort(function(a,b){return (b.year||0)-(a.year||0);}).map(function(it){
     var sub=[]; if(it.year) sub.push(it.year); sub.push(it.watched?"izlendi":"izlenecek");
     if(it.embed) sub.push(it.platform==="vk"?"VK":it.platform==="ok"?"OK.ru":"link");
     return '<div class="admin-item">'
@@ -1955,6 +1971,7 @@ function renderAdminList(){
       +'<button class="btn btn-ghost" id="backupBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7M21 3v6h-6"/></svg>Yedekler</button>'
       +'<button class="btn btn-ghost" id="tagEditBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.6 8.6L12 17l-4-4M3 12h.01"/><path d="M7 7h.01"/></svg>Etiket/Tür düzenle</button>'
       +'<input type="file" id="importFile" accept="application/json" style="display:none"></div>'
+    +(hiddenAdult?'<div class="vault-ribbon" style="margin-bottom:14px"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> '+hiddenAdult+' +18 kayıt gizli — düzenlemek için Bir Üç kilidini aç (logoya üç tık)</span></div>':'')
     +(rows||'<p style="color:var(--muted);text-align:center;padding:20px">Henüz kayıt yok.</p>');
   document.getElementById("addNew").onclick=function(){ renderForm(); };
   document.getElementById("exportBtn").onclick=exportCatalog;
@@ -2289,6 +2306,10 @@ function renderForm(editId){
     catChips.querySelectorAll("[data-c]").forEach(function(b){ b.onclick=function(){
       var c=b.getAttribute("data-c"); selCats=selCats.filter(function(x){return x!==c;}); paintCat(); }; });
   }
+  function enforceAdult(){
+    var any=selCats.concat(selSubs).some(function(g){ return ADULT_SET[norm(g)]; });
+    if(any && selCols.indexOf("N'18")<0){ selCols.push("N'18"); if(typeof paintCols==="function") paintCols(); if(typeof refreshColSuggest==="function") refreshColSuggest(); toast("+18 içerik · otomatik Bir Üç'e eklendi"); }
+  }
   function paintCat(){
     catGrid.innerHTML=ANA.map(function(c){
       return '<div class="tick '+(selCats.indexOf(c)>-1?"on":"")+'" data-c="'+esc(c)+'"><span class="box">'+CHECK+'</span><span>'+esc(c)+'</span></div>';
@@ -2296,7 +2317,7 @@ function renderForm(editId){
     catGrid.querySelectorAll("[data-c]").forEach(function(t){ t.onclick=function(){
       var c=t.getAttribute("data-c"), i=selCats.indexOf(c);
       if(i>-1) selCats.splice(i,1); else selCats.push(c);
-      t.classList.toggle("on"); paintCatChips(); }; });
+      t.classList.toggle("on"); paintCatChips(); enforceAdult(); }; });
     paintCatChips();
   }
   paintCat();
@@ -2317,7 +2338,7 @@ function renderForm(editId){
     subBody.querySelectorAll("[data-g]").forEach(function(t){ t.onclick=function(){
       var g=t.getAttribute("data-g"), i=selSubs.indexOf(g);
       if(i>-1) selSubs.splice(i,1); else selSubs.push(g);
-      t.classList.toggle("on"); paintSubChips(); }; });
+      t.classList.toggle("on"); paintSubChips(); enforceAdult(); }; });
     paintSubChips();
   }
   subSearch.addEventListener("input",paintSub);
@@ -2544,6 +2565,7 @@ function renderForm(editId){
       embed:p.empty?"":p.embed, platform:p.empty?"":p.platform, _rawSrc:srcEl.value.trim(),
       createdAt:(it&&it.createdAt)?it.createdAt:Date.now()
     };
+    if(isAdultTax(obj) && obj.collections.indexOf("N'18")<0) obj.collections.push("N'18");
     if(editId){ var i=state.items.findIndex(function(x){return x.id===editId;}); state.items[i]=obj; }
     else{
       var dup=state.items.find(function(x){
@@ -2813,7 +2835,7 @@ function childMode(){ var p=getProfile(); return !!(p&&p.child); }
 /* ===== Özel alan (yumuşak kilit / vault) ===== */
 var VAULT_PIN_KEY="cinora_vault_pin";
 var vaultUnlocked=false, vaultTimer=null, VAULT_TIMEOUT=10*60*1000;
-function isAdult(it){ return (it.collections||[]).indexOf("N'18")>-1; }
+function isAdult(it){ return (it.collections||[]).indexOf("N'18")>-1 || isAdultTax(it); }
 function vaultHidden(){ return childMode() || !vaultUnlocked; }       // kilitliyse +18 gizli
 function vaultAllows(it){ return !(isAdult(it) && vaultHidden()); }
 function vaultHasPin(){ return !!localStorage.getItem(VAULT_PIN_KEY); }
