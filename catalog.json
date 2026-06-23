@@ -1,5 +1,73 @@
 [
   {
+    "id": "mqqk3ntocfo1v",
+    "title": "Kör Talih",
+    "titleTr": "Kör Talih",
+    "titleOriginal": "Przypadek",
+    "titleEn": "Blind Chance",
+    "year": 1987,
+    "runtime": 123,
+    "director": "Krzysztof Kieślowski",
+    "cast": [
+      "Bogusław Linda",
+      "Tadeusz Łomnicki",
+      "Zbigniew Zapasiewicz",
+      "Bogusława Pawelec",
+      "Marzena Trybała"
+    ],
+    "country": "Poland",
+    "language": "Polish",
+    "categories": [
+      "Dram"
+    ],
+    "genres": [],
+    "collections": [],
+    "scoreNur": null,
+    "scoreFirat": null,
+    "reviewNur": "",
+    "reviewFirat": "",
+    "overview": "Witek, Varşova'ya giden trenin arkasından koşmaktadır. Film, bu koşunun 3 farklı olasılıkla sonuçlanmasının ardından Witek'in hayatının geri kalan kısmının nasıl gelişeceği üzerine varsayımları anlatır.İlki; trene yetişir ve orada dürüst bir komünist ile tanışır. Bundan sonra Parti'nin aktif bir üyesi haline gelir. İkincisi; trene yetişmek için koşarken istasyon görevlilerinden birine çarpar ve çıkan arbede sonucunda tutuklanır. Cezasını çekmek üzere çalışmak üzere gönderildiği parkta, kendisi gibi cezalandırılmış olan karşı görüşlü biriyle tanışır. Böylece karşı tarafın bir üyesi haline gelir.Üçüncüsü; treni kaçırır ve kimse ile tartışmadan yoluna gidecek iken okuldan bir kız ile tanışır. İleride bu kız ile evlenip, okulunu bitirip, bir doktor olarak huzurlu ve apolitik bir hayat sürmeye başlar.",
+    "keywords": [
+      "airplane",
+      "chance",
+      "political party",
+      "functionary",
+      "libya",
+      "lodz",
+      "train",
+      "psychological drama"
+    ],
+    "tags": [
+      "airplane",
+      "chance",
+      "political party",
+      "functionary",
+      "libya",
+      "lodz",
+      "train",
+      "psychological drama"
+    ],
+    "ratings": {
+      "tmdb": 7.5
+    },
+    "imdbId": "tt0084549",
+    "imdbUrl": "",
+    "lbUrl": "https://letterboxd.com/film/blind-chance/",
+    "tmdbId": 127,
+    "watched": false,
+    "watchedDate": "",
+    "fav": false,
+    "recommendedBy": [],
+    "date": "",
+    "people": [],
+    "description": "",
+    "thumb": "https://image.tmdb.org/t/p/w500/e9GW7hk4yv8QgpNnLSmtqHea2kF.jpg",
+    "embed": "https://ok.ru/videoembed/14759502547534",
+    "platform": "ok",
+    "_rawSrc": "https://ok.ru/video/14759502547534",
+    "createdAt": 1782213834588
+  },
+  {
     "id": "mqqisn7ak2pjg",
     "title": "Dünyalı",
     "titleTr": "Dünyalı",
