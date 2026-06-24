@@ -115,10 +115,11 @@
               "runtime": 30,
               "airDate": "2000-06-02",
               "still": "https://image.tmdb.org/t/p/w300/gIr4JZHchE81wm69zJn9CNVeZrL.jpg",
-              "embed": "",
-              "platform": "",
+              "embed": "https://ok.ru/videoembed/14777375066702",
+              "platform": "ok",
               "watched": false,
-              "watchedDate": ""
+              "watchedDate": "",
+              "_rawSrc": "https://ok.ru/video/14777375066702"
             },
             {
               "n": 5,
