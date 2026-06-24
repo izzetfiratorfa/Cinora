@@ -128,10 +128,11 @@
               "runtime": 30,
               "airDate": "2000-06-09",
               "still": "https://image.tmdb.org/t/p/w300/iplpprktK3Zh585eshTtozTmbFn.jpg",
-              "embed": "",
-              "platform": "",
+              "embed": "https://ok.ru/videoembed/14777707924046",
+              "platform": "ok",
               "watched": false,
-              "watchedDate": ""
+              "watchedDate": "",
+              "_rawSrc": "https://ok.ru/video/14777707924046"
             },
             {
               "n": 6,
@@ -140,10 +141,11 @@
               "runtime": 30,
               "airDate": "2000-06-16",
               "still": "https://image.tmdb.org/t/p/w300/yUJ3QUDlDcVlUouhryeNiCOCZLd.jpg",
-              "embed": "",
-              "platform": "",
+              "embed": "https://ok.ru/videoembed/14779012221518",
+              "platform": "ok",
               "watched": false,
-              "watchedDate": ""
+              "watchedDate": "",
+              "_rawSrc": "https://ok.ru/video/14779012221518"
             }
           ]
         },
