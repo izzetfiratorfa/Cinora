@@ -1,6 +1,434 @@
 {
   "items": [
     {
+      "id": "mqs1ebodmf4f1",
+      "title": "Coupling",
+      "titleTr": "Coupling",
+      "titleOriginal": "Coupling",
+      "titleEn": "Coupling",
+      "year": 2000,
+      "runtime": 30,
+      "director": "Martin Dennis",
+      "cast": [
+        "Jack Davenport",
+        "Gina Bellman",
+        "Sarah Alexander",
+        "Kate Isitt",
+        "Ben Miles"
+      ],
+      "country": "United Kingdom, United States of America",
+      "language": "English",
+      "categories": [
+        "Komedi"
+      ],
+      "genres": [],
+      "collections": [],
+      "scoreNur": null,
+      "scoreFirat": null,
+      "reviewNur": "",
+      "reviewFirat": "",
+      "overview": "Coupling, altı bekar arkadaşın özellikle kadın erkek ilişkileri üzerine sonsuz çabalarının anlatıldığı cesur bir dizi. Dozunda kullanılan cinsellik, kadın ve erkek dünyalarına dair sadece ‘dost sohbetlerinde konuşulan’ konuların işlenmesi her iki cins için de diğer cinsin ‘deşifresi’ anlamına geliyor. Coupling, kadın izleyiciler için ‘erkekleri tanıma kılavuzu’ ve tabii erkek izleyiciler için de bir tür ‘taktik rehberi’.",
+      "keywords": [
+        "sexual humor",
+        "group of friends",
+        "sitcom",
+        "innuendo",
+        "dirty joke"
+      ],
+      "tags": [
+        "sexual humor",
+        "group of friends",
+        "sitcom",
+        "innuendo",
+        "dirty joke"
+      ],
+      "ratings": {
+        "tmdb": 7.9
+      },
+      "imdbId": "tt0237123",
+      "imdbUrl": "https://www.imdb.com/title/tt0237123/?ref_=fn_t_1",
+      "lbUrl": "",
+      "tmdbId": 2719,
+      "watched": false,
+      "watchedDate": "",
+      "fav": false,
+      "recommendedBy": [
+        "Nur",
+        "Fırat"
+      ],
+      "date": "",
+      "people": [],
+      "description": "",
+      "thumb": "https://image.tmdb.org/t/p/w500/cfHQwmPUrCbm6XAPnuuBAVZpC94.jpg",
+      "embed": "",
+      "platform": "",
+      "_rawSrc": "",
+      "_type": "series",
+      "seasons": [
+        {
+          "n": 1,
+          "name": "Sezon 1",
+          "episodes": [
+            {
+              "n": 1,
+              "title": "1. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2000-05-12",
+              "still": "https://image.tmdb.org/t/p/w300/gz4IzyXabKUy7f3Z7iBKrQCafZK.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 2,
+              "title": "2. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2000-05-19",
+              "still": "https://image.tmdb.org/t/p/w300/iOfRd6EveE3sjmwKUyfIMu6z3yB.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 3,
+              "title": "3. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2000-05-26",
+              "still": "https://image.tmdb.org/t/p/w300/1Qm7IJ82OrXkMD36rQg9WiPIxm3.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 4,
+              "title": "4. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2000-06-02",
+              "still": "https://image.tmdb.org/t/p/w300/gIr4JZHchE81wm69zJn9CNVeZrL.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 5,
+              "title": "5. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2000-06-09",
+              "still": "https://image.tmdb.org/t/p/w300/iplpprktK3Zh585eshTtozTmbFn.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 6,
+              "title": "6. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2000-06-16",
+              "still": "https://image.tmdb.org/t/p/w300/yUJ3QUDlDcVlUouhryeNiCOCZLd.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            }
+          ]
+        },
+        {
+          "n": 2,
+          "name": "Sezon 2",
+          "episodes": [
+            {
+              "n": 1,
+              "title": "1. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-09-03",
+              "still": "https://image.tmdb.org/t/p/w300/y5TfOZMzhS3he1ryjd5I8vfU6bN.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 2,
+              "title": "2. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-09-10",
+              "still": "https://image.tmdb.org/t/p/w300/zteaBcgvssQcwReI4eD1BX3lxVN.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 3,
+              "title": "3. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-09-17",
+              "still": "https://image.tmdb.org/t/p/w300/xTZKsnY8Q8DHyP4EaFAs8k5EhXi.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 4,
+              "title": "4. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-09-24",
+              "still": "https://image.tmdb.org/t/p/w300/s8IhXGLEvWWzj4TZLJsiReeDzDr.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 5,
+              "title": "5. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-10-01",
+              "still": "https://image.tmdb.org/t/p/w300/mlvHZg6KwBp6gbIdXSHXO4W5G3H.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 6,
+              "title": "6. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-10-08",
+              "still": "https://image.tmdb.org/t/p/w300/9wLWOtIUv3A3p7QqnqBzjfTii3Y.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 7,
+              "title": "7. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-10-15",
+              "still": "https://image.tmdb.org/t/p/w300/vWCW6oSprkSr3EvoFDHkW6tu9Fr.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 8,
+              "title": "8. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-10-22",
+              "still": "https://image.tmdb.org/t/p/w300/44BnWDf0lYCe58SE0BZ48c2cywp.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 9,
+              "title": "9. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2001-10-29",
+              "still": "https://image.tmdb.org/t/p/w300/xcJi1maacssKWJNSY1az8NwWxxc.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            }
+          ]
+        },
+        {
+          "n": 3,
+          "name": "Sezon 3",
+          "episodes": [
+            {
+              "n": 1,
+              "title": "1. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2002-09-23",
+              "still": "https://image.tmdb.org/t/p/w300/fe7VmK1y9ovWkNrw395b5qwfSCX.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 2,
+              "title": "2. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2002-09-30",
+              "still": "https://image.tmdb.org/t/p/w300/eqWG8X3u3sRmztj0BO616Qjvc9V.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 3,
+              "title": "3. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2002-10-07",
+              "still": "https://image.tmdb.org/t/p/w300/qitWPjkYEC3Dd852fmtbNOtcR3E.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 4,
+              "title": "4. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2002-10-14",
+              "still": "https://image.tmdb.org/t/p/w300/kjDbAODkmHOZ0uYqbzijaujpuMW.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 5,
+              "title": "5. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2002-10-21",
+              "still": "https://image.tmdb.org/t/p/w300/9OtpM7Vei0ONqB9JZgHQxhubGiu.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 6,
+              "title": "6. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2002-10-28",
+              "still": "https://image.tmdb.org/t/p/w300/16ePVC681vHikItzUldmPKUmGn6.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 7,
+              "title": "7. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2002-11-04",
+              "still": "https://image.tmdb.org/t/p/w300/rb4ynEUoy7SlzZv3XrLq7rToPwK.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            }
+          ]
+        },
+        {
+          "n": 4,
+          "name": "Sezon 4",
+          "episodes": [
+            {
+              "n": 1,
+              "title": "1. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2004-05-10",
+              "still": "https://image.tmdb.org/t/p/w300/vObS3dyDs3THivLDqvtMK9IeBOs.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 2,
+              "title": "2. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2004-05-17",
+              "still": "https://image.tmdb.org/t/p/w300/lmhDVcPdyQka1z6bRnq52hxqtb5.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 3,
+              "title": "3. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2004-05-24",
+              "still": "https://image.tmdb.org/t/p/w300/hzJ2rIUs1Y4TW6GHptdibnmPGx3.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 4,
+              "title": "4. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2004-05-31",
+              "still": "https://image.tmdb.org/t/p/w300/dEGP6cCQ5IdgG9BzYyboUM6NB1N.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 5,
+              "title": "5. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2004-06-07",
+              "still": "https://image.tmdb.org/t/p/w300/iAFxT4bfrhZTzd3FflPXhvUwaLG.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            },
+            {
+              "n": 6,
+              "title": "6. Bölüm",
+              "overview": "",
+              "runtime": 30,
+              "airDate": "2004-06-14",
+              "still": "https://image.tmdb.org/t/p/w300/71mnP2akqwxynXLWERDNdcanQvv.jpg",
+              "embed": "",
+              "platform": "",
+              "watched": false,
+              "watchedDate": ""
+            }
+          ]
+        }
+      ],
+      "createdAt": 1782303351709
+    },
+    {
       "id": "mqs0x64e23auu",
       "title": "Serseri Aşıklar",
       "titleTr": "Serseri Aşıklar",
