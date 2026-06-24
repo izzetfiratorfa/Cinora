@@ -102,10 +102,11 @@
               "runtime": 30,
               "airDate": "2000-05-26",
               "still": "https://image.tmdb.org/t/p/w300/1Qm7IJ82OrXkMD36rQg9WiPIxm3.jpg",
-              "embed": "",
-              "platform": "",
+              "embed": "https://ok.ru/videoembed/14775243246158",
+              "platform": "ok",
               "watched": false,
-              "watchedDate": ""
+              "watchedDate": "",
+              "_rawSrc": "https://ok.ru/video/14775243246158"
             },
             {
               "n": 4,
