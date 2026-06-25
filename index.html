@@ -379,6 +379,24 @@
   .card{transition:transform .18s cubic-bezier(.2,.8,.25,1),box-shadow .18s}
   .tab{transition:background .16s,color .16s}
 
+  /* efekt katmanı */
+  .egg-canvas{position:fixed;inset:0;z-index:9997;pointer-events:none}
+  .egg-matrix{z-index:9996}
+  /* kilometre taşı kartı */
+  .milestone-ov{align-items:center;justify-content:center;z-index:9999}
+  .ms-card{background:radial-gradient(120% 100% at 50% 0%,#2a1610,#160d09);border:1px solid rgba(224,163,62,.4);
+    border-radius:22px;padding:38px 30px 28px;width:min(360px,90vw);text-align:center;box-shadow:0 30px 80px -20px rgba(0,0,0,.8);
+    animation:msPop .5s cubic-bezier(.2,.9,.3,1.2)}
+  @keyframes msPop{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .ms-icon{font-size:56px;line-height:1;margin-bottom:14px;animation:msFloat 2.4s ease-in-out infinite}
+  @keyframes msFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .ms-eyebrow{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent)}
+  .ms-title{font-family:"Fraunces",serif;font-weight:700;font-size:38px;color:#F2E9DE;margin:8px 0 6px;line-height:1.05}
+  .ms-sub{font-size:15px;color:#cdbba6;line-height:1.5;margin-bottom:22px}
+  .ms-go{background:var(--accent);color:#1a120a;border:none;border-radius:11px;padding:12px 26px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+  .sc-badge.nora.spin{animation:scSpin .7s cubic-bezier(.3,.1,.2,1)}
+  @keyframes scSpin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+
   /* Yıllık erişim düğmesi */
   .wrapped-cta{display:flex;align-items:center;gap:10px;width:100%;justify-content:center;margin-bottom:16px;
     background:linear-gradient(100deg,#3a1d10,#5a2f16);border:1px solid rgba(224,163,62,.4);color:#F2E9DE;
@@ -1970,6 +1988,7 @@ function toggleFav(id){
   var it=state.items.find(function(x){return x.id===id;}); if(!it) return;
   it.fav=!it.fav; save(); renderTabs(); renderGrid();
   toast(it.fav?"♥ Favorilere eklendi":"Favorilerden çıkarıldı");
+  if(it.fav) setTimeout(checkMilestones, 700);
 }
 function toggleWatched(id){
   var it=state.items.find(function(x){return x.id===id;}); if(!it) return;
@@ -1977,6 +1996,7 @@ function toggleWatched(id){
   if(it.watched && !it.watchedDate){ it.watchedDate=new Date().toISOString().slice(0,10); }
   save(); renderTabs(); renderGrid();
   toast(it.watched?"🎟️ Bilet kesildi · Bilet Koçanı'na eklendi":"İzlenecek olarak işaretlendi");
+  if(it.watched) setTimeout(checkMilestones, 700);
 }
 
 /* ===== sağ kategori bulutu ===== */
@@ -2151,6 +2171,7 @@ function toggleEpisodeWatched(id, sn, en){
   var it=state.items.find(function(x){return x.id===id;}); var fe=findEpisode(it,sn,en); if(!fe) return;
   fe.e.watched=!fe.e.watched; fe.e.watchedDate=fe.e.watched?new Date().toISOString().slice(0,10):"";
   save(); renderSeries(); renderTabs(); renderGrid();
+  if(fe.e.watched) setTimeout(checkMilestones, 700);
 }
 function editEpisodeEmbed(id, sn, en){
   var it=state.items.find(function(x){return x.id===id;}); var fe=findEpisode(it,sn,en); if(!fe) return;
@@ -3222,6 +3243,7 @@ function renderForm(editId){
     snapshot(editId?"düzenleme":"ekleme");
     save(); renderTabs(); renderFilterbar(); renderGrid(); renderAdminList();
     toast(editId?"Güncellendi":"Eklendi");
+    setTimeout(checkMilestones, 600);
   };
 }
 
@@ -3856,6 +3878,149 @@ function openShortcuts(){
 }
 function closeShortcuts(){ var ov=document.getElementById("helpOverlay"); if(ov){ ov.classList.remove("show"); document.body.style.overflow=""; } }
 
+/* ===== Konfeti & efektler ===== */
+function eggCanvas(){ var c=document.createElement("canvas"); c.className="egg-canvas"; c.width=window.innerWidth; c.height=window.innerHeight; document.body.appendChild(c); return c; }
+function confetti(opts){
+  opts=opts||{}; var c=eggCanvas(), x=c.getContext("2d");
+  var colors=opts.colors||["#E0A33E","#e07ac8","#9ed09a","#D98168","#F2E9DE"];
+  var emojis=opts.emojis||null, N=opts.count||130, dur=opts.dur||3200, P=[];
+  for(var i=0;i<N;i++){ P.push({x:Math.random()*c.width, y:-20-Math.random()*c.height*0.5, vx:(Math.random()-.5)*4.4, vy:2+Math.random()*4.5,
+    r:6+Math.random()*8, rot:Math.random()*6, vr:(Math.random()-.5)*.34, col:colors[i%colors.length], em:emojis?emojis[i%emojis.length]:null, a:1}); }
+  var t0=Date.now();
+  (function frame(){ var el=Date.now()-t0; x.clearRect(0,0,c.width,c.height);
+    P.forEach(function(p){ p.vy+=0.06; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; if(el>dur-800) p.a=Math.max(0,(dur-el)/800);
+      x.globalAlpha=p.a;
+      if(p.em){ x.font=(p.r*2.6)+"px serif"; x.fillText(p.em,p.x,p.y); }
+      else { x.save(); x.translate(p.x,p.y); x.rotate(p.rot); x.fillStyle=p.col; x.fillRect(-p.r/2,-p.r/3,p.r,p.r*0.66); x.restore(); } });
+    x.globalAlpha=1; if(el<dur) requestAnimationFrame(frame); else c.remove();
+  })();
+}
+function heartRain(){ confetti({emojis:["❤","💗","🌹","💕"], count:48, dur:3600}); }
+function emojiRain(list){ confetti({emojis:list, count:42, dur:3200}); }
+function matrixRain(){
+  var c=eggCanvas(); c.classList.add("egg-matrix"); var x=c.getContext("2d");
+  var cw=14, cols=Math.floor(c.width/cw), y=[]; for(var i=0;i<cols;i++) y[i]=Math.random()*c.height;
+  var chars="01CINORA三ノ日ア".split(""), t0=Date.now(), dur=3000;
+  (function frame(){ var el=Date.now()-t0;
+    x.fillStyle="rgba(6,10,6,0.14)"; x.fillRect(0,0,c.width,c.height);
+    x.fillStyle="#39d353"; x.font="14px monospace";
+    for(var i=0;i<cols;i++){ x.fillText(chars[Math.floor(Math.random()*chars.length)], i*cw, y[i]); y[i]=(y[i]>c.height && Math.random()>.975)?0:y[i]+cw; }
+    if(el<dur) requestAnimationFrame(frame); else { c.style.transition="opacity .6s"; c.style.opacity="0"; setTimeout(function(){c.remove();},600); }
+  })();
+}
+
+/* ===== Kilometre taşları ===== */
+var MILESTONE_KEY="cinora_milestones";
+function msGet(){ try{ var r=localStorage.getItem(MILESTONE_KEY); return r?JSON.parse(r):null; }catch(e){ return []; } }
+function msSet(a){ try{ localStorage.setItem(MILESTONE_KEY,JSON.stringify(a)); }catch(e){} }
+function milestoneStats(){
+  var its=vaultUniverse(), min=0, eps=0;
+  var works=its.filter(function(x){ return isSeries(x)?seriesProgress(x).done:x.watched; }).length;
+  its.forEach(function(x){ if(isSeries(x)){ (x.seasons||[]).forEach(function(s){(s.episodes||[]).forEach(function(e){ if(e.watched){ eps++; min+=e.runtime||0; } });}); }
+    else if(x.watched){ min+=x.runtime||0; } });
+  return { works:works, hours:Math.floor(min/60), eps:eps,
+    favs:its.filter(function(x){return x.fav;}).length,
+    coRated:its.filter(function(x){return x.scoreNur!=null&&x.scoreFirat!=null;}).length, lib:its.length };
+}
+function milestoneDefs(s){
+  var L=[]; function tier(val,list,key,icon,t,sub){ var hit=null; list.forEach(function(n){ if(val>=n) hit=n; }); if(hit) L.push({key:key+hit,icon:icon,title:t(hit),sub:sub(hit)}); }
+  tier(s.works,[10,25,50,100,250,500,1000],"works","🎬",function(n){return n+". yapım";},function(n){return "Birlikte "+n+" film/dizi tamamladınız.";});
+  tier(s.hours,[25,50,100,250,500,1000],"hours","⏳",function(n){return n+" saat";},function(n){return "Perde başında toplam "+n+" saat.";});
+  tier(s.eps,[50,100,250,500],"eps","📺",function(n){return n+" bölüm";},function(n){return n+" dizi bölümü izlediniz.";});
+  tier(s.favs,[10,25,50,100],"favs","❤",function(n){return n+" favori";},function(n){return "Kalbinize "+n+" yapım kazıdınız.";});
+  tier(s.coRated,[25,50,100,250],"corated","🍿",function(n){return n+" ortak puan";},function(n){return n+" filmi ikiniz de puanladınız.";});
+  tier(s.lib,[100,250,500,1000,2000],"lib","🗃️",function(n){return n+" kayıt";},function(n){return "Kütüphaneniz "+n+" yapıma ulaştı.";});
+  return L;
+}
+function anniversaryMilestone(){
+  var its=state.items.filter(function(x){return x.createdAt;}); if(!its.length) return null;
+  var first=Math.min.apply(null, its.map(function(x){return x.createdAt;})), fd=new Date(first), now=new Date();
+  if(fd.getMonth()===now.getMonth() && fd.getDate()===now.getDate()){
+    var years=now.getFullYear()-fd.getFullYear(); if(years>=1) return {key:"anniv"+years,icon:"🎂",title:years+". yıl",sub:"İlk kaydınızın "+years+". yıl dönümü. Nice senelere!"};
+  }
+  return null;
+}
+function checkMilestones(){
+  if(childMode()) return;
+  var done=msGet(), reached=milestoneDefs(milestoneStats());
+  var ann=anniversaryMilestone(); if(ann) reached.push(ann);
+  if(done===null){ msSet(reached.map(function(m){return m.key;})); return; } // ilk açılış: sessizce tohumla
+  var fresh=reached.filter(function(m){ return done.indexOf(m.key)<0; });
+  if(!fresh.length) return;
+  msSet(done.concat(fresh.map(function(m){return m.key;})));
+  showMilestone(fresh[fresh.length-1]);
+  fresh.slice(0,-1).forEach(function(m){ toast(m.icon+" "+m.title+" — kilometre taşı!"); });
+}
+function showMilestone(m){
+  confetti({count:170});
+  var o=document.createElement("div"); o.className="overlay milestone-ov show";
+  o.innerHTML='<div class="ms-card"><div class="ms-icon">'+m.icon+'</div><div class="ms-eyebrow">Kilometre taşı</div>'
+    +'<div class="ms-title">'+esc(m.title)+'</div><div class="ms-sub">'+esc(m.sub)+'</div>'
+    +'<button class="ms-go" id="msOk">Devam ✦</button></div>';
+  document.body.appendChild(o);
+  o.querySelector("#msOk").onclick=function(){ o.remove(); };
+  o.addEventListener("click",function(e){ if(e.target===o) o.remove(); });
+}
+
+/* ===== Easter egg'ler ===== */
+var EGG_WORDS={
+  "nur":function(){ heartRain(); toast("Nur’a — her perdede ❤"); },
+  "firat":function(){ confetti({colors:["#E0A33E","#caa05c","#F2E9DE"]}); toast("Fırat buradaydı ✦"); },
+  "nur firat":function(){ heartRain(); toast("İkiniz · tenha saatler 🥂"); },
+  "nora":function(){ emojiRain(["📚"]); toast("Nora Kitap Evi’ne hoş geldin"); },
+  "elanur":function(){ emojiRain(["⭐","🌸"]); toast("Elanur’a bir yıldız ⭐"); },
+  "perde":function(){ if(typeof playCurtain==="function") playCurtain(); },
+  "matrix":matrixRain,
+  "42":function(){ toast("Hayatın, evrenin ve her şeyin cevabı."); },
+  "popcorn":function(){ emojiRain(["🍿"]); }, "patlamis misir":function(){ emojiRain(["🍿"]); },
+  "sinema":function(){ emojiRain(["🎬","🎞️","🍿"]); },
+  "ask":heartRain, "love":heartRain, "kalp":heartRain,
+  "yesilcam":function(){ emojiRain(["🎞️"]); toast("Yeşilçam ☀️"); },
+  "ceylan":function(){ toast("🎬 Kasaba · Mayıs Sıkıntısı · Kış Uykusu"); },
+  "kubrick":function(){ emojiRain(["🌌"]); toast("2001 · sonsuzluğa ve ötesine"); },
+  "lynch":function(){ matrixRain(); toast("🦉 Baykuşlar göründükleri gibi değildir"); },
+  "kaplumbaga":function(){ emojiRain(["🐢"]); toast("Kaplumbağalar da uçar"); },
+  "gece":function(){ toast("🌙 Gece kuşu… perde hâlâ açık"); },
+  "konami":function(){ confetti({count:220}); toast("⭐ Sinematek modu açıldı!"); }
+};
+var eggLast="";
+function eggFromText(v){
+  if(/🍿/.test(v)){ emojiRain(["🍿"]); return; }
+  if(/[❤🩷💗💕]/.test(v)){ heartRain(); return; }
+  if(/🎬|🎞️/.test(v)){ emojiRain(["🎬","🎞️"]); return; }
+  var n=norm(v).trim();
+  if(n && EGG_WORDS[n] && n!==eggLast){ eggLast=n; EGG_WORDS[n](); }
+  else if(!EGG_WORDS[n]) eggLast="";
+}
+function initEggs(){
+  // Konami: ↑↑↓↓←→←→ b a
+  var seq=["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"], pos=0;
+  document.addEventListener("keydown",function(e){
+    var k=e.key; if(k===seq[pos]||k&&k.toLowerCase&&k.toLowerCase()===seq[pos]){ pos++; if(pos===seq.length){ pos=0; EGG_WORDS.konami(); } } else { pos=(k===seq[0])?1:0; }
+  });
+  // herhangi bir yerde yazılan gizli kelimeler (input dışında)
+  var buf="";
+  document.addEventListener("keydown",function(e){
+    var t=e.target; if(t&&(t.tagName==="INPUT"||t.tagName==="TEXTAREA"||t.isContentEditable)) return;
+    if(e.key&&e.key.length===1&&/[a-zçğıöşü0-9 ]/i.test(e.key)){ buf=(buf+e.key).slice(-14);
+      Object.keys(EGG_WORDS).forEach(function(w){ if(norm(buf).slice(-w.length)===w){ EGG_WORDS[w](); buf=""; } }); }
+  });
+  // detayda Nora rozetine tıkla → döner
+  document.addEventListener("click",function(e){ var b=e.target.closest&&e.target.closest(".sc-badge.nora"); if(b){ b.classList.remove("spin"); void b.offsetWidth; b.classList.add("spin"); } });
+}
+function dateEggs(){
+  if(childMode()) return;
+  var d=new Date(), m=d.getMonth()+1, day=d.getDate(), h=d.getHours();
+  try{ if(sessionStorage.getItem("cinora_dategg")==="1") {} else {
+    sessionStorage.setItem("cinora_dategg","1");
+    if(m===2&&day===14){ setTimeout(function(){ heartRain(); toast("💞 Sevgililer günü · birlikte bir film?"); },1200); }
+    else if(m===1&&day===1){ setTimeout(function(){ confetti({count:200}); toast("🎬 Mutlu yıllar!"); },1200); }
+    else if(m===10&&day===31){ setTimeout(function(){ emojiRain(["🎃","🦇","👻"]); toast("🎃 Korku gecesi…"); },1200); }
+    else if(m===12&&day===31){ setTimeout(function(){ confetti({count:240}); toast("🥂 Yıl biterken son seans"); },1200); }
+    else if(h>=3&&h<6){ setTimeout(function(){ toast("🌙 Gece kuşu… perde hâlâ açık"); },1400); }
+  } }catch(e){}
+}
+
 /* ===== başlat ===== */
 function boot(){
   applyAppearance();
@@ -3882,7 +4047,7 @@ function boot(){
   content.addEventListener("touchmove",function(){ clearTimeout(lpTimer); });
 
   var search=document.getElementById("search");
-  search.addEventListener("input",function(e){ state.query=e.target.value; renderGrid(); renderSuggest(); });
+  search.addEventListener("input",function(e){ state.query=e.target.value; renderGrid(); renderSuggest(); eggFromText(e.target.value); });
   search.addEventListener("keydown",function(e){
     var box=document.getElementById("searchSuggest"), open=box.classList.contains("show");
     if(e.key==="ArrowDown"){ if(open){ e.preventDefault(); moveSuggest(1); } }
@@ -3931,6 +4096,8 @@ function boot(){
   window.addEventListener("hashchange",openFromHash);
   openFromHash();
   maybeExportReminder();
+  initEggs();
+  setTimeout(function(){ checkMilestones(); dateEggs(); }, 1800);
   if(getProfile()) applyProfile(); else setTimeout(openProfilePicker, 300);
 }
 function renderSkeleton(){
