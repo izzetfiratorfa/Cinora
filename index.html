@@ -120,6 +120,11 @@
   .thumb-ph{width:100%;height:100%;display:grid;place-items:center;position:relative}
   .thumb-ph .glyph{font-family:"Fraunces",serif;font-size:46px;font-weight:500;
     color:rgba(242,233,222,.85);mix-blend-mode:overlay}
+  .thumb-ph .glyph.full{font-size:19px;line-height:1.22;font-weight:500;padding:14px 12px;text-align:center;
+    color:rgba(242,233,222,.92);mix-blend-mode:normal;
+    display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+  .grid.wall .thumb-ph .glyph.full{font-size:14px;-webkit-line-clamp:6;padding:10px 8px}
+  .rthumb .thumb-ph .glyph.full,.rel-thumb .thumb-ph .glyph.full{font-size:13px;-webkit-line-clamp:4;padding:8px}
   .play-badge{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:.2s;background:rgba(15,11,8,.34)}
   .card:hover .play-badge{opacity:1}
   .play-badge span{width:54px;height:54px;border-radius:50%;background:var(--accent);
@@ -1965,8 +1970,8 @@ function sortCmp(a,b){
 function thumbHTML(it){
   var prim=titleSet(it).prim;
   if(it.thumb && state.ui.showPosters) return '<img src="'+esc(it.thumb)+'" alt="'+esc(prim)+' afişi" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">';
-  var hue=hueFrom(it.title||it.titleOriginal||"x"), letter=((it.titleOriginal||it.title||"S").trim().charAt(0)||"S").toLocaleUpperCase("tr");
-  return '<div class="thumb-ph" role="img" aria-label="'+esc(prim)+'" style="background:linear-gradient(140deg,hsl('+hue+',32%,22%),hsl('+((hue+40)%360)+',38%,14%))"><span class="glyph">'+esc(letter)+'</span></div>';
+  var hue=hueFrom(it.title||it.titleOriginal||"x");
+  return '<div class="thumb-ph" role="img" aria-label="'+esc(prim)+'" style="background:linear-gradient(140deg,hsl('+hue+',32%,22%),hsl('+((hue+40)%360)+',38%,14%))"><span class="glyph full">'+esc(prim)+'</span></div>';
 }
 /* en güçlü tek puanı kısa göster (IMDb > TMDB) */
 function ratingShort(it){
